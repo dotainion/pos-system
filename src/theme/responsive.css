@@ -1,0 +1,39 @@
+@media screen and (max-width:767px){
+    .item-container{
+        padding: 0px;
+    }
+    .item-info-container{
+        width: 100%;
+        min-width: none;
+    }
+    .hide-on-mobile{
+        display: none;
+    }
+    .menu-content-page{
+        padding-top: 50px;
+    }
+    .menu-toolbar-container{
+        width: 100%;
+    }
+    .menu-toolbar-search{
+        width: 60%;
+    }
+    .hide-on-mobile{
+        display: none;
+    }
+    .hide-on-desktop{
+        display: block;
+    }
+    .add-btn-on-mobile{
+        position: absolute;
+        z-index: 9999999999;
+        right: 10px;
+        bottom: 30px;
+    }
+    .show-menu{
+        width: 100%;
+    }
+    .hide-menu{
+        width: 0%;
+    }
+}
