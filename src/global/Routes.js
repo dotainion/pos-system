@@ -2,7 +2,7 @@ export const routes = {
     login: "/login",
     orderEntry: "/order-entry",
     default: "/",
-    products: "/inventory",
+    products: "/products",
     administration: "/administration",
     reports: "/reports",
     settings: "/settings",

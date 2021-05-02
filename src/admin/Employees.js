@@ -1,18 +1,24 @@
 import { IonButton, IonCard, IonContent, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonThumbnail } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
-import React from 'react';
+import React, { useState } from 'react';
+import { CreateEmployee } from '../components/CreateEmployee';
 import { MenuBarWrapper } from '../components/MenuBar';
 import img from '../images/beach.jpg';
 import { SearchBar } from '../widgets/SearchBar';
 
 
 export const Employees = () =>{
+    const [showCreateEmployee, setShowCreateEmployee] = useState(false);
     return(
         <IonPage>
-            <MenuBarWrapper onSearch={(value)=>{alert(value)}}>
+            <CreateEmployee
+                isOpen={showCreateEmployee}
+                onClose={()=>setShowCreateEmployee(false)}
+            />
+            <MenuBarWrapper onAdd={()=>setShowCreateEmployee(true)}>
                 <IonList class="item-container">
                     {
-                        [1].length?
+                        [1]?.length?
                         [1,1,2,2,2].map((employee, key)=>(
                             <div className="item-info-container" key={key}>
                                 <div className="flex item-sub-info-container">

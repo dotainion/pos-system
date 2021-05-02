@@ -12,6 +12,19 @@ class Tools{
         stringArray[0] = firstChar.toUpperCase();
         return stringArray.join("");
     }
+    async toBase64(file){
+        try{
+            return await new Promise((res, rej) => {
+                const reader = new FileReader();
+                reader.onload = e => res(e.target.result);
+                reader.onerror = e => rej(e);
+                reader.readAsDataURL(file); 
+            });
+        }catch(error){
+            console.log(error)
+            return "";
+        }
+    };
 }
 
 export const tools = new Tools();

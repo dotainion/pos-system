@@ -21,6 +21,10 @@ export const Login = () =>{
         else history.push(routes.orderEntry);
     }
 
+    const onEnterPress = (e) =>{
+        if (e.key === "Enter") onSignIn();
+    }
+
     return(
         <IonPage className="page">
             <IonContent>
@@ -32,11 +36,11 @@ export const Login = () =>{
                                     <div className="float-top-center singin-error">{error}</div>
                                     <IonItem color="light" lines="none">
                                         <IonLabel position="floating">User Name/Email</IonLabel>
-                                        <IonInput ref={emailRef} type="email" />
+                                        <IonInput ref={emailRef} onKeyPress={onEnterPress} type="email" />
                                     </IonItem>
                                     <IonItem color="light" lines="none">
                                         <IonLabel position="floating">Password</IonLabel>
-                                        <IonInput ref={passwordRef} type='password' />
+                                        <IonInput ref={passwordRef} onKeyPress={onEnterPress} type='password' />
                                     </IonItem>
                                     <IonLabel style={{textShadow:"1px 1px 1px black"}} class="link-hover" color="danger">Forget Password</IonLabel>
                                     <IonButton onClick={onSignIn} style={{float:"right"}} size="small" color="light">Login</IonButton>

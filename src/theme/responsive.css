@@ -26,7 +26,7 @@
     }
     .add-btn-on-mobile{
         position: absolute;
-        z-index: 9999999999;
+        z-index: 99999;
         right: 10px;
         bottom: 30px;
     }
@@ -35,5 +35,21 @@
     }
     .hide-menu{
         width: 0%;
+    }
+    .d-flex-on-mobile{
+        display: block;
+    }
+    .popup-container{
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
+        padding-bottom: 80px;
+    }
+    .max-width-on-mobile{
+        width: 100%;
+    }
+    .backdrop{
+        height: 100vh;
+        overflow: none;
     }
 }

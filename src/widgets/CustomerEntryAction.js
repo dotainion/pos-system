@@ -1,0 +1,223 @@
+import { IonIcon } from '@ionic/react';
+import { addOutline, chevronDownOutline, chevronUpOutline, closeOutline, eyeOutline, saveOutline } from 'ionicons/icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Entry } from '../components/Entry';
+import { PopupContainer } from '../components/PopupContainer';
+import { useStore } from '../context/Store';
+import { addCustomer } from '../database/database';
+import { SearchBar } from './SearchBar';
+
+
+export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searchValue}) =>{
+    const { cart, setCart, cartOnHold, setCartOnHold } = useStore();
+    const [toggleDisplay, setToggleDisplay] = useState({saveItem:true,viewItem:false,addCustomer:false});
+    const [error, setError] = useState("");
+    const [showAddCustomer, setShowAddCustomer] = useState(false);
+    const [customer, setCustomer] = useState({});
+    const [defaultSearchValue, setDefaultSearchValue] = useState("");
+
+    //for add cart on hold and name it
+    const titleRef = useRef();
+
+    //for adding customer
+    const customerNameRef = useRef();
+    const customerEmailRef = useRef();
+    const customerNumberRef = useRef();
+    const customerIdRef = useRef();
+
+    const onSaveCartItem = () =>{
+        setError("");
+        if (cart?.length <= 0) return setError("No item to be save");
+        if (!titleRef.current.value) return setError("Must provide a title");
+        for (let obj of cartOnHold){
+            if (obj?.title === titleRef.current.value) return setError("Title already exist");
+        }
+        setCartOnHold([{title: titleRef.current.value, order: cart}, ...cartOnHold]);
+        setCart([]);
+        titleRef.current.value = "";
+    }
+
+    const onRestore = (e,index) =>{
+        e.stopPropagation();
+        let holdStore = [];
+        let newOnHold = JSON.parse(JSON.stringify(cartOnHold || []));
+        for (let order of newOnHold){
+            if (newOnHold?.[index]?.title !== order?.title){
+                holdStore.push(order);
+            }
+        }
+        if (newOnHold?.[index]){
+            setCart(newOnHold?.[index]?.order);
+            setCartOnHold(holdStore);
+        }
+    }
+
+    const onSaveCustomer = async() =>{
+        setError("");
+        if (!customerNameRef.current.value) return setError("Name is required");
+        await addCustomer({
+            name: customerNameRef.current.value || "",
+            email: customerEmailRef.current.value || "",
+            number: customerNumberRef.current.value || "",
+            id: customerIdRef.current.value || "",
+        });
+        customerNameRef.current.value = "";
+        customerEmailRef.current.value = "";
+        customerNumberRef.current.value = "";
+        customerIdRef.current.value = "";
+    }
+
+    const onCustomerSearch = (value) =>{
+        
+    }
+
+    const toggleContainer = (cmd) =>{
+        if (cmd === "save-item") setToggleDisplay({saveItem:true,viewItem:false,addCustomer:false});
+        if (cmd === "view-item") setToggleDisplay({saveItem:false,viewItem:true,addCustomer:false});
+        if (cmd === "add-customer") setToggleDisplay({saveItem:false,viewItem:false,addCustomer:true});
+    }
+
+    const toggleItemOnHold = (id) =>{
+        let element = document.getElementById(id);
+        let elementUp = document.getElementById(`${id}up`);
+        let elementDown = document.getElementById(`${id}down`);
+        if (element.hidden){
+            element.hidden = false;
+            elementUp.hidden = false;
+            elementDown.hidden = true;
+        }else{
+            element.hidden = true;
+            elementUp.hidden = true;
+            elementDown.hidden = false;
+        }
+    }
+
+    //detech change in error and close after time
+    useEffect(()=>{
+        setTimeout(() => {
+            setError("");
+        }, 8000);
+    },[error]);
+
+    //detech change in customer selected and fire callback
+    useEffect(()=>{
+        onCustomerSelected?.(customer);
+    },[customer]);
+    
+    //detech change in search for customer on order enter
+    useEffect(()=>{
+        if (searchValue){
+            onCustomerSearch(searchValue);
+            setDefaultSearchValue(searchValue);
+            setToggleDisplay({saveItem:false,viewItem:false,addCustomer:true});
+        }
+    },[searchValue]);
+    return(
+        <>
+        <PopupContainer isOpen={isOpen} onClose={onClose}>
+            <div hidden={!toggleDisplay.addCustomer}  className="pad-xxl max-width input-style" style={{color:"black"}}>
+                <div className="half-width item-center">
+                    <SearchBar
+                        placeholder="Search customer..."
+                        defaultValue={defaultSearchValue}
+                        onSearch={onCustomerSearch}
+                    />
+                </div>
+            </div>
+            <p hidden={toggleDisplay.addCustomer}  className="pad-xl" style={{color:"white",position:"relative"}}>
+                Stash item thats in cart.<br/>
+                Give a name to this order to be saved so it can be itdentify when needed.<br/>
+                <label className="float-bottom-overflow max-width" style={{color:"red",textAlign:"center"}}>{error}</label>
+            </p>
+            <div className="flex">
+                <button onClick={()=>toggleContainer("save-item")} style={{color:toggleDisplay.saveItem && "orange"}} className="add-btn btn-font">Save Item <IonIcon icon={saveOutline}/></button>
+                <button onClick={()=>toggleContainer("view-item")} style={{color:toggleDisplay.viewItem && "orange"}} className="add-btn btn-font">View Items <IonIcon icon={eyeOutline}/></button>
+                <button onClick={()=>toggleContainer("add-customer")} style={{color:toggleDisplay.addCustomer && "orange"}} className="add-btn btn-font">Customers <IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/></button>
+            </div>
+            <div hidden={!toggleDisplay.saveItem} className="pad entry-action-sub">
+                <div className="half-width item-center flex">
+                    <Entry cssClass="input-style" entryRef={titleRef} placeholder="Give a title to this order" label="Title" />
+                    <div className="pad-xl" style={{position:"relative"}}>
+                        <div className="float-left">
+                            <button onClick={onSaveCartItem} className="add-btn btn-font">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div className="max-size entry-action-mini scrollbar">
+                    {
+                        cart?.length?
+                        cart.map((order, key)=>(
+                            <div style={{color:"white"}} key={key}>
+                                <div className="sales-item-name-header radius">{order?.info?.title || "Not Provided"}</div>
+                                <div className="sales-item-qty-header radius">{order?.qty || 1}</div>
+                                <div className="sales-item-price-header radius">{order?.info?.salePrice || "Not Provided"}</div>
+                            </div>
+                        )):
+                        <div style={{color:"white"}}>Cart is empty</div>
+                    }
+                </div>
+            </div>
+            
+            <div hidden={!toggleDisplay.viewItem} className="pad entry-action-sub">
+                <div className="max-size entry-action-mini scrollbar">
+                    {
+                        cartOnHold?.length?
+                        cartOnHold.map((hold, key)=>(
+                            <div key={key}>
+                                <div onClick={()=>toggleItemOnHold(`${hold?.title}${key}`)} className="pad radius max-width pointer no-select input-style">
+                                    <span>{hold?.title}<IonIcon hidden id={`${hold?.title}${key}up`} icon={chevronUpOutline}/><IonIcon id={`${hold?.title}${key}down`} icon={chevronDownOutline}/></span>
+                                    <button onClick={e=>onRestore(e,key)} style={{backgroundColor:"inherit",color:"lightgreen",float:"right"}}>Restore</button>
+                                </div>
+                                <div hidden id={`${hold?.title}${key}`} className="no-select" style={{backgroundColor:"rgb(0,0,0,0.5)"}}>
+                                    {hold?.order?.map((order, key)=>(
+                                        <div style={{color:"white"}} key={key}>
+                                            <div className="sales-item-name-header radius">{order?.info?.title || "Not Provided"}</div>
+                                            <div className="sales-item-qty-header radius">{order?.qty || 1}</div>
+                                            <div className="sales-item-price-header radius">{order?.info?.salePrice || "Not Provided"}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )):
+                        <div style={{color:"white"}}>No item on hold</div>
+                    }
+                </div>
+            </div>
+
+            <div hidden={!toggleDisplay.addCustomer} className="pad entry-action-sub">
+                <div>
+                    <div style={{float:"left"}}>Selected Customer: <b style={{color:"orange"}}>{customer?.info?.name || "None"}</b></div>
+                    <IonIcon onClick={()=>setShowAddCustomer(true)} class="entry-action-add-btn" icon={addOutline}/>
+                </div>
+                <div className="max-size entry-action-mini scrollbar">
+                    {
+                        [1]?.length?
+                        [{id:"dfd54",info:{name:"this name is test",email:"example@mail.com",number:"111111",id:"225544"}}].map((customer, key)=>(
+                            <div onClick={()=>setCustomer(customer)} className="flex customer-item-container input-style" key={key}>
+                                <div className="inline max-width pad">{customer?.info?.name}</div>
+                                <div className="inline max-width pad">{customer?.info?.email}</div>
+                                <div className="inline max-width pad">{customer?.info?.number}</div>
+                                <div className="inline max-width pad">{customer?.info?.id}</div>
+                            </div>
+                        )):
+                        <div style={{color:"white"}}>No customers</div>
+                    }
+                </div>
+            </div>
+        </PopupContainer>
+        <PopupContainer isOpen={showAddCustomer} onClose={()=>setShowAddCustomer(false)}>
+            <p className="pad-xl font-xl" style={{position:"relative",textAlign:"center"}}>
+                Add valued customer<br/>
+                <label className="float-bottom-overflow max-width font" style={{color:"red",textAlign:"center"}}>{error}</label>
+            </p>
+            <div className="item-center" style={{width:"60%"}}>
+                <Entry entryRef={customerNameRef} type="text" cssClass="input-style" label="Name" placeholder="Name" />
+                <Entry entryRef={customerEmailRef} type="email" cssClass="input-style" label="Email" placeholder="example@gmail.com" />
+                <Entry entryRef={customerNumberRef} type="number" cssClass="input-style" label="Phone Number" placeholder="1474999999" />
+                <Entry entryRef={customerIdRef} type="text" cssClass="input-style" label="Id Number" placeholder="Id#" />
+                <button onClick={onSaveCustomer} className="add-btn" style={{float:"right"}}>Save</button>
+            </div>
+        </PopupContainer>
+        </>
+    )
+}

@@ -4,7 +4,7 @@ import { closeOutline, searchOutline } from 'ionicons/icons';
 
 
 
-export const SearchBar = ({placeholder, onTyping, onSearch, clearOnSearch, onCleared, hidden}) =>{
+export const SearchBar = ({placeholder, onTyping, onSearch, clearOnSearch, onCleared, hidden, searchRef, defaultValue}) =>{
     const [value, setValue] = useState("");
     const [hideClose, setHideClose] = useState(false);
 
@@ -34,9 +34,14 @@ export const SearchBar = ({placeholder, onTyping, onSearch, clearOnSearch, onCle
         if (!value) setHideClose(true);
         else setHideClose(false);
     },[value]);
+
+    //apply default value
+    useEffect(()=>{
+        if (defaultValue) setValue(defaultValue);
+    },[defaultValue]);
     return(
         <div hidden={hidden} className="search-container">
-            <input onChange={onTriggerTyping} onKeyPress={onTriggerEnterKey} placeholder={placeholder} value={value}/>
+            <input onChange={onTriggerTyping} ref={searchRef} onKeyPress={onTriggerEnterKey} placeholder={placeholder} value={searchRef?.current?.value || value}/>
             <IonIcon class="close-hover" hidden={hideClose} onClick={onTriggerCear} icon={closeOutline}/>
             <IonIcon onClick={onTriggerSearch} icon={searchOutline}/>
         </div>
