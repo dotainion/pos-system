@@ -279,14 +279,13 @@
 }
 .dark{
     color: white;
-    /*background-color: rgb(48, 46, 46);*/
     background: linear-gradient(to bottom, rgb(95, 95, 95) 0%, rgb(5, 5, 5) 100%);
     --ion-background-color: linear-gradient(to bottom, rgb(95, 95, 95) 0%, rgb(5, 5, 5) 100%);
 }
 .dark-r{
     color: white;
     background: linear-gradient(to right, rgb(95, 95, 95) 0%, rgb(5, 5, 5) 100%);
-    --ion-background-color: linear-gradient(to v, rgb(95, 95, 95) 0%, rgb(5, 5, 5) 100%);
+    --ion-background-color: linear-gradient(to right, rgb(95, 95, 95) 0%, rgb(5, 5, 5) 100%);
 }
 .dark-hover:hover{
     background: linear-gradient(to bottom, rgb(117, 114, 114) 0%, rgb(36, 35, 35) 100%);
@@ -297,7 +296,6 @@
 }
 .success{
     color: white;
-    /*background-color: green;*/
     background: linear-gradient(to bottom, rgb(8, 172, 8) 0%, rgb(0, 26, 0) 100%);
 }
 .success:hover{
@@ -305,7 +303,6 @@
 }
 .danger{
     color: white;
-    /*background-color: red;*/
     background: linear-gradient(to bottom, rgb(241, 62, 62) 0%, rgb(46, 1, 1) 100%);
 }
 .danger:hover{
@@ -313,7 +310,6 @@
 }
 .dodger{
     color: white;
-    /*background-color: dodgerblue;*/
     background: linear-gradient(to bottom, dodgerblue 0%, rgb(1, 22, 43) 100%);
 }
 .dodger:hover{
@@ -321,7 +317,6 @@
 }
 .dark-blue{
     color: white;
-    /*background-color: rgb(38, 76, 99);*/
     background: linear-gradient(to bottom, rgb(19, 192, 250)0%, rgb(1, 41, 54)100%);
 }
 .dark-blue:hover{
@@ -330,7 +325,6 @@
 }
 .teal{
     color: white;
-    /*background-color: rgb(5, 80, 80);*/
     background: linear-gradient(to bottom, rgb(5, 80, 80) 0%, rgb(0, 36, 36) 100%);
 }
 .input-style{
@@ -450,7 +444,6 @@
 }
 .menu-button-selected{
     color: orange;
-    /*border-left: 5px solid white;*/
 }
 .menu-button ion-icon{
     color: white;
