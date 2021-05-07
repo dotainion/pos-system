@@ -4,7 +4,8 @@ const collection = {
     users: "users",
     products: "products",
     sales: "sales",
-    customer: "customer"
+    customer: "customer",
+    rewards: "rewards",
 }
 
 export const addUser = async(data, uid=null) =>{
@@ -90,5 +91,28 @@ export const getCustomer = async() =>{
     }catch(error){
         console.log(error);
         return [];
+    }
+}
+
+export const updateCustomerReward = async(data,id) =>{
+    try{
+        try{
+            await updateData(collection.rewards,data,id);
+        }catch{
+            await addData(collection.rewards,data,id);
+        }
+        return true;
+    }catch(error){
+        console.log(error);
+        return false;
+    }
+}
+
+export const getCustomerReward = async(id) =>{
+    try{
+        return await getDataById(collection.rewards,id);
+    }catch(error){
+        console.log(error);
+        return {};
     }
 }

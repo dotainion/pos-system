@@ -56,6 +56,12 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
             salepriceRef.current.value = record?.info?.salePrice;
             costPriceRef.current.value = record?.info?.costPrice;
             quantityRef.current.value = record?.info?.qty;
+        }else{
+            setImage("");
+            titleRef.current.value = "";
+            salepriceRef.current.value = "";
+            costPriceRef.current.value = "";
+            quantityRef.current.value = "";
         }
     },[record]);
     return(
@@ -80,7 +86,7 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
                 </div>
             </div>
             <div className="half-width max-width-on-mobile item-center">
-                <button disabled={loading} onClick={onAddProduct} className="add-btn" style={{float:"right",fontSize:"15px"}}>Save</button>
+                <button disabled={loading} onClick={onAddProduct} className="add-btn" style={{float:"right",fontSize:"15px"}}>{Object.keys(record || {})?.length? "Update": "Save"}</button>
             </div>
             <input hidden ref={imageRef} onChange={async(e)=>setImage(await tools.toBase64(e.target.files[0]))} type="file"/>
         </PopupContainer>

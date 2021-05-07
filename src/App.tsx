@@ -25,7 +25,7 @@ import './theme/responsive.css';
 import './theme/actions.css';
 
 /* pages */
-import Sales from './pages/PointOfSale';
+import OrderEntry from './pages/OrderEntry';
 import { Login } from './authentication/Login';
 import { routes } from './global/Routes';
 import SecureRoutes from './SecureRoute';
@@ -35,6 +35,7 @@ import { Administration } from './admin/Administration';
 import { Employees } from './admin/Employees';
 import { Reports } from './admin/Reports';
 import { Settings } from './admin/Settings';
+import { Register } from './authentication/Register';
 
 
 const App: React.FC = () => (
@@ -44,11 +45,12 @@ const App: React.FC = () => (
         <IonRouterOutlet>
           <Route exact path={routes.products} render={()=><SecureRoutes Components={Products}/>}/>
           <Route exact path={routes.administration} render={()=><SecureRoutes Components={Administration}/>}/>
-          <Route exact path={routes.orderEntry} render={()=><SecureRoutes Components={Sales}/>}/>
+          <Route exact path={routes.orderEntry} render={()=><SecureRoutes Components={OrderEntry}/>}/>
           <Route exact path={routes.employees} render={()=><SecureRoutes Components={Employees}/>}/>
           <Route exact path={routes.reports} render={()=><SecureRoutes Components={Reports}/>}/>
           <Route exact path={routes.settings} render={()=><SecureRoutes Components={Settings}/>}/>
           <Route exact path={routes.login} render={()=><Login/>}/>
+          <Route exact path={routes.register} render={()=><Register/>}/>
           <Route exact path={routes.default} render={()=><Redirect to={routes.login}/>}/>
         </IonRouterOutlet>
       </IonReactRouter>

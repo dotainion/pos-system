@@ -61,10 +61,10 @@ export const RefundCustomer = ({isOpen, onClose}) =>{
                                 </div>
                                 <div hidden id={`${sale?.id}${key}`}>
                                     {sale?.info?.products?.map((prod, key)=>(
-                                        <div className="no-select" style={{backgroundColor:"rgb(0,0,0,0.5)",color:"white"}} key={key}>
-                                            <div className="sales-item-name-header radius">{prod?.info?.title || "Not Provided"}</div>
-                                            <div className="sales-item-qty-header radius">{prod?.info?.qty || 1}</div>
-                                            <div className="sales-item-price-header radius">${prod?.info?.salePrice || "Not Provided"}</div>
+                                        <div className="no-select" style={{backgroundColor:"rgb(0,0,0,0.5)",borderBottom:"1px solid white",color:"white"}} key={key}>
+                                            <div className="sales-item-name-header radius" style={{border:"none"}}>{prod?.info?.title || "Not Provided"}</div>
+                                            <div className="sales-item-qty-header radius" style={{border:"none"}}>{prod?.info?.qty || 1}</div>
+                                            <div className="sales-item-price-header radius" style={{border:"none"}}>${prod?.info?.salePrice || "Not Provided"}</div>
                                         </div>
                                     ))}
                                 </div>

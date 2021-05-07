@@ -2,17 +2,18 @@ import { IonCard, IonCardContent, IonContent, IonIcon, IonLabel, IonList, IonPag
 import { addOutline, chevronDown, chevronDownOutline, chevronUpOutline, closeOutline, pencilOutline, personOutline, saveOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useStore } from '../context/Store';
-import { getProducts, addSale } from '../database/database';
+import { getProducts, addSale, updateCustomerReward, getCustomerReward } from '../database/database';
 import { ToolBar } from '../layout/ToolBar';
 import { Alert } from '../widgets/Alert';
+import { ContainerLoader } from '../widgets/ContainerLoader';
 import { CustomerEntryActions } from '../widgets/CustomerEntryAction';
 import { PaymentWindow } from '../widgets/PaymentWindow';
 import { RefundCustomer } from '../widgets/RefundCustomer';
 import { SearchBar } from '../widgets/SearchBar';
 
 
-const Sales = () => {
-    const { cart, setCart, products, mostRecent, saveMostRecent, removeMostRecent, searchProducts } = useStore();
+const OrderEntry = () => {
+    const { cart, setCart, products, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts } = useStore();
     const [loading, setLoading] = useState(false);
     const [moreOption, setMoreOption] = useState(false);
     const [tax, setTax] = useState(0);
@@ -25,6 +26,8 @@ const Sales = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [showPaymentWindow, setShowPaymentWindow] = useState(false);
     const [showRefundWindow, setShowRefundWindow] = useState(false);
+    const [reward, setReward] = useState({});
+    const [paymentSubmited, setPaymentSubmited] = useState(true);
 
     const moreOptionToggle = () =>{
         if (moreOption) setMoreOption(false);
@@ -62,6 +65,7 @@ const Sales = () => {
         try{
             if (cart?.length <= 0) return;
             setLoading(true);
+            setPaymentSubmited(false);
             let cusId = "";
             if (Object.keys(cusId || {})?.length > 0) cusId = customer?.id;
             const date = new Date().getTime();
@@ -73,9 +77,18 @@ const Sales = () => {
                 date,
                 customerId: cusId
             });
+            if (Object.keys(customer || {}).length > 0){
+                const cusReward = {
+                    store: "",
+                    reward: parseFloat(reward?.reward || 0) +1,//reward is done base on the percentage amount towards total price
+                    visits: parseFloat(reward?.visits || 0) +1
+                }
+                await updateCustomerReward(cusReward,customer?.id);
+            }
             /**
              * print receipt 
              */
+            setPaymentSubmited(true);
         }catch{
             console.log("someting went wrong");
         }finally{
@@ -92,6 +105,11 @@ const Sales = () => {
         }
     }
 
+    //get customer rewards when customer selected
+    const initCustomerReward = async() =>{
+        setReward(await getCustomerReward(customer?.id));
+    }
+
     //detect change in cart and update NET and TOTAL accordingly
     useEffect(()=>{
         let sub = 0;
@@ -105,6 +123,11 @@ const Sales = () => {
         setTax(tempTax);
         setTotal(sub + tempTax);
     },[cart]);
+
+    //detect change in customer and update accordingly
+    useEffect(()=>{
+        initCustomerReward(customer);
+    },[customer]);
     return (
         <IonPage className="page">
             <ToolBar/>
@@ -122,6 +145,7 @@ const Sales = () => {
                 loading={loading}
                 onClose={()=>setShowPaymentWindow(false)}
                 onConfirmPayment={onCloseSale}
+                paymentSubmited={paymentSubmited}
             />
             <RefundCustomer
                 isOpen={showRefundWindow}
@@ -155,18 +179,18 @@ const Sales = () => {
                             </div>
                         </div>
 
-                        <div className="flex pad-v-xl font dark">
+                        <div className="flex font dark reward-container">
                             <div className="max-width pad-h">
                                 <div>STORE</div>
-                                <div className="text-right pad-v">0.000</div>
+                                <div className="text-right pad-v">{reward?.store || "0.0"}</div>
                             </div>
                             <div className="max-width pad-h border-l-r">
                                 <div>REWARD</div>
-                                <div className="text-right pad-v">4200</div>
+                                <div className="text-right pad-v">${reward?.reward || "0.0"}</div>
                             </div>
                             <div className="max-width pad-h">
                                 <div>VISIT</div>
-                                <div className="text-right pad-v">19</div>
+                                <div className="text-right pad-v">{reward?.visits || 0}</div>
                             </div>
                         </div>
 
@@ -188,7 +212,7 @@ const Sales = () => {
                             ))}
                         </div>
 
-                        <div className="cost-display pad-xl dark">
+                        <div className="cost-display-container pad-xl dark">
                             <div className="flex">
                                 <div className="max-width pad-mini"><b>TOTAL</b></div>
                                 <div className="max-width pad-mini"><b>${total.toFixed(2)}</b></div>
@@ -204,72 +228,79 @@ const Sales = () => {
                         </div>
                     </div>
                     <div style={{width:"60%"}}>
-                        <div style={{height:"90vh",backgroundColor:"lightgray"}}>
-                            <div style={{overflowY:"auto",height:"78vh",paddingBottom:"40px"}}>
+                        <div style={{height:"90vh"}} className="silver2">
+                            <div className="scroll relative scrollbar2" style={{height:"78vh",paddingBottom:"40px"}}>
+                                <ContainerLoader isOpen={showProductLoader} />
                                 {
+                                    products.length?
                                     products.map((item, key)=>(
                                     <div className="sales-item" key={key}>
                                         <div onClick={()=>addToCart(item)} className="sales-item-sub dark-blue click">
-                                            <div className="float-top-left pad-mini">
-                                                <img style={{width:"30px",height:"30px"}} src={item?.info?.image} alt=""/>
+                                            <div className="sales-item-image">
+                                                <img hidden={!item?.info?.image} className="max-size" src={item?.info?.image} alt=""/>
                                             </div>
-                                            <div className="float-center">
-                                                <div style={{textAlign:"center"}}>{item?.info?.title}</div>
-                                                <div style={{fontSize:"13px",textAlign:"center"}}>${item?.info?.salePrice}</div>
+                                            <div className="sales-item-content">
+                                                <div>{item?.info?.title}</div>
+                                                <div>${item?.info?.salePrice}</div>
                                             </div>
                                             <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini">
                                                 <IonIcon onClick={()=>saveMostRecent(item)} icon={saveOutline}/>
                                             </div>
                                         </div>
                                     </div>
-                                    ))
+                                    )):
+                                    <div className="pad-xxl">No records</div>
                                 }
                             </div> 
                             <div className="more-option-float">
                                 <div onClick={moreOptionToggle} className="dark dark-hover pad-mini" style={{position:"relative",width:"60%",textAlign:"center"}}>
                                     <div className="more-option-btn pad-mini">
                                         <label>More</label>
-                                        <IonIcon hidden={!moreOption} class="float-center" style={{fontSize:"20px",left:"54%"}} icon={chevronUpOutline}/>
-                                        <IonIcon hidden={moreOption} class="float-center" style={{fontSize:"20px",left:"54%"}} icon={chevronDownOutline}/>
+                                        <div className="float-right">
+                                            <IonIcon hidden={moreOption} style={{fontSize:"20px"}} icon={chevronUpOutline}/>
+                                        </div>
+                                        <div className="float-right">
+                                            <IonIcon hidden={!moreOption} style={{fontSize:"20px"}} icon={chevronDownOutline}/>
+                                        </div>
                                     </div>
                                 </div>
-                                <div hidden={!moreOption} className="more-option-item-container">
+                                <div hidden={!moreOption} className="more-option-item-container scrollbar2">
                                     {mostRecent.map((item, key)=>(
-                                        <div onClick={()=>addToCart(item)} className="sales-item" key={key}>
-                                            <div className="float-top-left pad-mini">
-                                                <img style={{width:"30px",height:"30px"}} src={item?.info?.image} alt=""/>
-                                            </div>
-                                            <div className="sales-item-sub teal click">
-                                                <div className="float-center">
-                                                    <div style={{textAlign:"center"}}>{item?.info?.title || "Food"}</div>
-                                                    <div style={{fontSize:"13px",textAlign:"center"}}>{item?.info?.salePrice || "$0.00"}</div>
+                                        <div className="sales-item" key={key}>
+                                            <div onClick={()=>addToCart(item)} className="sales-item-sub dark-blue click">
+                                                <div className="sales-item-image">
+                                                    <img hidden={!item?.info?.image} className="max-size" src={item?.info?.image} alt=""/>
                                                 </div>
-                                            </div>
-                                            <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini" style={{color:"white"}}>
-                                                <IonIcon onClick={()=>removeMostRecent(item)} class="close-hover" icon={closeOutline}/>
+                                                <div className="sales-item-content">
+                                                    <div>{item?.info?.title}</div>
+                                                    <div>${item?.info?.salePrice}</div>
+                                                </div>
+                                                <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini">
+                                                    <IonIcon onClick={()=>removeMostRecent(item)} class="close-hover" icon={closeOutline}/>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>   
-                            <div>
-                                <div className="sales-item">
-                                    <div onClick={()=>setShowCustomerAction(true)} className="sales-item-sub click dodger">
+                            <div className="action-btn-container">
+                                <div className="sales-action-btn-container">
+                                    <div onClick={()=>setShowCustomerAction(true)} className="sales-action-btn click dodger">
                                         <IonIcon className="float-center" style={{fontSize:"60px"}} icon={addOutline} />
                                     </div>
                                 </div>
-                                <div className="sales-item">
-                                    <div onClick={()=>cart?.length? setShowAlert(true): null} className="sales-item-sub click dark dark-hover">
+                                <div className="sales-action-btn-container">
+                                    <div onClick={()=>cart?.length? setShowAlert(true): null} className="sales-action-btn click dark dark-hover">
                                         <div className="float-center">CLEAR</div>
                                     </div>
                                 </div>
-                                <div className="sales-item">
-                                    <div onClick={()=>setShowRefundWindow(true)} className="sales-item-sub click danger">
+                                <div className="sales-action-btn-container">
+                                    <div onClick={()=>setShowRefundWindow(true)} className="sales-action-btn click danger">
                                         <div className="float-center">CANCEL</div>
                                     </div>
                                 </div>
-                                <div className="sales-item">
-                                    <div onClick={()=>cart?.length? setShowPaymentWindow(true): null} className="sales-item-sub click success">
+                                <div className="sales-action-btn-container">
+                                    <div onClick={()=>cart?.length? setShowPaymentWindow(true): null} className="sales-action-btn click success">
                                         <div className="float-center">PAY</div>
                                     </div>
                                 </div>
@@ -282,4 +313,4 @@ const Sales = () => {
     );
 };
 
-export default Sales;
+export default OrderEntry;

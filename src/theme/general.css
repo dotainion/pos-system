@@ -15,6 +15,13 @@
     animation: modal 0.3s linear forwards;
     background-color: rgb(0, 0, 0, 0.50);
 }
+.container-backdrop{
+    position: absolute;
+    z-index: 99999999999999;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.50);
+}
 .background-image{
     position: relative;
     width: 100%;
@@ -123,7 +130,7 @@
 .sales-item-container{
     position: relative;
     height: 59%;
-    max-height: 450px;
+    max-height: 400px;
     overflow-y: auto;
     background-color: lightgray;
 }
@@ -137,9 +144,11 @@
     border-radius: 5px;
     margin-left: 10px;
 }
-.cost-display{
+.cost-display-container{
     height: 16%;
     border-top: 1px solid white;
+    border-radius: 30px;
+    margin-top: 15px;
 }
 .sales-item-name-header{
     width: 60%;
@@ -184,15 +193,50 @@
 .sales-item{
     position: relative;
     display: inline-block;
-    width: 25%;
-    padding: 2px;
-    height: 100px;
+    width: 20%;
+    padding: 10px;
+    height: 200px;
     margin-bottom: -2px;
     user-select: none;
 }
 .sales-item-sub{
+    position: relative;
     width: 100%;
     height: 100%;
+}
+.sales-item-image{
+    width: 100%;
+    height: 75%;
+}
+.sales-item-content{
+    width: 100%;
+    height: 25%;
+    padding: 3px;
+    font-size: 13px;
+    color: black;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    background-color: white;
+}
+.action-btn-container{
+    position: relative;
+    background-color: rgb(24, 23, 23);
+}
+.sales-action-btn-container{
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    padding: 5px;
+    height: 108px;
+    margin-bottom: -2px;
+    user-select: none;
+}
+.sales-action-btn{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
 }
 .flex{
     display: flex;
@@ -270,6 +314,9 @@
     padding-left: 25px;
     padding-right: 25px;
 }
+.border{
+    border: 1px solid gray;
+}
 .border-l-r{
     border-left: 1px solid white;
     border-right: 1px solid white;
@@ -292,6 +339,10 @@
 }
 .silver{
     background: linear-gradient(to right, gray 0%, white 50%, gray 100%);
+    --ion-background-color: linear-gradient(to right, gray 0%, white 50%, gray 100%);
+}
+.silver2{
+    background: linear-gradient(to bottom, white 0%, gray 100%);
     --ion-background-color: linear-gradient(to right, gray 0%, white 50%, gray 100%);
 }
 .success{
@@ -320,8 +371,7 @@
     background: linear-gradient(to bottom, rgb(19, 192, 250)0%, rgb(1, 41, 54)100%);
 }
 .dark-blue:hover{
-    color: orange;
-    text-shadow: 1px 1px 1px black;
+    color: rgb(1, 41, 54);
 }
 .teal{
     color: white;
@@ -359,6 +409,7 @@
     background: linear-gradient(to bottom, rgb(235, 240, 243) 0%, rgb(129, 155, 170) 100%);
 }
 .more-option-btn{
+    position: relative;
     display: inline;
     margin-left: 20px;
     padding-right: 20px;
@@ -589,6 +640,7 @@
     border-radius: 50%;
     user-select: none;
     box-shadow: 1px 1px 2px black;
+    color: black;
     background-color: white;
 }
 .popup-header{
@@ -628,14 +680,38 @@
     border-radius: 50%;
     background: linear-gradient(to right, lightgray 0%, rgb(22, 22, 22) 100%);
 }
+.scrollbar2::-webkit-scrollbar{
+    width: 15px;
+    height: 15px;
+    background: linear-gradient(to right, dodgerblue 0%, rgb(1, 18, 34) 100%);
+}
+.scrollbar2::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    border: 1px solid gray;
+    background: linear-gradient(to right, lightgray 0%, rgb(22, 22, 22) 100%);
+}
+.scrollbar2::-webkit-scrollbar-button{
+    color: black;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(to right, lightgray 0%, rgb(22, 22, 22) 100%);
+}
 .btn-font{
     font-size: 15px;
 }
 .radius{
     border-radius: 5px;
 }
+.radius-xl{
+    border-radius: 10px;
+}
 .pointer{
     cursor: pointer;
+}
+.reward-container{
+    border-radius: 40px;
+    margin-bottom: 10px;
+    padding: 15px;
 }
 .popup-container{
     position: relative;
@@ -689,4 +765,15 @@
     padding: 20px;
     margin-top: 10px;
     box-shadow: 1px 1px 5px black;
+}
+.relative{
+    position: relative;
+}
+.jump-up{
+    animation: jump 3s linear infinite;
+}
+.spinner{
+    font-size: 25px;
+    color: white;
+    animation: spin 1s infinite;
 }

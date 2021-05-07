@@ -6,24 +6,24 @@ import { PopupContainer } from '../components/PopupContainer';
 import { useStore } from '../context/Store';
 import { addCustomer } from '../database/database';
 import { SearchBar } from './SearchBar';
+import img from '../images/beach.jpg';
+import { tools } from '../tools/Tools';
+import { AddCustomer } from './AddCustomer';
 
 
 export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searchValue}) =>{
-    const { cart, setCart, cartOnHold, setCartOnHold } = useStore();
+    const { cart, setCart, cartOnHold, setCartOnHold, customers } = useStore();
     const [toggleDisplay, setToggleDisplay] = useState({saveItem:true,viewItem:false,addCustomer:false});
     const [error, setError] = useState("");
     const [showAddCustomer, setShowAddCustomer] = useState(false);
     const [customer, setCustomer] = useState({});
     const [defaultSearchValue, setDefaultSearchValue] = useState("");
 
+    //hold image
+    const [image, setImage] = useState("");
+
     //for add cart on hold and name it
     const titleRef = useRef();
-
-    //for adding customer
-    const customerNameRef = useRef();
-    const customerEmailRef = useRef();
-    const customerNumberRef = useRef();
-    const customerIdRef = useRef();
 
     const onSaveCartItem = () =>{
         setError("");
@@ -50,21 +50,6 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
             setCart(newOnHold?.[index]?.order);
             setCartOnHold(holdStore);
         }
-    }
-
-    const onSaveCustomer = async() =>{
-        setError("");
-        if (!customerNameRef.current.value) return setError("Name is required");
-        await addCustomer({
-            name: customerNameRef.current.value || "",
-            email: customerEmailRef.current.value || "",
-            number: customerNumberRef.current.value || "",
-            id: customerIdRef.current.value || "",
-        });
-        customerNameRef.current.value = "";
-        customerEmailRef.current.value = "";
-        customerNumberRef.current.value = "";
-        customerIdRef.current.value = "";
     }
 
     const onCustomerSearch = (value) =>{
@@ -143,14 +128,19 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                         </div>
                     </div>
                 </div>
-                <div className="max-size entry-action-mini scrollbar">
+                <div className="max-size entry-action-mini scrollbar" style={{position:"relative"}}>
+                    <div style={{color:"white"}} className="dark-blue">
+                        <div className="sales-item-name-header radius">Title</div>
+                        <div className="sales-item-qty-header radius">Qty</div>
+                        <div className="sales-item-price-header radius">Price</div>
+                    </div>
                     {
                         cart?.length?
                         cart.map((order, key)=>(
-                            <div style={{color:"white"}} key={key}>
-                                <div className="sales-item-name-header radius">{order?.info?.title || "Not Provided"}</div>
-                                <div className="sales-item-qty-header radius">{order?.qty || 1}</div>
-                                <div className="sales-item-price-header radius">{order?.info?.salePrice || "Not Provided"}</div>
+                            <div style={{color:"white",borderBottom:"1px solid white"}} key={key}>
+                                <div className="sales-item-name-header radius" style={{border:"none"}}>{order?.info?.title || "Not Provided"}</div>
+                                <div className="sales-item-qty-header radius" style={{border:"none"}}>{order?.qty || 1}</div>
+                                <div className="sales-item-price-header radius" style={{border:"none"}}>${order?.info?.salePrice || "Not Provided"}</div>
                             </div>
                         )):
                         <div style={{color:"white"}}>Cart is empty</div>
@@ -191,8 +181,8 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                 </div>
                 <div className="max-size entry-action-mini scrollbar">
                     {
-                        [1]?.length?
-                        [{id:"dfd54",info:{name:"this name is test",email:"example@mail.com",number:"111111",id:"225544"}}].map((customer, key)=>(
+                        customers?.length?
+                        customers.map((customer, key)=>(
                             <div onClick={()=>setCustomer(customer)} className="flex customer-item-container input-style" key={key}>
                                 <div className="inline max-width pad">{customer?.info?.name}</div>
                                 <div className="inline max-width pad">{customer?.info?.email}</div>
@@ -205,19 +195,10 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                 </div>
             </div>
         </PopupContainer>
-        <PopupContainer isOpen={showAddCustomer} onClose={()=>setShowAddCustomer(false)}>
-            <p className="pad-xl font-xl" style={{position:"relative",textAlign:"center"}}>
-                Add valued customer<br/>
-                <label className="float-bottom-overflow max-width font" style={{color:"red",textAlign:"center"}}>{error}</label>
-            </p>
-            <div className="item-center" style={{width:"60%"}}>
-                <Entry entryRef={customerNameRef} type="text" cssClass="input-style" label="Name" placeholder="Name" />
-                <Entry entryRef={customerEmailRef} type="email" cssClass="input-style" label="Email" placeholder="example@gmail.com" />
-                <Entry entryRef={customerNumberRef} type="number" cssClass="input-style" label="Phone Number" placeholder="1474999999" />
-                <Entry entryRef={customerIdRef} type="text" cssClass="input-style" label="Id Number" placeholder="Id#" />
-                <button onClick={onSaveCustomer} className="add-btn" style={{float:"right"}}>Save</button>
-            </div>
-        </PopupContainer>
+        <AddCustomer
+            isOpen={showAddCustomer}
+            onClose={()=>setShowAddCustomer(false)}
+        />
         </>
     )
 }

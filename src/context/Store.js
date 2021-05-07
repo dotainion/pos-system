@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../config/auth';
 import { roles } from '../content/lists';
-import { getProducts, getUser } from '../database/database';
+import { getCustomer, getProducts, getUser } from '../database/database';
 
 
 const ContextProvider = createContext();
@@ -14,6 +14,8 @@ export const AppContext = ({children}) =>{
     const [cartOnHold, setCartOnHold] = useState([]);
     const [products, setProducts] = useState([]);
     const [mostRecent, setMostRecent] = useState([]);
+    const [customers, setCustomers] = useState([]);
+    const [showProductLoader, setShowProductLoader] = useState(false);
 
     const signIn = async(email, password) =>{
         try{
@@ -31,6 +33,10 @@ export const AppContext = ({children}) =>{
         }catch(error){
             return {error: error.message};
         }
+    }
+
+    const signOut = async() =>{
+        await auth.signOut();
     }
 
     const saveMostRecent = (item) =>{
@@ -62,9 +68,11 @@ export const AppContext = ({children}) =>{
     }
 
     const initProducts = async() =>{
+        setShowProductLoader(true);
         setProducts(await getProducts());
         //window.localStorage.clear();
         setMostRecent(JSON.parse(window.localStorage.getItem("most-recent") || []));
+        setShowProductLoader(false);
     }
 
     //on search value
@@ -75,6 +83,7 @@ export const AppContext = ({children}) =>{
             }
             return false;
         }
+        setShowProductLoader(true);
         let storeSorted = [];
         let prods = await getProducts();
         const title = prods.filter((prod)=>prod?.info?.title?.toLowerCase()?.includes(value?.toLowerCase()));
@@ -83,15 +92,21 @@ export const AppContext = ({children}) =>{
             if (!isInclued(obj?.id)) storeSorted.push(obj);
         }
         setProducts(storeSorted);
+        setShowProductLoader(false);
+    }
+
+    const initCustomers = async() =>{
+        setCustomers(await getCustomer());
     }
 
     const initialize = () =>{
         initProducts();
+        initCustomers();
     }
 
     useEffect(()=>{
-        initialize();
         auth.onAuthStateChanged(async(user)=>{
+            initialize();
             setIsAuthenticated(user);
             setLoading(false);
         });
@@ -103,14 +118,18 @@ export const AppContext = ({children}) =>{
             cartOnHold,
             setCartOnHold,
             signIn,
+            signOut,
             createUser,
             isAuthenticated,
             products,
             initProducts,
+            showProductLoader,
             searchProducts,
             mostRecent,
             saveMostRecent,
             removeMostRecent,
+            customers,
+            initCustomers
         }}>
             {!loading && children}
         </ContextProvider.Provider>

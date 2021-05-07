@@ -19,6 +19,17 @@ export const Products = () =>{
     const onGetProduts = async() =>{
         setProducts(await getProducts());
     }
+
+    const onShowAddProducts = () =>{
+        setSelectedRecord({});
+        setShowAddProducts(true);
+    }
+
+    const onShowEditProducts = (obj) =>{
+        setSelectedRecord(obj);
+        setShowAddProducts(true)
+    }
+
     //this is a test
     useEffect(()=>{
         onGetProduts();
@@ -30,21 +41,21 @@ export const Products = () =>{
                 record={selectedRecord}
                 onClose={()=>setShowAddProducts(false)}
             />
-            <MenuBarWrapper onAdd={()=>setShowAddProducts(true)} onSearch>
+            <MenuBarWrapper onAdd={onShowAddProducts} onSearch>
                 <IonList class="item-container">
                     {
                         products?.length?
                         products.map((prod, key)=>(
-                            <div onClick={()=>{setSelectedRecord(prod);setShowAddProducts(true)}} className="item-info-container" key={key}>
+                            <div onClick={()=>onShowEditProducts(prod)} className="item-info-container" key={key}>
                                 <div className="flex item-sub-info-container">
-                                    <IonThumbnail>
+                                    <IonThumbnail style={{width:"25%"}}>
                                         <IonImg class="max-size" src={prod?.info?.image || img}/>
                                     </IonThumbnail>
-                                    <div>
-                                        <div>{prod?.info?.title}</div>
-                                        <div>{prod?.info?.costPrice}</div>
-                                        <div>{prod?.info?.salePrice}</div>
-                                        <div>{prod?.info?.qty}</div>
+                                    <div style={{whiteSpace:"nowrap",width:"75%"}}>
+                                        <div>Title: {prod?.info?.title}</div>
+                                        <div>Cost Price: ${prod?.info?.costPrice}</div>
+                                        <div>Sale Price: ${prod?.info?.salePrice}</div>
+                                        <div>Quantity: {prod?.info?.qty}</div>
                                     </div>
                                 </div>
                             </div>

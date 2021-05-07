@@ -1,5 +1,6 @@
 export const routes = {
     login: "/login",
+    register: "/register",
     orderEntry: "/order-entry",
     default: "/",
     products: "/products",
