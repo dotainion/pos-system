@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../config/auth';
 import { roles } from '../content/lists';
 import { getCustomer, getProducts, getUser } from '../database/database';
+import { Landscape, Portrait } from '../screen/Screen';
 
 
 const ContextProvider = createContext();
@@ -70,9 +71,8 @@ export const AppContext = ({children}) =>{
     const initProducts = async() =>{
         setShowProductLoader(true);
         setProducts(await getProducts());
-        //window.localStorage.clear();
-        setMostRecent(JSON.parse(window.localStorage.getItem("most-recent") || []));
         setShowProductLoader(false);
+        setMostRecent(JSON.parse(window.localStorage.getItem("most-recent") || []));
     }
 
     //on search value
@@ -111,26 +111,28 @@ export const AppContext = ({children}) =>{
             setLoading(false);
         });
     },[]);  
+
+    const providerValue = {
+        cart,
+        setCart,
+        cartOnHold,
+        setCartOnHold,
+        signIn,
+        signOut,
+        createUser,
+        isAuthenticated,
+        products,
+        initProducts,
+        showProductLoader,
+        searchProducts,
+        mostRecent,
+        saveMostRecent,
+        removeMostRecent,
+        customers,
+        initCustomers
+    }
     return(
-        <ContextProvider.Provider value={{
-            cart,
-            setCart,
-            cartOnHold,
-            setCartOnHold,
-            signIn,
-            signOut,
-            createUser,
-            isAuthenticated,
-            products,
-            initProducts,
-            showProductLoader,
-            searchProducts,
-            mostRecent,
-            saveMostRecent,
-            removeMostRecent,
-            customers,
-            initCustomers
-        }}>
+        <ContextProvider.Provider value={providerValue}>
             {!loading && children}
         </ContextProvider.Provider>
     )

@@ -44,7 +44,9 @@ export const Login = () =>{
                                     </IonItem>
                                     <IonLabel style={{textShadow:"1px 1px 1px black"}} class="link-hover" color="danger">Forget Password</IonLabel>
                                     <IonButton onClick={onSignIn} style={{float:"right"}} size="small" color="light">Login</IonButton>
-                                    <IonButton onClick={()=>history.push(routes.register)} style={{float:"right"}} size="small" color="light">Sign up</IonButton>
+                                    <div className="singup-btn">
+                                        <label onClick={()=>history.push(routes.register)}>Sign up</label>
+                                    </div>
                                 </div>
                             </div>
                         </IonCol>

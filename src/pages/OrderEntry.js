@@ -22,7 +22,6 @@ const OrderEntry = () => {
     const [showCustomerAction, setShowCustomerAction] = useState(false);
     const [customer, setCustomer] = useState({});
     const [customerSearchValue, setCustomerSearchValue] = useState("");
-    const [showEditField, setShowEditField] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [showPaymentWindow, setShowPaymentWindow] = useState(false);
     const [showRefundWindow, setShowRefundWindow] = useState(false);
@@ -32,11 +31,6 @@ const OrderEntry = () => {
     const moreOptionToggle = () =>{
         if (moreOption) setMoreOption(false);
         else setMoreOption(true);
-    }
-
-    const toggleShowEditField = () =>{
-        if (showEditField) setShowEditField(false);
-        else setShowEditField(true);
     }
 
     const updateCartQty = (item,value=null) =>{
@@ -53,12 +47,18 @@ const OrderEntry = () => {
 
     const addToCart = (item) =>{
         for (let cartItem of cart){
-            if (cartItem?.id === item?.id){
-                return updateCartQty(item);
-            }
+            if (cartItem?.id === item?.id) return updateCartQty(item);
         }
         item["qty"] = 1;
         setCart([item,...cart]);
+    }
+
+    const deleteFromCart = (item) =>{
+        let tempCart = [];
+        for (let cartItem of cart){
+            if (cartItem?.id !== item?.id) tempCart.push(cartItem);
+        }
+        setCart(tempCart);
     }
 
     const onCloseSale = async() =>{
@@ -196,18 +196,21 @@ const OrderEntry = () => {
 
                         <div className="sales-item-header-container">
                             <div className="sales-item-name-header dark">name</div>
-                            <div onClick={toggleShowEditField} className="sales-item-qty-header dark">Qty</div>
+                            <div className="sales-item-qty-header dark">Qty</div>
                             <div className="sales-item-price-header dark">Price</div>
                         </div>
 
                         <div className="sales-item-container">
                             {cart.map((order, key)=>(
-                                <div key={key}>
+                                <div className="cart-item-hover relative" key={key}>
                                     <div className="sales-item-name-header">{order?.info?.title || "Not Provided"}</div>
-                                    <div className="sales-item-qty">
-                                        <input onChange={(e)=>updateCartQty(order,e.target.value)} style={{background: showEditField && "white"}} value={order?.qty || 1}/>
+                                    <div className="sales-item-qty cart-qty-item-hover">
+                                        <input onChange={(e)=>updateCartQty(order,e.target.value)} value={order?.qty || 1}/>
                                     </div>
                                     <div className="sales-item-price-header">${order?.info?.salePrice || "Not Provided"}</div>
+                                    <span className="hide">
+                                        <IonIcon onClick={()=>deleteFromCart(order)} class="float-right close-hover font-xl" icon={closeOutline}/>
+                                    </span>
                                 </div>
                             ))}
                         </div>

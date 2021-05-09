@@ -51,7 +51,7 @@ const App: React.FC = () => (
           <Route exact path={routes.settings} render={()=><SecureRoutes Components={Settings}/>}/>
           <Route exact path={routes.login} render={()=><Login/>}/>
           <Route exact path={routes.register} render={()=><Register/>}/>
-          <Route exact path={routes.default} render={()=><Redirect to={routes.login}/>}/>
+          <Route exact path={routes.default} render={()=><Redirect to={routes.orderEntry}/>}/>
         </IonRouterOutlet>
       </IonReactRouter>
     </AppContext>

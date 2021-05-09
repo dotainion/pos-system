@@ -117,7 +117,7 @@ export const Register = () =>{
     return(
         <IonPage>
             <IonContent class="silver no-select">
-                <div className="flex border radius pad-xxl half-width silver2 float-center">
+                <div className="flex d-flex-on-mobile border radius pad-xxl half-width silver2 float-center max-width-on-mobile">
                     <div className="max-width">
                         <div hidden={!pages.first}>
                             <Entry onChange={()=>reset("f")} entryRef={firstNameRef} error={firstNameError} labelColor="rgb(5, 5, 5)" label="First Name" placeholder="First Name" />
@@ -141,7 +141,7 @@ export const Register = () =>{
                             </div>
                         </div>
                     </div>
-                    <div className="half-width" style={{position:"relative",overflow:"hidden"}}>
+                    <div className="half-width hide-on-mobile" style={{position:"relative",overflow:"hidden"}}>
                         <img className="float-center" style={{borderRadius:"50%"}} src={posImage} alt="" />
                     </div>
                     <button onClick={()=>history.push(routes.login)} className="float-bottom-left pad pad-h radius click silver2" style={{float:"right",margin:"30px"}}>Login instead</button>
