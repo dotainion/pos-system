@@ -277,6 +277,12 @@
 .max-screen-height{
     height: 100vh;
 }
+.max-screen-height-for-menu-wrapper{
+    position: absolute;
+    width: 100%;
+    height: 93.1vh;
+    bottom: 0;
+}
 .half-width{
     width: 50%;
 }
@@ -301,6 +307,10 @@
 .pad-v{
     padding-top: 10px;
     padding-bottom: 10px;
+}
+.pad-v-mini{
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 .pad-v-xl{
     padding-top: 15px;
@@ -473,7 +483,7 @@
 .menu-container{
     position: relative;
     z-index: 9999999999;
-    max-width: 250px;
+    width: 20%;
     height: 100vh;
     white-space: nowrap;
     transition: all 1s;
@@ -491,7 +501,11 @@
     margin-left: 5px;
     margin-right: 5px;
     color: white;
+    cursor: pointer;
     --ion-background-color: linear-gradient(to bottom, dodgerblue 0%, rgb(9, 36, 63) 100%);
+}
+.menu-button:hover{
+    color: red;
 }
 .menu-button-selected{
     color: orange;
@@ -528,9 +542,8 @@
     box-shadow: 0px 0px 20px rgb(9, 36, 63);
 }
 .item-info-container ion-thumbnail{
-    width: 80px;
-    height: 80px;
-    padding-right: 5px;
+    width: 100%;
+    height: 250px;
 }
 .add-btn{
     font-size: 20px;
@@ -567,8 +580,8 @@
     display: none;
 }
 .menu-content-page{
-    padding-top: 60px;
-    padding-bottom: 20px;
+    position: relative;
+    width: 80%;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url(../images/beach.jpg);
@@ -805,4 +818,7 @@
 }
 .hide{
     display: none;
+}
+.center{
+    text-align: center;
 }

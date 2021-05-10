@@ -17,6 +17,7 @@ export const AppContext = ({children}) =>{
     const [mostRecent, setMostRecent] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [showProductLoader, setShowProductLoader] = useState(false);
+    const [adminAccess, setAdminAccess] = useState(false);
 
     const signIn = async(email, password) =>{
         try{
@@ -129,7 +130,9 @@ export const AppContext = ({children}) =>{
         saveMostRecent,
         removeMostRecent,
         customers,
-        initCustomers
+        initCustomers,
+        adminAccess,
+        setAdminAccess,
     }
     return(
         <ContextProvider.Provider value={providerValue}>

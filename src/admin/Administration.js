@@ -6,7 +6,7 @@ import { MenuBar, MenuBarWrapper } from '../components/MenuBar';
 export const Administration = () =>{
     return(
         <IonPage>
-            <MenuBarWrapper onSearch>
+            <MenuBarWrapper>
                 <IonList class="item-container">
                     hello oworld
                 </IonList>

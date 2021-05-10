@@ -1,8 +1,9 @@
-import { IonItemDivider, IonProgressBar } from '@ionic/react';
+import { IonItemDivider } from '@ionic/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
 import { PopupContainer } from '../components/PopupContainer';
 import { useStore } from '../context/Store';
+import { Progressing } from './Progressing';
 
 
 
@@ -47,7 +48,7 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                             <div className="pad-mini">{cart?.length} Items</div>
                         </div>
                     </IonItemDivider>
-                    <IonProgressBar style={{visibility:!loading && "hidden"}} color="light" type="indeterminate" value={0.5}/>
+                    <Progressing isOpen={loading} />
                     <div className="flex font-mini">
                         <div className="max-width pad-mini">NET</div>
                         <div className="max-width pad-mini">{net?.toFixed(2) || 0.0}</div>

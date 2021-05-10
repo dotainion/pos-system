@@ -1,5 +1,5 @@
-import { IonIcon, IonList, IonProgressBar } from '@ionic/react';
-import { closeOutline } from 'ionicons/icons';
+import { IonIcon, IonImg, IonList, IonThumbnail } from '@ionic/react';
+import { closeOutline, imagesOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { roles } from '../content/lists';
 import { useStore } from '../context/Store';
@@ -7,6 +7,9 @@ import { addUser } from '../database/database';
 import { Entry } from './Entry';
 import { PopupContainer } from './PopupContainer';
 import { Select } from './Select';
+import img from '../images/beach.jpg';
+import { tools } from '../tools/Tools';
+import { Progressing } from '../widgets/Progressing';
 
 
 export const CreateEmployee = ({isOpen, record, onClose}) =>{
@@ -14,6 +17,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [inputStyle, setInputStyle] = useState("");
+    const [image, setImage] = useState("");
     const [showEmplyeeInput, setShowEmployeeInput] = useState({
         first: true,
         second: false,
@@ -23,6 +27,8 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
     const credsEmailRef = useRef();
     const credsPasswordRef = useRef();
     const credsConfirmRef = useRef();
+
+    const imageRef = useRef();
 
     const roleRef = useRef();
 
@@ -62,6 +68,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                 address: addressRef.current.value || "",
 
                 role: roleRef.current.value || "",
+                image: image,
                 
                 kinName: nextOfKinNameRef.current.value || "",
                 kinEmail: nextOfKinEmailRef.current.value || "",
@@ -88,6 +95,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
             addressRef.current.value = record?.info?.address || "";
 
             roleRef.current.value = record?.info?.role || "";
+            setImage(record?.info?.image || "");
         
             nextOfKinNameRef.current.value = record?.info?.kinName || "";
             nextOfKinEmailRef.current.value = record?.info?.kinEmail || "";
@@ -110,7 +118,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                     }
                 </div>
             </div>
-            <IonProgressBar hidden={!loading} color="light" type="indeterminate" value={0.5}/>
+            <Progressing isOpen={loading}/>
             <div className="pad">
                 <div hidden={!showEmplyeeInput.first}>
                     <div className="flex d-flex-on-mobile">
@@ -124,6 +132,11 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={countryRef} placeholder="Country" label="Country" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={cityRef} placeholder="city" label="City" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={addressRef} placeholder="Address" label="Address" />
+                            <IonThumbnail onClick={()=>imageRef.current?.click()} class="item-center relative" style={{width:"100px",height:"100px",borderRadius:"50%"}}>
+                                <IonImg src={image || img} class="max-size" style={{borderRadius:"50%"}} />
+                                <IonIcon icon={imagesOutline} class="float-top-left" style={{boxShadow:"2px 2px 5px black",margin:"5px"}} />
+                            </IonThumbnail>
+                            <input hidden type="file" ref={imageRef} onChange={async e=>setImage(await tools.toBase64(e.target.files[0]))} />
                         </div>
                     </div>
                     <div style={{float:"right"}}>

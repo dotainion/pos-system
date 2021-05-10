@@ -5,7 +5,7 @@ import { useStore } from '../context/Store';
 import { getProducts, addSale, updateCustomerReward, getCustomerReward } from '../database/database';
 import { ToolBar } from '../layout/ToolBar';
 import { Alert } from '../widgets/Alert';
-import { ContainerLoader } from '../widgets/ContainerLoader';
+import { Loader } from '../widgets/Loader';
 import { CustomerEntryActions } from '../widgets/CustomerEntryAction';
 import { PaymentWindow } from '../widgets/PaymentWindow';
 import { RefundCustomer } from '../widgets/RefundCustomer';
@@ -13,7 +13,7 @@ import { SearchBar } from '../widgets/SearchBar';
 
 
 const OrderEntry = () => {
-    const { cart, setCart, products, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts } = useStore();
+    const { cart, setCart, products, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, setAdminAccess } = useStore();
     const [loading, setLoading] = useState(false);
     const [moreOption, setMoreOption] = useState(false);
     const [tax, setTax] = useState(0);
@@ -128,6 +128,7 @@ const OrderEntry = () => {
     useEffect(()=>{
         initCustomerReward(customer);
     },[customer]);
+
     return (
         <IonPage className="page">
             <ToolBar/>
@@ -158,7 +159,7 @@ const OrderEntry = () => {
                 message="Are you sure you will like to clear the cart?"
             />
             <IonContent>
-                <div className="flex no-select" style={{minWidth:"700px"}}>
+                <div className="flex no-select" style={{minWidth:"670px"}}>
                     <div style={{width:"40%",padding:"20px",borderRight:"5px solid rgb(48, 46, 46)"}}>
                         <div className="flex">
                             <div className="max-width pad">
@@ -233,7 +234,7 @@ const OrderEntry = () => {
                     <div style={{width:"60%"}}>
                         <div style={{height:"90vh"}} className="silver2">
                             <div className="scroll relative scrollbar2" style={{height:"78vh",paddingBottom:"40px"}}>
-                                <ContainerLoader isOpen={showProductLoader} />
+                                <Loader isOpen={showProductLoader} />
                                 {
                                     products.length?
                                     products.map((item, key)=>(

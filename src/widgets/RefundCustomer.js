@@ -5,12 +5,19 @@ import { PopupContainer } from '../components/PopupContainer';
 import { Dropdown } from './Dropdown';
 import { SearchBar } from './SearchBar';
 import { getSales } from '../database/database';
+import { Loader } from './Loader';
+import { ConfirmAuthentication } from './ConfirmAuth';
 
 
 export const RefundCustomer = ({isOpen, onClose}) =>{
     const [sales, setSales] = useState([]);
+    const [showLoader, setShowLoader] = useState(false);
+    const [showConfirmAuth, setShowConfirmAuth] = useState(false);
+
     const onGetSales = async() =>{
+        setShowLoader(true);
         setSales(await getSales());
+        setShowLoader(false);
     }
 
     const toggleItemOnHold = (id) =>{
@@ -33,11 +40,16 @@ export const RefundCustomer = ({isOpen, onClose}) =>{
     }
 
     useEffect(()=>{
-        if (isOpen) onGetSales?.();
+        if (isOpen){
+            onGetSales?.();
+            setShowConfirmAuth(true);
+        }
     },[isOpen]);
     return(
+        <>
         <PopupContainer isOpen={isOpen} onClose={onClose}>
-            <div className="dark max-size">
+            <div className="dark max-size relative">
+                <Loader isOpen={showLoader}/>
                 <div className="pad-xxl dark" style={{color:"black"}}>
                     <div className="half-width max-width-on-mobile item-center">
                         <SearchBar placeholder="Search Customer" />
@@ -75,5 +87,14 @@ export const RefundCustomer = ({isOpen, onClose}) =>{
                 </div>
             </div>
         </PopupContainer>
+        <ConfirmAuthentication
+            isOpen={showConfirmAuth}
+            onConfirmed={()=>setShowConfirmAuth(false)}
+            onClose={()=>{
+                onClose?.();
+                setShowConfirmAuth(false);
+            }}
+        />
+        </>
     )
 }

@@ -1,4 +1,4 @@
-import { IonIcon, IonImg, IonList, IonLoading, IonProgressBar, IonThumbnail } from '@ionic/react';
+import { IonIcon, IonImg, IonList, IonLoading, IonThumbnail } from '@ionic/react';
 import { closeOutline, imagesOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { roles } from '../content/lists';
@@ -9,6 +9,7 @@ import { Select } from './Select';
 import img from '../images/beach.jpg';
 import { tools } from '../tools/Tools';
 import { PopupContainer } from './PopupContainer';
+import { Progressing } from '../widgets/Progressing';
 
 
 export const AddProducts = ({isOpen, record, onClose}) =>{
@@ -40,7 +41,8 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
             title: titleRef.current.value || "",
             salePrice: salepriceRef.current.value || "",
             costPrice: costPriceRef.current.value || "",
-            qty: quantityRef.current.value || ""
+            qty: quantityRef.current.value || "",
+            postBy: ""
         }
         if (Object.keys(record || {})?.length > 0) await updateProducts(object, record?.id);
         else await addProducts(object);
@@ -70,7 +72,7 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
                 <div>Add new product to inventory</div>
                 <div style={{fontWeight:"normal",fontSize:"15px",color:"orangered",textAlign:"center"}}>{error}</div>
             </div>
-            <IonProgressBar hidden={!loading} color="light" type="indeterminate" value={0.5}/>
+            <Progressing isOpen={loading}/>
             <div className="flex d-flex-on-mobile pad">
                 <div className="max-width">
                     <IonThumbnail class="add-product-pop-thumbnail">

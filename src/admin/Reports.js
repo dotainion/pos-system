@@ -8,7 +8,7 @@ import { MenuBarWrapper } from '../components/MenuBar';
 export const Reports = () =>{
     return(
         <IonPage>
-            <MenuBarWrapper onSearch>
+            <MenuBarWrapper>
                 <IonList class="item-container">
                     hello oworld
                 </IonList>

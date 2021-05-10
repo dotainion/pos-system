@@ -20,6 +20,15 @@ export const Products = () =>{
         setProducts(await getProducts());
     }
 
+    //this is a test
+    const onSearchProduts = async(value) =>{
+        const prods = await getProducts();
+        const results = prods.filter((item)=>(
+            item?.info?.title.toLowerCase().includes(value.toLowerCase())
+        ));
+        setProducts(results);
+    }
+
     const onShowAddProducts = () =>{
         setSelectedRecord({});
         setShowAddProducts(true);
@@ -41,21 +50,21 @@ export const Products = () =>{
                 record={selectedRecord}
                 onClose={()=>setShowAddProducts(false)}
             />
-            <MenuBarWrapper onAdd={onShowAddProducts} onSearch>
+            <MenuBarWrapper onAdd={onShowAddProducts} onSearch={onSearchProduts}>
                 <IonList class="item-container">
                     {
                         products?.length?
                         products.map((prod, key)=>(
                             <div onClick={()=>onShowEditProducts(prod)} className="item-info-container" key={key}>
-                                <div className="flex item-sub-info-container">
-                                    <IonThumbnail style={{width:"25%"}}>
+                                <div className="item-sub-info-container">
+                                    <IonThumbnail>
                                         <IonImg class="max-size" src={prod?.info?.image || img}/>
                                     </IonThumbnail>
-                                    <div style={{whiteSpace:"nowrap",width:"75%"}}>
-                                        <div>Title: {prod?.info?.title}</div>
-                                        <div>Cost Price: ${prod?.info?.costPrice}</div>
-                                        <div>Sale Price: ${prod?.info?.salePrice}</div>
-                                        <div>Quantity: {prod?.info?.qty}</div>
+                                    <div style={{whiteSpace:"nowrap",width:"75%",paddingTop:"10px"}}>
+                                        <div className="pad-v-mini">Title: {prod?.info?.title}</div>
+                                        <div className="pad-v-mini">Cost Price: ${prod?.info?.costPrice}</div>
+                                        <div className="pad-v-mini">Sale Price: ${prod?.info?.salePrice}</div>
+                                        <div className="pad-v-mini">Quantity: {prod?.info?.qty}</div>
                                     </div>
                                 </div>
                             </div>

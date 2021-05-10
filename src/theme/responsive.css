@@ -9,14 +9,19 @@
     .hide-on-mobile{
         display: none;
     }
-    .menu-content-page{
-        padding-top: 50px;
-    }
     .menu-toolbar-container{
         width: 100%;
     }
     .menu-toolbar-search{
         width: 60%;
+    }
+    .menu-backdrop{
+        position: absolute;
+        z-index: 9999999999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
     }
     .hide-on-mobile{
         display: none;
@@ -51,5 +56,11 @@
     .backdrop{
         height: 100vh;
         overflow: none;
+    }
+    .max-screen-height-for-menu-wrapper{
+        position: absolute;
+        width: 100%;
+        height: 90vh;
+        bottom: 0;
     }
 }
