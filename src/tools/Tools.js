@@ -1,4 +1,18 @@
+import { routes } from "../global/Routes";
+
+class Routes{
+    key = "routes-for-admin-access";
+    set(route){
+        window.localStorage.setItem(this.key, JSON.stringify(route));
+    }
+    get(){
+        const route = window.localStorage.getItem(this.key);
+        if (route) return JSON.parse(route);
+        return routes.orderEntry;
+    }
+}
 class Tools{
+    route = new Routes();
     isMobile(){
         if (window.innerWidth <= 767) return true
         else return false;

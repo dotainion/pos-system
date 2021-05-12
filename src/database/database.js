@@ -94,6 +94,15 @@ export const getCustomer = async() =>{
     }
 }
 
+export const getCustomerById = async(id) =>{
+    try{
+        return await getDataById(collection.customer, id);
+    }catch(error){
+        console.log(error);
+        return {};
+    }
+}
+
 export const updateCustomerReward = async(data,id) =>{
     try{
         try{

@@ -4,10 +4,11 @@ import { useHistory } from 'react-router';
 import { Entry } from '../components/Entry';
 import { useStore } from '../context/Store';
 import { routes } from '../global/Routes';
+import { tools } from '../tools/Tools';
 import { Progressing } from '../widgets/Progressing';
 
 
-export const AdminAccess = ({path}) =>{
+export const AdminAccess = () =>{
     const history = useHistory();
 
     const { signIn, adminAccess, setAdminAccess } = useStore();
@@ -35,12 +36,12 @@ export const AdminAccess = ({path}) =>{
 
     //detects change in adminAccess and push route
     useEffect(()=>{
-        if (adminAccess) history.push(path);
+        if (adminAccess) history.push(tools.route.get());
     },[adminAccess]);
     return(
         <IonPage>
             <IonContent>
-                <IonGrid class="background-image">
+                <IonGrid class="dark">
                     <IonRow>
                         <IonCol sizeMd="4" offsetMd="4">
                             <div className="login-main-container">
@@ -53,8 +54,8 @@ export const AdminAccess = ({path}) =>{
                                     <Entry onKeyPress={onEnterPress} entryRef={emailRef} label="Email" placeholder="example@gmail.com" type="email" />
                                     <Entry onKeyPress={onEnterPress} entryRef={passwordRef} label="Password" placeholder="Password1#" type="password" />
                                     <div style={{marginLeft:"20px", marginRight:"20px"}}>
-                                        <IonButton onClick={verifyAuth} size="small" color="light" style={{float:"right"}}>Confirm</IonButton>
-                                        <IonButton onClick={()=>history.goBack()} size="small" color="light" style={{float:"right"}}>Cancel</IonButton>
+                                        <IonButton onClick={verifyAuth} shape="round" size="small" color="light" style={{float:"right"}}>Confirm</IonButton>
+                                        <IonButton onClick={()=>history.goBack()} shape="round" size="small" color="light" style={{float:"right",marginRight:"10px"}}>Cancel</IonButton>
                                     </div>
                                 </div>
                             </div>

@@ -75,8 +75,8 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
             <Progressing isOpen={loading}/>
             <div className="flex d-flex-on-mobile pad">
                 <div className="max-width">
-                    <IonThumbnail class="add-product-pop-thumbnail">
-                        <IonIcon onClick={()=>imageRef.current?.click()} class="float-top-left add-image-icon" icon={imagesOutline}/>
+                    <IonThumbnail onClick={()=>imageRef.current?.click()} class="add-product-pop-thumbnail">
+                        <IonIcon class="float-top-left add-image-icon" icon={imagesOutline}/>
                         <IonImg src={image || img} class="max-size" />
                     </IonThumbnail>
                 </div>

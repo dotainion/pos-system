@@ -8,11 +8,15 @@ import { Alert } from '../widgets/Alert';
 import { Loader } from '../widgets/Loader';
 import { CustomerEntryActions } from '../widgets/CustomerEntryAction';
 import { PaymentWindow } from '../widgets/PaymentWindow';
-import { RefundCustomer } from '../widgets/RefundCustomer';
 import { SearchBar } from '../widgets/SearchBar';
+import { useHistory } from 'react-router';
+import { routes } from '../global/Routes';
+import { tools } from '../tools/Tools';
 
 
 const OrderEntry = () => {
+    const history = useHistory();
+
     const { cart, setCart, products, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, setAdminAccess } = useStore();
     const [loading, setLoading] = useState(false);
     const [moreOption, setMoreOption] = useState(false);
@@ -23,8 +27,8 @@ const OrderEntry = () => {
     const [customer, setCustomer] = useState({});
     const [customerSearchValue, setCustomerSearchValue] = useState("");
     const [showAlert, setShowAlert] = useState(false);
+    const [showRefundAlert, setShowRefundAlert] = useState(false);
     const [showPaymentWindow, setShowPaymentWindow] = useState(false);
-    const [showRefundWindow, setShowRefundWindow] = useState(false);
     const [reward, setReward] = useState({});
     const [paymentSubmited, setPaymentSubmited] = useState(true);
 
@@ -49,8 +53,12 @@ const OrderEntry = () => {
         for (let cartItem of cart){
             if (cartItem?.id === item?.id) return updateCartQty(item);
         }
-        item["qty"] = 1;
-        setCart([item,...cart]);
+        let newItem = JSON.parse(JSON.stringify(item));
+        newItem["qty"] = 1;
+        delete newItem?.info["qty"];
+        delete newItem?.info["image"];
+        delete newItem?.info["costPrice"];
+        setCart([newItem,...cart]);
     }
 
     const deleteFromCart = (item) =>{
@@ -66,8 +74,6 @@ const OrderEntry = () => {
             if (cart?.length <= 0) return;
             setLoading(true);
             setPaymentSubmited(false);
-            let cusId = "";
-            if (Object.keys(cusId || {})?.length > 0) cusId = customer?.id;
             const date = new Date().getTime();
             await addSale({
                 products: cart,
@@ -75,7 +81,7 @@ const OrderEntry = () => {
                 net,
                 total,
                 date,
-                customerId: cusId
+                customerId: customer?.id || ""
             });
             if (Object.keys(customer || {}).length > 0){
                 const cusReward = {
@@ -83,16 +89,21 @@ const OrderEntry = () => {
                     reward: parseFloat(reward?.reward || 0) +1,//reward is done base on the percentage amount towards total price
                     visits: parseFloat(reward?.visits || 0) +1
                 }
-                await updateCustomerReward(cusReward,customer?.id);
+                const res = await updateCustomerReward(cusReward,customer?.id);
+                if (res) setPaymentSubmited(true);
             }
             /**
              * print receipt 
              */
-            setPaymentSubmited(true);
+            
         }catch{
             console.log("someting went wrong");
         }finally{
-            setCart([]);
+            if (paymentSubmited){
+                setCart([]);
+            }else{
+                alert("Something when wrong");
+            }
             setLoading(false);
         }
     }
@@ -107,6 +118,7 @@ const OrderEntry = () => {
 
     //get customer rewards when customer selected
     const initCustomerReward = async() =>{
+        console.log(customer)
         setReward(await getCustomerReward(customer?.id));
     }
 
@@ -148,15 +160,21 @@ const OrderEntry = () => {
                 onConfirmPayment={onCloseSale}
                 paymentSubmited={paymentSubmited}
             />
-            <RefundCustomer
-                isOpen={showRefundWindow}
-                onClose={()=>setShowRefundWindow(false)}
-            />
             <Alert
                 isOpen={showAlert}
                 onClose={()=>setShowAlert(false)}
                 onConfirm={()=>setCart([])}
                 message="Are you sure you will like to clear the cart?"
+            />
+            <Alert
+                isOpen={showRefundAlert}
+                header="Administrator alert!!"
+                onClose={()=>setShowRefundAlert(false)}
+                onConfirm={()=>{
+                    tools.route.set(routes.refund);
+                    history.push(routes.refund);
+                }}
+                message="Refund of customers requires admin profilage, will you like to continue?"
             />
             <IonContent>
                 <div className="flex no-select" style={{minWidth:"670px"}}>
@@ -299,7 +317,7 @@ const OrderEntry = () => {
                                     </div>
                                 </div>
                                 <div className="sales-action-btn-container">
-                                    <div onClick={()=>setShowRefundWindow(true)} className="sales-action-btn click danger">
+                                    <div onClick={()=>setShowRefundAlert(true)} className="sales-action-btn click danger">
                                         <div className="float-center">CANCEL</div>
                                     </div>
                                 </div>

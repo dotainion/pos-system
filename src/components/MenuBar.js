@@ -54,6 +54,10 @@ export const MenuBarWrapper = ({onAdd, onSearch, children}) =>{
         else return "menu-button-selected";
     }
 
+    const routeTo = (path) =>{
+        history.push({pathname:path,state:path});
+    }
+
     useEffect(()=>{
         if (onAdd || onSearch) setHideToolbar(false);
         else setHideToolbar(true);
@@ -69,7 +73,7 @@ export const MenuBarWrapper = ({onAdd, onSearch, children}) =>{
                 </IonList>
                 {nav.map((appPage, index) => (
                     <IonMenuToggle autoHide={false} key={index}>
-                        <IonItem className={`menu-button ${isSelected(appPage.url)}`} routerLink={appPage.url} routerDirection="none" lines="none">
+                        <IonItem className={`menu-button ${isSelected(appPage.url)}`} onClick={()=>routeTo(appPage.url)} routerDirection="none" lines="none">
                             <IonIcon class="menu-button-icon" slot="start" icon={appPage.icon} />
                             <IonLabel>{appPage.title}</IonLabel>
                         </IonItem>

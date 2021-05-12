@@ -1,14 +1,17 @@
 import { IonHeader, IonList, IonTitle, IonToolbar } from "@ionic/react"
+import { useState } from "react";
 import { useHistory } from "react-router";
 import { useStore } from "../context/Store";
 import { routes } from "../global/Routes";
 import { tools } from "../tools/Tools";
+import { Alert } from "../widgets/Alert";
 import { Dropdown } from "../widgets/Dropdown"
 
 
 export const ToolBar = () =>{
     const history = useHistory();
-    const { signOut } = useStore();
+    const { signOut, adminAccess } = useStore();
+    const [showAlert,setShowAlert] = useState({state:false, route:""});
 
     const edits = [
 
@@ -19,22 +22,43 @@ export const ToolBar = () =>{
     const views = [
         {
             title: tools.titleCase(routes.products,"/"),
-            command: ()=>history.push(routes.products)
+            command: ()=>routeTo(routes.products)
         },{
             title: tools.titleCase(routes.administration,"/"),
-            command: ()=>history.push(routes.administration)
+            command: ()=>routeTo(routes.administration)
         },{
             title: tools.titleCase(routes.reports,"/"),
-            command: ()=>history.push(routes.reports)
+            command: ()=>routeTo(routes.reports)
         },{
             title: tools.titleCase(routes.employees,"/"),
-            command: ()=>history.push(routes.employees)
+            command: ()=>routeTo(routes.employees)
         }
     ];
     const settings = [
         
     ];
+
+    const routeTo = (path) =>{
+        for (let link of views){
+            if (path.includes(link.title.toLowerCase()) && !adminAccess){
+                return setShowAlert({state:true, route:path});
+            }
+        }
+        tools.route.set(path);
+        history.push(path);
+    }
     return(
+        <>
+            <Alert
+                isOpen={showAlert.state}
+                header="Administrator alert!!"
+                onClose={()=>setShowAlert({state:false, route:""})}
+                onConfirm={()=>{
+                    tools.route.set(showAlert.route);
+                    history.push(showAlert.route);
+                }}
+                message="Requires admin profilage, will you like to continue?"
+            />
             <div className="no-select h-seperator pad dark font-mini" style={{position:"relative"}}>
                 <Dropdown options={files} cssClass="inline pad-mini dark-hover v-seperator">File</Dropdown>
                 <Dropdown options={edits} cssClass="inline pad-mini dark-hover v-seperator">Edit</Dropdown>
@@ -42,5 +66,6 @@ export const ToolBar = () =>{
                 <Dropdown options={settings} cssClass="inline pad-mini dark-hover">Settings</Dropdown>
                 <label onClick={signOut} className="float-right pad-h-xl close-hover">Sign out</label>
             </div>
+        </>
     )
 }

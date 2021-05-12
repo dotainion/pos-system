@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
@@ -36,26 +36,33 @@ import { Employees } from './admin/Employees';
 import { Reports } from './admin/Reports';
 import { Settings } from './admin/Settings';
 import { Register } from './authentication/Register';
+import { CustomerRefend } from './pages/CustomerRefund';
+import { AdminAccess } from './authentication/AdminAccess';
+import { useEffect } from 'react';
 
 
-const App: React.FC = () => (
-  <IonApp>
-    <AppContext>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path={routes.products} render={()=><SecureRoutes Components={Products}/>}/>
-          <Route exact path={routes.administration} render={()=><SecureRoutes Components={Administration}/>}/>
-          <Route exact path={routes.orderEntry} render={()=><SecureRoutes Components={OrderEntry}/>}/>
-          <Route exact path={routes.employees} render={()=><SecureRoutes Components={Employees}/>}/>
-          <Route exact path={routes.reports} render={()=><SecureRoutes Components={Reports}/>}/>
-          <Route exact path={routes.settings} render={()=><SecureRoutes Components={Settings}/>}/>
-          <Route exact path={routes.login} render={()=><Login/>}/>
-          <Route exact path={routes.register} render={()=><Register/>}/>
-          <Route exact path={routes.default} render={()=><Redirect to={routes.orderEntry}/>}/>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </AppContext>
-  </IonApp>
-);
+const App: React.FC = () =>{
+  return (
+    <IonApp>
+      <AppContext>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path={routes.products} render={()=><SecureRoutes Components={Products}/>}/>
+            <Route exact path={routes.administration} render={()=><SecureRoutes Components={Administration}/>}/>
+            <Route exact path={routes.orderEntry} render={()=><SecureRoutes Components={OrderEntry}/>}/>
+            <Route exact path={routes.employees} render={()=><SecureRoutes Components={Employees}/>}/>
+            <Route exact path={routes.reports} render={()=><SecureRoutes Components={Reports}/>}/>
+            <Route exact path={routes.settings} render={()=><SecureRoutes Components={Settings}/>}/>
+            <Route exact path={routes.refund} render={()=><SecureRoutes Components={CustomerRefend}/>}/>
+            <Route exact path={routes.adminAccess} render={()=><AdminAccess/>}/>
+            <Route exact path={routes.login} render={()=><Login/>}/>
+            <Route exact path={routes.register} render={()=><Register/>}/>
+            <Route exact path={routes.default} render={()=><Redirect to={routes.orderEntry}/>}/>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </AppContext>
+    </IonApp>
+  );
+}
 
 export default App;

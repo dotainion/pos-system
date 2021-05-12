@@ -8,4 +8,6 @@ export const routes = {
     reports: "/reports",
     settings: "/settings",
     employees: "/employees",
+    refund: "/refund",
+    adminAccess: "/admin-access",
 }

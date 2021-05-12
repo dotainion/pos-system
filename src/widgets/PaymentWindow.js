@@ -42,7 +42,7 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                     Payment<br/>
                     <label className="float-bottom-overflow max-width font" style={{color:"red",left:"0px"}}>{error}</label>
                 </p>
-                <div className="float-center half-width dark">
+                <div className="float-center half-width dark" style={{minWidth:"350px"}}>
                     <IonItemDivider style={{marginTop:"20px",marginBottom:"20px",color:"white"}}>
                         <div className="flex font-mini">
                             <div className="pad-mini">{cart?.length} Items</div>
@@ -61,7 +61,7 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                         <div className="max-width pad-mini"><b>TOTAL</b></div>
                         <div className="max-width pad-mini"><b>${total?.toFixed(2) || 0.0}</b></div>
                     </div>
-                    <Entry cssClass="dark" label="Tendered" onChange={(e)=>setTendered(e.target.value)} entryRef={tenderedRef} placeholder="Tendered Amount" type="number" />
+                    <Entry cssClass="dark" dollarSign label="Tendered" onChange={(e)=>setTendered(e.target.value)} entryRef={tenderedRef} placeholder="Tendered Amount" type="number" />
                     <div className="pad-xl" style={{height:"70px"}}>
                         <div style={{float:"left"}}>Change ${changed && changed?.toFixed(2) || 0.0}</div>
                         <div><button onClick={onTriggerPayment} disabled={loading} className="dark pad radius pad-h-xl click" style={{float:"right"}}>PAY {total?.toFixed(2)}</button></div>

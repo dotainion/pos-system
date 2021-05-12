@@ -130,9 +130,9 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                 </div>
                 <div className="max-size entry-action-mini scrollbar" style={{position:"relative"}}>
                     <div style={{color:"white"}} className="dark-blue">
-                        <div className="sales-item-name-header radius">Title</div>
-                        <div className="sales-item-qty-header radius">Qty</div>
-                        <div className="sales-item-price-header radius">Price</div>
+                        <div style={{border:"none"}} className="sales-item-name-header radius">Title</div>
+                        <div style={{border:"none"}} className="sales-item-qty-header radius">Qty</div>
+                        <div style={{border:"none"}} className="sales-item-price-header radius">Price</div>
                     </div>
                     {
                         cart?.length?

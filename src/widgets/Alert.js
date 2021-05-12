@@ -9,7 +9,7 @@ export const Alert = ({isOpen, header, message, onConfirm, onClose}) =>{
     }
     return(
         <div hidden={!isOpen} onClick={onClose} className="backdrop">
-            <div className="float-center alert-container dark" onClick={e=>e.stopPropagation()}>
+            <div className="float-center alert-container silver" onClick={e=>e.stopPropagation()}>
                 <p><b>{header || "Confirm!"}</b></p>
                 <p>{message}</p>
                 <p>
