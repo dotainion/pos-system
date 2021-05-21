@@ -51,11 +51,11 @@ export const AdminAccess = () =>{
                                         <div className="font" style={{color:"red"}}>{error}</div>
                                     </div>
                                     <Progressing isOpen={loading} />
-                                    <Entry onKeyPress={onEnterPress} entryRef={emailRef} label="Email" placeholder="example@gmail.com" type="email" />
-                                    <Entry onKeyPress={onEnterPress} entryRef={passwordRef} label="Password" placeholder="Password1#" type="password" />
+                                    <Entry onKeyPress={onEnterPress} entryRef={emailRef} labelColor="white" label="Email" placeholder="example@gmail.com" type="email" />
+                                    <Entry onKeyPress={onEnterPress} entryRef={passwordRef} labelColor="white" label="Password" placeholder="Password1#" type="password" />
                                     <div style={{marginLeft:"20px", marginRight:"20px"}}>
                                         <IonButton onClick={verifyAuth} shape="round" size="small" color="light" style={{float:"right"}}>Confirm</IonButton>
-                                        <IonButton onClick={()=>history.goBack()} shape="round" size="small" color="light" style={{float:"right",marginRight:"10px"}}>Cancel</IonButton>
+                                        <IonButton onClick={()=>history.push(routes.orderEntry)} shape="round" size="small" color="light" style={{float:"right",marginRight:"10px"}}>Cancel</IonButton>
                                     </div>
                                 </div>
                             </div>

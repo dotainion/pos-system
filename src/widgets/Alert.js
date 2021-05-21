@@ -2,10 +2,10 @@ import { IonAlert } from '@ionic/react';
 import React from 'react';
 
 
-export const Alert = ({isOpen, header, message, onConfirm, onClose}) =>{
+export const Alert = ({isOpen, hideCancelButton, header, message, onConfirm, onClose}) =>{
     const onTriggerConfirm = () =>{
-        if (typeof onConfirm === "function") onConfirm();
-        if (typeof onClose === "function") onClose();
+        onConfirm?.();
+        onClose?.();
     }
     return(
         <div hidden={!isOpen} onClick={onClose} className="backdrop">
@@ -14,7 +14,7 @@ export const Alert = ({isOpen, header, message, onConfirm, onClose}) =>{
                 <p>{message}</p>
                 <p>
                     <button onClick={onTriggerConfirm} className="pad radius silver" style={{float:"right"}}>Okay</button>
-                    <button onClick={onClose} className="pad radius silver" style={{float:"right"}}>Cancel</button>
+                    <button hidden={hideCancelButton} onClick={onClose} className="pad radius silver" style={{float:"right"}}>Cancel</button>
                 </p>
             </div>
         </div>

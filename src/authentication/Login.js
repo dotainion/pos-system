@@ -1,29 +1,37 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow } from "@ionic/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { useStore } from "../context/Store";
 import { routes } from "../global/Routes";
+import { Progressing } from "../widgets/Progressing";
 
 
 
 export const Login = () =>{
-    const { signIn } = useStore();
+    const { signIn, isAuthenticated } = useStore();
     const history = useHistory();
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const emailRef = useRef();
     const passwordRef = useRef();
 
     const onSignIn = async() =>{
         setError("");
+        setLoading(true);
         const response = await signIn(emailRef.current.value, passwordRef.current.value);
+        setLoading(false);
         if (response?.error) setError(response?.error);
-        else history.push(routes.orderEntry);
     }
 
     const onEnterPress = (e) =>{
         if (e.key === "Enter") onSignIn();
     }
+
+    //detect when user is loged in and route to order entery
+    useEffect(()=>{
+        if (isAuthenticated) history.push(routes.orderEntry);
+    },[isAuthenticated]);
 
     return(
         <IonPage className="page">
@@ -34,6 +42,7 @@ export const Login = () =>{
                             <div className="login-main-container">
                                 <div className="login-container no-select float-center">
                                     <div className="float-top-center singin-error">{error}</div>
+                                    <p><Progressing isOpen={loading}/></p>
                                     <IonItem color="light" lines="none">
                                         <IonLabel position="floating">User Name/Email</IonLabel>
                                         <IonInput ref={emailRef} onKeyPress={onEnterPress} type="email" />

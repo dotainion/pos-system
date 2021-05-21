@@ -1,4 +1,14 @@
 @media screen and (max-width:767px){
+    .backdrop-on-mobile{
+        position: absolute;
+        z-index: 99999999999999;
+        top: 50%;
+        left: 50%;
+        overflow: auto;
+        transform: translate3d(-50%, -50%, 0);
+        animation: modal 0.3s linear forwards;
+        background-color: rgb(0, 0, 0, 0.50);
+    }
     .item-container{
         padding: 0px;
     }
@@ -36,10 +46,13 @@
         bottom: 30px;
     }
     .show-menu{
-        width: 100%;
+        width: 300%;
     }
     .hide-menu{
         width: 0%;
+    }
+    .show-on-mobile{
+        display: block;
     }
     .d-flex-on-mobile{
         display: block;
@@ -62,5 +75,113 @@
         width: 100%;
         height: 90vh;
         bottom: 0;
+    }
+    .toggle-prod-and-order-entry{
+        position: absolute;
+        z-index: 999;
+        top: 20px;
+        left: 1px;
+        font-size: 30px;
+        color: white;
+    }
+    .toggle-prod-and-order-entry img{
+        width: 40px;
+        height: 40px;
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+        box-shadow: 1px 1px 20px skyblue;
+    }
+    .order-entry-main-container{
+        display: block;
+        width: 100%;
+        min-width: 100%;
+    }
+    .order-entry-cart-container{
+        width: 100%;
+        padding: 20px;
+        border-right: none;
+    }
+    .sales-item-container{
+        position: relative;
+        z-index: 9999999999999;
+        height: 150px;
+        font-size: 14px;
+        min-height: 150px;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: lightgray;
+    }
+    .cost-display-container{
+        font-size: 14px;
+    }
+    .order-entry-product-container{
+        width: 100%;
+    }
+    .order-entry-product-sub-container{
+        height: auto;
+    }
+    .order-entry-product-mini-container{
+        height: 93vh;
+        padding-bottom: 40px;
+    }
+    .search-left-pad-on-mobile{
+        padding-left:35px;
+    }
+    .customer-image-icon{
+        font-size: 30px;
+    }
+    .reward-container{
+        font-size: 13px;
+    }
+    .sales-item-header-container{
+        font-size: 14px;
+    }
+    .order-entry-product-for-mobile{
+        position: fixed;
+        margin-top: 40px;
+        background: linear-gradient(to right, white, lightgray, gray);
+    }
+    .sales-item{
+        position: relative;
+        display: inline-block;
+        width: 33.33%;
+        padding: 10px;
+        height: 200px;
+        margin-bottom: -2px;
+        user-select: none;
+    }
+    .register-pad-on-mobile{
+        padding: 5px;
+    }
+    .report-main-container{
+        width: 100%;
+        min-width: 100%;
+    }
+    .report-inner-container{
+        position: relative;
+        font-size: 12px;
+        padding-left: 5px;
+        margin: 5px;
+        border-radius: 5px;
+        border: 1px solid black;
+    }
+    .report-mobile-show-over{
+        position: absolute;
+        z-index: 9999999;
+        width: 100%;
+        height: 100%;
+    }
+    .report-children-container{
+        height: 100%;
+    }
+    .scrollbar::-webkit-scrollbar{
+        width: 5px;
+        height: 5px;
+        background: linear-gradient(to right, dodgerblue 0%, rgb(1, 18, 34) 100%);
+    }
+    .scrollbar2::-webkit-scrollbar{
+        width: 5px;
+        height: 5px;
+        background: linear-gradient(to right, dodgerblue 0%, rgb(1, 18, 34) 100%);
     }
 }

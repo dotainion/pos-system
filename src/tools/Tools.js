@@ -1,4 +1,6 @@
 import { routes } from "../global/Routes";
+import { weekDay } from '../content/lists';
+
 
 class Routes{
     key = "routes-for-admin-access";
@@ -44,6 +46,57 @@ class Tools{
         var validate = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
         if (validate.test(email)) return true;
         else return false;
+    }
+    async toast(message, color="light", duration=500, position="top"){
+        const toast = document.createElement('ion-toast');
+        toast.message = message;
+        toast.position = position;
+        toast.duration = duration;
+        toast.color = color;
+      
+        document.body.appendChild(toast);
+        await toast.present();
+      
+        const { role } = await toast.onDidDismiss();
+    }
+    async toastWithOption(message, color="light", duration=400, position="top", header=""){
+        const toast = document.createElement('ion-toast');
+        toast.header = header;
+        toast.message = message;
+        toast.position = position;
+        toast.duration = duration;
+        toast.color = color;
+        toast.buttons = [
+            {
+                side: 'start',
+                icon: 'star',
+                text: 'Favorite',
+                handler: () => {
+                    console.log('Favorite clicked');
+                }
+            }, {
+                text: 'Done',
+                role: 'cancel',
+                handler: () => {
+                    console.log('Cancel clicked');
+                }
+            }
+        ];
+      
+        document.body.appendChild(toast);
+        await toast.present();
+      
+        const { role } = await toast.onDidDismiss();
+        console.log('onDidDismiss resolved with role', role);
+    }
+    nowDate(){
+        return new Date().toLocaleDateString("zh-Hans-CN");
+    }
+    nowTime(){
+        return new Date().toLocaleTimeString();
+    }
+    formatDate(date){
+        return new Date(date).toLocaleDateString("zh-Hans-CN");
     }
 }
 

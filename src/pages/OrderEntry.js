@@ -1,8 +1,8 @@
 import { IonCard, IonCardContent, IonContent, IonIcon, IonLabel, IonList, IonPage } from '@ionic/react';
-import { addOutline, chevronDown, chevronDownOutline, chevronUpOutline, closeOutline, pencilOutline, personOutline, saveOutline } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
+import { addOutline, chevronDown, chevronDownOutline, chevronUpOutline, closeOutline, pencilOutline, personOutline, reorderFourOutline, saveOutline } from 'ionicons/icons';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../context/Store';
-import { getProducts, addSale, updateCustomerReward, getCustomerReward } from '../database/database';
+import { getProducts, addSale, updateCustomerReward, getCustomerReward, updateProducts, getEndOfDayReporByTimeStamp } from '../database/database';
 import { ToolBar } from '../layout/ToolBar';
 import { Alert } from '../widgets/Alert';
 import { Loader } from '../widgets/Loader';
@@ -12,12 +12,15 @@ import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
+import posImage from '../images/pos.jpg';
+import prodImage from '../images/product-icon.png';
+
 
 
 const OrderEntry = () => {
     const history = useHistory();
 
-    const { cart, setCart, products, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, setAdminAccess } = useStore();
+    const { cart, user, setCart, products, initProducts, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, settings } = useStore();
     const [loading, setLoading] = useState(false);
     const [moreOption, setMoreOption] = useState(false);
     const [tax, setTax] = useState(0);
@@ -30,7 +33,10 @@ const OrderEntry = () => {
     const [showRefundAlert, setShowRefundAlert] = useState(false);
     const [showPaymentWindow, setShowPaymentWindow] = useState(false);
     const [reward, setReward] = useState({});
-    const [paymentSubmited, setPaymentSubmited] = useState(true);
+    const [paymentSubmited, setPaymentSubmited] = useState(false);
+    const [showProductsOnMobile, setShowProductsOnMobile] = useState("hide-on-mobile");
+
+    const tenderedRef = useRef();
 
     const moreOptionToggle = () =>{
         if (moreOption) setMoreOption(false);
@@ -43,6 +49,7 @@ const OrderEntry = () => {
             if (cartItem?.id === item?.id){
                 if (value) cartItem["qty"] = value;
                 else cartItem["qty"] = parseInt(cartItem["qty"]) +1;
+                if (tools.isMobile()) tools.toast(`(${item?.info?.title}) quantity changed to ${cartItem["qty"]}`);
             }
             tempCart.push(cartItem);
         }
@@ -50,12 +57,17 @@ const OrderEntry = () => {
     }
 
     const addToCart = (item) =>{
+        const qtyMessage = "No more item in stock";
         for (let cartItem of cart){
-            if (cartItem?.id === item?.id) return updateCartQty(item);
+            if (cartItem?.id === item?.id){
+                if (parseInt(cartItem?.qty) >= parseInt(item?.info?.qty)) return tools.toast(qtyMessage);
+                return updateCartQty(item);
+            }
         }
+        if (parseInt(item?.info?.qty) <= 0) return tools.toast(qtyMessage);
+        if (tools.isMobile()) tools.toast(`(${item?.info?.title}) was added`);
         let newItem = JSON.parse(JSON.stringify(item));
         newItem["qty"] = 1;
-        delete newItem?.info["qty"];
         delete newItem?.info["image"];
         delete newItem?.info["costPrice"];
         setCart([newItem,...cart]);
@@ -72,41 +84,45 @@ const OrderEntry = () => {
     const onCloseSale = async() =>{
         try{
             if (cart?.length <= 0) return;
+            if (!user?.storeId) alert("Invalid store id");
             setLoading(true);
             setPaymentSubmited(false);
-            const date = new Date().getTime();
-            await addSale({
+            const submited = await addSale({
                 products: cart,
                 tax,
                 net,
                 total,
-                date,
+                date: tools.nowDate(),
+                time: tools.nowTime(),
+                storeId: user?.storeId || "",
                 customerId: customer?.id || ""
             });
+            for (let item of cart){
+                const qty = parseFloat(item?.info?.qty) - parseFloat(item?.qty) || 0;
+                await updateProducts({qty},item?.id);
+            }
+            await initProducts(user?.storeId);
             if (Object.keys(customer || {}).length > 0){
+                const rewardPercentage = ((total / 100) * parseFloat(settings?.reward) || 0);
                 const cusReward = {
                     store: "",
-                    reward: parseFloat(reward?.reward || 0) +1,//reward is done base on the percentage amount towards total price
+                    reward: parseFloat(reward?.reward || 0) + rewardPercentage,
                     visits: parseFloat(reward?.visits || 0) +1
                 }
-                const res = await updateCustomerReward(cusReward,customer?.id);
-                if (res) setPaymentSubmited(true);
+                await updateCustomerReward(cusReward,customer?.id);
             }
-            /**
-             * print receipt 
-             */
-            
-        }catch{
+            if (submited){
+                setCart([]);
+                setPaymentSubmited(true);
+            }
+        }catch(error){
             console.log("someting went wrong");
         }finally{
-            if (paymentSubmited){
-                setCart([]);
-            }else{
-                alert("Something when wrong");
-            }
+            if (!paymentSubmited && loading) alert("Something when wrong");
+            tenderedRef.current.value = "";
             setLoading(false);
         }
-    }
+    } 
 
     //open customer list on search
     const openCustomerListOnSearch = (value) =>{
@@ -118,7 +134,6 @@ const OrderEntry = () => {
 
     //get customer rewards when customer selected
     const initCustomerReward = async() =>{
-        console.log(customer)
         setReward(await getCustomerReward(customer?.id));
     }
 
@@ -130,17 +145,17 @@ const OrderEntry = () => {
             let price = parseFloat(cartItem?.info?.salePrice);
             sub = sub + (price * qty);
         }
-        let tempTax = ((sub / 100) * 15);
+        let tempTax = ((sub / 100) * parseFloat(settings?.tax) || 0);
         setNet(sub);
         setTax(tempTax);
         setTotal(sub + tempTax);
-    },[cart]);
+    },[cart, settings]);
 
     //detect change in customer and update accordingly
     useEffect(()=>{
         initCustomerReward(customer);
     },[customer]);
-
+    
     return (
         <IonPage className="page">
             <ToolBar/>
@@ -159,6 +174,7 @@ const OrderEntry = () => {
                 onClose={()=>setShowPaymentWindow(false)}
                 onConfirmPayment={onCloseSale}
                 paymentSubmited={paymentSubmited}
+                tenderedRef={tenderedRef}
             />
             <Alert
                 isOpen={showAlert}
@@ -177,13 +193,17 @@ const OrderEntry = () => {
                 message="Refund of customers requires admin profilage, will you like to continue?"
             />
             <IonContent>
-                <div className="flex no-select" style={{minWidth:"670px"}}>
-                    <div style={{width:"40%",padding:"20px",borderRight:"5px solid rgb(48, 46, 46)"}}>
+                <div className="toggle-prod-and-order-entry hide-on-desktop" style={{position:"fixed",top:"60px"}}>
+                    <img onClick={()=>setShowProductsOnMobile("backdrop-on-mobile")} src={prodImage} alt=""/>
+                </div>
+
+                <div className="order-entry-main-container">
+                    <div className="order-entry-cart-container">
                         <div className="flex">
-                            <div className="max-width pad">
+                            <div className="max-width search-left-pad-on-mobile pad">
                                 <SearchBar onSearch={openCustomerListOnSearch} placeholder="Customer"/>
                             </div>
-                            <div className="max-width pad">
+                            <div className="max-width pad hide-on-mobile">
                                 <SearchBar onSearch={searchProducts} placeholder="Product"/>
                             </div>
                         </div>
@@ -249,45 +269,19 @@ const OrderEntry = () => {
                             </div>
                         </div>
                     </div>
-                    <div style={{width:"60%"}}>
-                        <div style={{height:"90vh"}} className="silver2">
-                            <div className="scroll relative scrollbar2" style={{height:"78vh",paddingBottom:"40px"}}>
-                                <Loader isOpen={showProductLoader} />
-                                {
-                                    products.length?
-                                    products.map((item, key)=>(
-                                    <div className="sales-item" key={key}>
-                                        <div onClick={()=>addToCart(item)} className="sales-item-sub dark-blue click">
-                                            <div className="sales-item-image">
-                                                <img hidden={!item?.info?.image} className="max-size" src={item?.info?.image} alt=""/>
-                                            </div>
-                                            <div className="sales-item-content">
-                                                <div>{item?.info?.title}</div>
-                                                <div>${item?.info?.salePrice}</div>
-                                            </div>
-                                            <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini">
-                                                <IonIcon onClick={()=>saveMostRecent(item)} icon={saveOutline}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    )):
-                                    <div className="pad-xxl">No records</div>
-                                }
-                            </div> 
-                            <div className="more-option-float">
-                                <div onClick={moreOptionToggle} className="dark dark-hover pad-mini" style={{position:"relative",width:"60%",textAlign:"center"}}>
-                                    <div className="more-option-btn pad-mini">
-                                        <label>More</label>
-                                        <div className="float-right">
-                                            <IonIcon hidden={moreOption} style={{fontSize:"20px"}} icon={chevronUpOutline}/>
-                                        </div>
-                                        <div className="float-right">
-                                            <IonIcon hidden={!moreOption} style={{fontSize:"20px"}} icon={chevronDownOutline}/>
-                                        </div>
-                                    </div>
+                    <div className="order-entry-product-container">
+                        <div className="order-entry-product-sub-container silver2">
+                            <div className={`${showProductsOnMobile} order-entry-product-for-mobile`}>
+
+                                <div className="toggle-prod-and-order-entry hide-on-desktop">
+                                    <img onClick={()=>setShowProductsOnMobile("hide-on-mobile")} src={posImage} alt=""/>
                                 </div>
-                                <div hidden={!moreOption} className="more-option-item-container scrollbar2">
-                                    {mostRecent.map((item, key)=>(
+
+                                <div className="scroll relative scrollbar2 order-entry-product-mini-container">
+                                    <Loader isOpen={showProductLoader} />
+                                    {
+                                        products.length?
+                                        products.map((item, key)=>(
                                         <div className="sales-item" key={key}>
                                             <div onClick={()=>addToCart(item)} className="sales-item-sub dark-blue click">
                                                 <div className="sales-item-image">
@@ -298,13 +292,46 @@ const OrderEntry = () => {
                                                     <div>${item?.info?.salePrice}</div>
                                                 </div>
                                                 <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini">
-                                                    <IonIcon onClick={()=>removeMostRecent(item)} class="close-hover" icon={closeOutline}/>
+                                                    <IonIcon onClick={()=>saveMostRecent(item)} icon={saveOutline}/>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
-                            </div>   
+                                        )):
+                                        <div className="pad-xxl">No records</div>
+                                    }
+                                </div> 
+                                <div hidden className="more-option-float">
+                                    <div onClick={moreOptionToggle} className="dark dark-hover pad-mini" style={{position:"relative",width:"60%",textAlign:"center"}}>
+                                        <div className="more-option-btn pad-mini">
+                                            <label>More</label>
+                                            <div className="float-right">
+                                                <IonIcon hidden={moreOption} style={{fontSize:"20px"}} icon={chevronUpOutline}/>
+                                            </div>
+                                            <div className="float-right">
+                                                <IonIcon hidden={!moreOption} style={{fontSize:"20px"}} icon={chevronDownOutline}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div hidden={!moreOption} className="more-option-item-container scrollbar2">
+                                        {mostRecent.map((item, key)=>(
+                                            <div className="sales-item" key={key}>
+                                                <div onClick={()=>addToCart(item)} className="sales-item-sub dark-blue click">
+                                                    <div className="sales-item-image">
+                                                        <img hidden={!item?.info?.image} className="max-size" src={item?.info?.image} alt=""/>
+                                                    </div>
+                                                    <div className="sales-item-content">
+                                                        <div>{item?.info?.title}</div>
+                                                        <div>${item?.info?.salePrice}</div>
+                                                    </div>
+                                                    <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini">
+                                                        <IonIcon onClick={()=>removeMostRecent(item)} class="close-hover" icon={closeOutline}/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div> 
+                            </div>
                             <div className="action-btn-container">
                                 <div className="sales-action-btn-container">
                                     <div onClick={()=>setShowCustomerAction(true)} className="sales-action-btn click dodger">
@@ -312,7 +339,7 @@ const OrderEntry = () => {
                                     </div>
                                 </div>
                                 <div className="sales-action-btn-container">
-                                    <div onClick={()=>cart?.length? setShowAlert(true): null} className="sales-action-btn click dark dark-hover">
+                                    <div onClick={()=>cart?.length? setShowAlert(true): null} className="sales-action-btn click dark">
                                         <div className="float-center">CLEAR</div>
                                     </div>
                                 </div>

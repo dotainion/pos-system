@@ -12,7 +12,10 @@ const SecureRoutes = ({Components}) =>{
     const { isAuthenticated, adminAccess } = useStore();
     const path = history.location.pathname;
     if (isAuthenticated && adminAccess) return <Components/>;
-    else if (!path.includes(routes.orderEntry)) return <Redirect to={routes.adminAccess}/>;
+    else if (!path.includes(routes.orderEntry)){
+        if (isAuthenticated) return <Redirect to={routes.adminAccess}/>;
+        else return <Redirect to={routes.login}/>;
+    }
     else if (isAuthenticated) return <Components/>;
     else return <Redirect to={routes.login}/>;
 }

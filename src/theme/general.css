@@ -22,6 +22,16 @@
     height: 100%;
     background-color: rgb(0, 0, 0, 0.50);
 }
+.backdrop-left{
+    position: absolute;
+    z-index: 99999999999999;
+    top: 0px;
+    left: 0px;
+    width: 300px;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgb(0, 0, 0, 0.50);
+}
 .background-image{
     position: relative;
     width: 100%;
@@ -125,13 +135,16 @@
     margin-left: 50%;
     transform: translateX(-50%);
 }
+.centered {
+    text-align: center;
+    align-content: center;
+}
 .sales-item-header-container{
     
 }
 .sales-item-container{
     position: relative;
-    height: 59%;
-    max-height: 400px;
+    height: 50%;
     overflow-y: auto;
     background-color: lightgray;
 }
@@ -252,7 +265,7 @@
     border-radius: 15px;
     border: 1px solid lightgray;
     background-color: white;
-    background: linear-gradient(to bottom, white 0%, rgb(151, 150, 150) 100%);
+    /*background: linear-gradient(to bottom, white 0%, rgb(151, 150, 150) 100%);*/
 }
 .search-container ion-icon{
     font-size: 25px;
@@ -328,6 +341,12 @@
 .border{
     border: 1px solid gray;
 }
+.border-top{
+    border-top: 1px solid white;
+}
+.border-bottom{
+    border-bottom: 1px solid white;
+}
 .border-l-r{
     border-left: 1px solid white;
     border-right: 1px solid white;
@@ -349,16 +368,24 @@
     background: linear-gradient(to bottom, rgb(117, 114, 114) 0%, rgb(36, 35, 35) 100%);
 }
 .silver{
+    color: rgb(3, 37, 68);
     background: linear-gradient(to right, gray 0%, white 50%, gray 100%);
     --ion-background-color: linear-gradient(to right, gray 0%, white 50%, gray 100%);
 }
 .silver2{
-    background: linear-gradient(to bottom, white 0%, gray 100%);
+    color: rgb(3, 37, 68);
+    background: linear-gradient(to bottom, gray 0%, white 50%, gray 100%);
     --ion-background-color: linear-gradient(to right, gray 0%, white 50%, gray 100%);
 }
 .success{
     color: white;
-    background: linear-gradient(to bottom, rgb(8, 172, 8) 0%, rgb(0, 26, 0) 100%);
+    background: linear-gradient(to bottom, rgb(12, 168, 12) 0%, rgb(1, 19, 1) 100%);
+    --ion-background-color: linear-gradient(to bottom rgb(12, 168, 12) 0%, rgb(1, 19, 1) 100%);
+}
+.success2{
+    color: blue;
+    background: linear-gradient(to right, darkgreen 0%, rgb(185, 224, 185) 50%, darkgreen 100%);
+    --ion-background-color: linear-gradient(to right, darkgreen 0%, rgb(185, 224, 185) 50%, darkgreen 100%);
 }
 .success:hover{
     background-color: rgb(58, 141, 58);
@@ -428,6 +455,9 @@
 .click:active{
     transform: scale(1.02);
 }
+.click2:active{
+    font-size: 15px;
+}
 .close{
     position: absolute;
     z-index: 999999999999999;
@@ -488,9 +518,10 @@
     height: 100vh;
     white-space: nowrap;
     transition: all 1s;
-    box-shadow: 2px 2px 5px rgb(9, 36, 63);
+    border-right: 1px solid black;
+    /*box-shadow: 2px 2px 5px rgb(9, 36, 63);
     background: linear-gradient(to right, rgb(9, 36, 63) 0%,  dodgerblue 50%, rgb(9, 36, 63) 100%);
-    --ion-background-color: linear-gradient(to right, rgb(9, 36, 63) 0%,  dodgerblue 50%, rgb(9, 36, 63) 100%);
+    --ion-background-color: linear-gradient(to right, rgb(9, 36, 63) 0%,  dodgerblue 50%, rgb(9, 36, 63) 100%);*/
 }
 .menu-container ion-list-header{
     color: white;
@@ -503,16 +534,26 @@
     margin-right: 5px;
     color: white;
     cursor: pointer;
-    --ion-background-color: linear-gradient(to bottom, dodgerblue 0%, rgb(9, 36, 63) 100%);
+    /*--ion-background-color: linear-gradient(to bottom, dodgerblue 0%, rgb(9, 36, 63) 100%);*/
 }
-.menu-button:hover{
-    color: red;
+.menu-hover:hover{
+    color: navy;
 }
 .menu-button-selected{
     color: orange;
 }
 .menu-button ion-icon{
     color: white;
+}
+.menu-button-option-container{
+    margin-top: 30px;
+    --ion-background: white;
+}
+.menu-button-option-container div{
+    padding: 8px;
+    margin: 5px;
+    color: navy;
+    font-weight: bold;
 }
 .item-container{
     padding: 50px;
@@ -534,7 +575,7 @@
     margin: 5px;
     cursor: pointer;
     color: rgb(230, 218, 196);
-    background: linear-gradient(to bottom, dodgerblue 0%, rgb(9, 36, 63) 100%);
+    /*background: linear-gradient(to bottom, dodgerblue 0%, rgb(9, 36, 63) 100%);*/
 }
 .item-sub-info-container:hover{
     background: linear-gradient(to bottom, gray 0%, rgb(8, 8, 8) 100%);
@@ -545,6 +586,16 @@
 .item-info-container ion-thumbnail{
     width: 100%;
     height: 250px;
+}
+.print-btn{
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-right: 3px;
+    box-shadow: 2px 2px 5px gray;
+    background-color: lightgray;
 }
 .add-btn{
     font-size: 20px;
@@ -583,15 +634,15 @@
 .menu-content-page{
     position: relative;
     width: 80%;
-    background-size: cover;
+    /*background-size: cover;
     background-repeat: no-repeat;
-    background-image: url(../images/beach.jpg);
+    background-image: url(../images/beach.jpg);*/
 }
 .menu-toolbar-container{
     width: 85%;
     height: 63px;
     background-color: white;
-    background: linear-gradient(to right, rgb(9, 36, 63) 0%,  dodgerblue 50%, rgb(9, 36, 63) 100%);
+    /*background: linear-gradient(to right, rgb(9, 36, 63) 0%,  dodgerblue 50%, rgb(9, 36, 63) 100%);*/
 }
 .menu-toolbar-search{
     width: 40%;
@@ -600,10 +651,10 @@
     font-size: 30px;
     margin: 5px;
     padding: 5px;
-    color: white;
+    color: black;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgb(9, 36, 63);
-    background: linear-gradient(to right, rgb(26, 133, 240) 0%, rgb(9, 36, 63) 100%);
+    /*background: linear-gradient(to right, rgb(26, 133, 240) 0%, rgb(9, 36, 63) 100%);*/
 }
 .hamburger-menu:active{
     box-shadow: 1px 1px 2px rgb(9, 36, 63);
@@ -632,7 +683,7 @@
     --ion-background-color: linear-gradient(to bottom, rgb(26, 133, 240) 0%, rgb(9, 36, 63) 100%);
 }
 .link{
-    color: gray;
+    color: rgb(61, 60, 60);
     cursor: pointer;
 }
 .link:hover{
@@ -643,6 +694,8 @@
     width: 100%;
     height: 350px;
     padding: 10px;
+    
+    background-color: rgb(236, 233, 233);
 }
 .add-product-pop-thumbnail:hover{
     background-color: lightgray;
@@ -662,7 +715,6 @@
     font-size: 20px;
     font-weight: bold;
     padding: 20px;
-    color: white;
 }
 .dollar-sign{
     position: relative;
@@ -677,6 +729,23 @@
     left: 5px;
     color: black;
     transform: translateY(-50%);
+}
+.percent-sign{
+    position: relative;
+}
+.percent-sign input{
+    padding-left: 20px;
+}
+.percent-sign::after{
+    position: absolute;
+    content: "%";
+    top: 50%;
+    left: 5px;
+    color: black;
+    transform: translateY(-50%);
+}
+.hide-scrollbar::-webkit-scrollbar{
+    display: none;
 }
 .scrollbar::-webkit-scrollbar{
     width: 10px;
@@ -757,11 +826,15 @@
 .customer-item-container{
     margin-bottom: 5px;
 }
+.customer-item-container div{
+    overflow: hidden;
+}
 .customer-item-container:hover{
-    color: orange;
+    color: brown;
 }
 .alert-container{
-    width: 300px;
+    width: 25%;
+    min-width: 350px;
     border-radius: 5px;
     padding: 20px;
     user-select: none;
@@ -822,4 +895,104 @@
 }
 .center{
     text-align: center;
+}
+.print-preview-container{
+    height: 80%;
+    overflow-y: auto;
+    background-color: white;
+}
+.print-preview-action-container{
+    position: relative;
+    height: 20%;
+    max-height: 80px;
+    overflow-y: auto;
+    background-color: white;
+}
+.print-preview-iframe{
+    position: absolute;
+    width: 0px;
+    height: 0px;
+}
+.print-preview{
+    width: 155px;
+    max-width: 155px;
+    padding: 5px;
+    color: black;
+    font-size: 12px;
+    font-family: 'Times New Roman';
+    background-color: white;
+}
+.print-preview-container img {
+    max-width: inherit;
+    width: inherit;
+}
+.print-preview table,td,th,tr{
+    border-top: 1px solid black;
+    border-collapse: collapse;
+}
+.print-preview th.description{
+    width: 75px;
+    max-width: 75px;
+}
+.print-preview th.quantity{
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+.print-preview th.price{
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+.order-entry-main-container{
+    display: flex;
+    user-select: none;
+    min-width: 670px;
+}
+.order-entry-cart-container{
+    width: 40%;
+    padding: 20px;
+    border-right: 5px solid rgb(48, 46, 46);
+}
+.order-entry-product-container{
+    width: 60%;
+}
+.order-entry-product-sub-container{
+    height: 90vh;
+}
+.order-entry-product-mini-container{
+    height: 78vh;
+    padding-bottom: 40px;
+}
+.menu-bar-btn-container{
+    width: 70px;
+}
+.teal-c{
+    color: teal;
+}
+.report-main-container{
+    width: 50%;
+    min-width: 450px;
+}
+.report-container{
+    width: 50%;
+    display: inline-block;
+}
+.report-inner-container{
+    position: relative;
+    font-size: 15px;
+    margin: 5px;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+.report-inner-container:hover{
+    background: linear-gradient(to bottom, gray 0%, rgb(8, 8, 8) 100%);
+}
+.report-inner-container:active{
+    border: 1px solid gray;
+}
+.report-children-container{
+    height: 80vh;
+    overflow-y: auto;
 }

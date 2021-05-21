@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { auth } from '../config/auth';
 import { roles } from '../content/lists';
-import { getCustomer, getProducts, getUser } from '../database/database';
+import { getCustomer, getProducts, getSettings, getUser, updateSettings } from '../database/database';
 import { routes } from '../global/Routes';
 import { Landscape, Portrait } from '../screen/Screen';
 
@@ -12,6 +12,7 @@ export const useStore = () => useContext(ContextProvider);
 
 export const AppContext = ({children}) =>{
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState({});
     const [isAuthenticated, setIsAuthenticated] = useState();
     const [cart, setCart] = useState([]);
     const [cartOnHold, setCartOnHold] = useState([]);
@@ -20,6 +21,7 @@ export const AppContext = ({children}) =>{
     const [customers, setCustomers] = useState([]);
     const [showProductLoader, setShowProductLoader] = useState(false);
     const [adminAccess, setAdminAccess] = useState(false);
+    const [settings, setSettings] = useState({});
 
     const signIn = async(email, password) =>{
         try{
@@ -71,9 +73,9 @@ export const AppContext = ({children}) =>{
         }
     }
 
-    const initProducts = async() =>{
+    const initProducts = async(uid) =>{
         setShowProductLoader(true);
-        setProducts(await getProducts());
+        setProducts(await getProducts(uid));
         setShowProductLoader(false);
         setMostRecent(JSON.parse(window.localStorage.getItem("most-recent") || []));
     }
@@ -88,7 +90,7 @@ export const AppContext = ({children}) =>{
         }
         setShowProductLoader(true);
         let storeSorted = [];
-        let prods = await getProducts();
+        let prods = await getProducts(user?.storeId);
         const title = prods.filter((prod)=>prod?.info?.title?.toLowerCase()?.includes(value?.toLowerCase()));
         const salePrice = prods.filter((prod)=>prod?.info?.salePrice?.toLowerCase()?.includes(value?.toLowerCase()));
         for (let obj of [...title, ...salePrice]){
@@ -98,24 +100,37 @@ export const AppContext = ({children}) =>{
         setShowProductLoader(false);
     }
 
-    const initCustomers = async() =>{
-        setCustomers(await getCustomer());
+    const initCustomers = async(uid) =>{
+        setCustomers(await getCustomer(uid));
     }
 
-    const initialize = () =>{
-        initProducts();
-        initCustomers();
+    const initSettings = async(uid) =>{
+        setSettings(await getSettings(uid));
+    }
+
+    const changeSettings = async(setting) =>{
+        setSettings(setting);
+        //await updateSettings(setting, user?.storeId);
+    }
+
+    const initialize = (uid) =>{
+        initProducts(uid);
+        initCustomers(uid);
+        initSettings(uid);
     }
 
     useEffect(()=>{
         auth.onAuthStateChanged(async(user)=>{
-            initialize();
+            setUser(await getUser(user?.uid));
+            initialize(user?.uid);
             setIsAuthenticated(user);
             setLoading(false);
         });
     },[]);  
 
     const providerValue = {
+        user,
+        setUser,
         cart,
         setCart,
         cartOnHold,
@@ -135,6 +150,9 @@ export const AppContext = ({children}) =>{
         initCustomers,
         adminAccess,
         setAdminAccess,
+        settings,
+        setSettings,
+        changeSettings
     }
     return(
         <ContextProvider.Provider value={providerValue}>

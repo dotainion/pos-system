@@ -3,25 +3,43 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
 import { PopupContainer } from '../components/PopupContainer';
 import { useStore } from '../context/Store';
+import { ReceiptPreview } from '../document/Preview';
+import { printer } from '../document/Printer';
 import { Progressing } from './Progressing';
 
 
 
-export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmited, loading, total, tax, net}) =>{
+export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmited, tenderedRef, loading, total, tax, net}) =>{
     const { cart } = useStore();
+
     const [changed, setChanged] = useState("");
     const [tendered, setTendered] = useState("");
     const [error, setError] = useState("");
-
-    const tenderedRef = useRef();
+    const [showPreview, setShowPreview] = useState(false);
+    const [record, setRecord] = useState([]);
 
     const onTriggerPayment = () =>{
         setError("");
         const msg = "Incorrect tendered amount";
+        if (showPreview) return setError("Payment already submited");
         if (!tendered) return setError(msg);
         if (/[a-zA-Z]/g.test(tendered)) return setError(msg);
+        if (tenderedRef?.current?.value === "") return setError(msg);
         if (parseFloat(tendered) < parseFloat(total)) return setError(msg);
-        if (typeof onConfirmPayment === "function") onConfirmPayment();
+        if (typeof onConfirmPayment === "function"){
+            setRecord({
+                tax:JSON.parse(JSON.stringify(tax)),
+                net:JSON.parse(JSON.stringify(net)),
+                total:JSON.parse(JSON.stringify(total)),
+                order:JSON.parse(JSON.stringify(cart))
+            });
+            onConfirmPayment();
+        }
+    }
+
+    const onTriggerClose = () =>{
+        onClose?.();
+        setShowPreview(false);
     }
 
     //update change when tendered an total changes
@@ -32,11 +50,13 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
     //do something when paymentSubmited
     useEffect(()=>{
         if (paymentSubmited){
+            setShowPreview(true);
             tenderedRef.current.value = "";
         }
     },[paymentSubmited]);
     return(
-        <PopupContainer isOpen={isOpen} onClose={onClose}>
+        <>
+        <PopupContainer isOpen={isOpen} onClose={onTriggerClose} noBackdropDismist>
             <div className="dark max-size">
                 <p className="pad-xl font-xl half-width item-center" style={{textAlign:"center",borderBottom:"1px solid white"}}>
                     Payment<br/>
@@ -61,7 +81,7 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                         <div className="max-width pad-mini"><b>TOTAL</b></div>
                         <div className="max-width pad-mini"><b>${total?.toFixed(2) || 0.0}</b></div>
                     </div>
-                    <Entry cssClass="dark" dollarSign label="Tendered" onChange={(e)=>setTendered(e.target.value)} entryRef={tenderedRef} placeholder="Tendered Amount" type="number" />
+                    <Entry cssClass="dark" labelColor="white" dollarSign label="Tendered" onChange={(e)=>setTendered(e.target.value)} entryRef={tenderedRef} placeholder="Tendered Amount" type="number" />
                     <div className="pad-xl" style={{height:"70px"}}>
                         <div style={{float:"left"}}>Change ${changed && changed?.toFixed(2) || 0.0}</div>
                         <div><button onClick={onTriggerPayment} disabled={loading} className="dark pad radius pad-h-xl click" style={{float:"right"}}>PAY {total?.toFixed(2)}</button></div>
@@ -69,5 +89,14 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                 </div>
             </div>
         </PopupContainer>
+        <ReceiptPreview
+            isOpen={showPreview}
+            onClose={()=>{
+                onClose?.();
+                setShowPreview(false);
+            }}
+            record={record}
+        />
+        </>
     )
 }

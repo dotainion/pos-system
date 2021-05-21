@@ -1,4 +1,4 @@
-import { addData, getData, getDataById, updateData } from "./databaseRef";
+import { addData, getData, getDataByField, getDataById, getDataMoreThanOrEqualTo, updateData } from "./databaseRef";
 
 const collection = {
     users: "users",
@@ -6,6 +6,7 @@ const collection = {
     sales: "sales",
     customer: "customer",
     rewards: "rewards",
+    settings: "settings",
 }
 
 export const addUser = async(data, uid=null) =>{
@@ -24,6 +25,15 @@ export const getUser = async(uid) =>{
     }catch(error){
         console.log(error);
         return {};
+    }
+}
+
+export const getEmployees = async(uid) =>{
+    try{
+        return await getDataByField(collection.users,"storeId",uid);
+    }catch(error){
+        console.log(error);
+        return [];
     }
 }
 
@@ -47,9 +57,9 @@ export const updateProducts = async(data,id) =>{
     }
 }
 
-export const getProducts = async() =>{
+export const getProducts = async(id) =>{
     try{
-        return await getData(collection.products);
+        return await getDataByField(collection.products,"storeId",id);
     }catch(error){
         console.log(error);
         return [];
@@ -66,9 +76,9 @@ export const addSale = async(data) =>{
     }
 }
 
-export const getSales = async() =>{
+export const getSales = async(id) =>{
     try{
-        return await getData(collection.sales);
+        return await getDataByField(collection.sales, "storeId", id);
     }catch(error){
         console.log(error);
         return [];
@@ -85,9 +95,9 @@ export const addCustomer = async(data) =>{
     }
 }
 
-export const getCustomer = async() =>{
+export const getCustomer = async(id) =>{
     try{
-        return await getData(collection.customer);
+        return await getDataByField(collection.customer,"storeId",id);
     }catch(error){
         console.log(error);
         return [];
@@ -123,5 +133,46 @@ export const getCustomerReward = async(id) =>{
     }catch(error){
         console.log(error);
         return {};
+    }
+}
+
+export const updateSettings = async(data,id) =>{
+    try{
+        try{
+            await updateData(collection.settings,data,id);
+        }catch{
+            await addData(collection.settings,data,id);
+        }
+        return true;
+    }catch(error){
+        console.log(error);
+        return false;
+    }
+}
+
+export const getSettings = async(id) =>{
+    try{
+        return await getDataById(collection.settings,id);
+    }catch(error){
+        console.log(error);
+        return {};
+    }
+}
+
+export const getEndOfDayReporByTimeStamp = async(timeStamp) =>{
+    try{
+        return await getDataByField(collection.sales,"date", timeStamp);
+    }catch(error){
+        console.log(error);
+        return [];
+    }
+}
+
+export const getLowStocks = async(id) =>{
+    try{
+        return await getDataByField(collection.products,"storeId", id);
+    }catch(error){
+        console.log(error);
+        return [];
     }
 }

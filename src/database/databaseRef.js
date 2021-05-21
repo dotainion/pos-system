@@ -43,6 +43,18 @@ export const getDataByField = async(collection,queryKey,queryValue,limit=false) 
     return allData;
 }
 
+export const getDataByFieldAndNotEqualTo = async(collection,queryKey,queryValue,queryNotEqualToKey,queryNotEqualToValue,limit=false) =>{
+    let allData = [];
+    let accountRef = "";
+    if (limit !== false) accountRef = db.collection(collection).where(queryKey,"==",queryValue).where(queryNotEqualToKey,"!=",queryNotEqualToValue).limit(limit);
+    else accountRef = db.collection(collection).where(queryKey,"==",queryValue).where(queryNotEqualToKey,"!=",queryNotEqualToValue);
+    let data = await accountRef.get();
+    data.forEach((record) => {
+        allData.push({ id: record.id, info: record.data() });
+    });
+    return allData;
+}
+
 export const deleteDataById = async(collection, uId) =>{
     if(uId){
         const delRef = db.collection(collection).doc(uId);

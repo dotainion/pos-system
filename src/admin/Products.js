@@ -3,26 +3,25 @@ import { addOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { AddProducts } from '../components/AddProducts';
 import { MenuBarWrapper } from '../components/MenuBar';
+import { useStore } from '../context/Store';
 import { getProducts } from '../database/database';
 import img from '../images/beach.jpg';
 
 
 
 export const Products = () =>{
+    const { user } = useStore();
     const [showAddProducts, setShowAddProducts] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState({});
 
-    //this is a test
     const [products, setProducts] = useState([]);
 
-    //this is a test
     const onGetProduts = async() =>{
-        setProducts(await getProducts());
+        setProducts(await getProducts(user?.storeId));
     }
 
-    //this is a test
     const onSearchProduts = async(value) =>{
-        const prods = await getProducts();
+        const prods = await getProducts(user?.storeId);
         const results = prods.filter((item)=>(
             item?.info?.title.toLowerCase().includes(value.toLowerCase())
         ));
@@ -56,7 +55,7 @@ export const Products = () =>{
                         products?.length?
                         products.map((prod, key)=>(
                             <div onClick={()=>onShowEditProducts(prod)} className="item-info-container" key={key}>
-                                <div className="item-sub-info-container">
+                                <div className="item-sub-info-container dark">
                                     <IonThumbnail>
                                         <IonImg class="max-size" src={prod?.info?.image || img}/>
                                     </IonThumbnail>
@@ -70,7 +69,7 @@ export const Products = () =>{
                             </div>
                         )):
                         <IonList>
-                            <IonLabel>No Empolyee</IonLabel>
+                            <IonLabel>No Products</IonLabel>
                         </IonList>
                     }
                 </IonList>

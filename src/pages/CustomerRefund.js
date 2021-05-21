@@ -2,6 +2,7 @@ import { IonContent, IonIcon, IonPage } from '@ionic/react';
 import { chevronDownOutline, chevronUpOutline, homeOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { useStore } from '../context/Store';
 import { getCustomer, getCustomerById, getSales, getUser } from '../database/database';
 import { routes } from '../global/Routes';
 import { Dropdown } from '../widgets/Dropdown';
@@ -11,14 +12,14 @@ import { SearchBar } from '../widgets/SearchBar';
 
 export const CustomerRefend = () =>{
     const history = useHistory();
-
+    const { user } = useStore();
     const [sales, setSales] = useState([]);
     const [showLoader, setShowLoader] = useState(false);
 
     const onGetSales = async() =>{
         setShowLoader(true);
         let tempStorage = [];
-        const customerSales = await getSales();
+        const customerSales = await getSales(user?.storeId);
         for (let cusSale of customerSales){
             cusSale["customer"] = await getCustomerById(cusSale?.info?.customerId);
             tempStorage.push(cusSale);
@@ -42,41 +43,35 @@ export const CustomerRefend = () =>{
         }
     }
 
-    const handleDate = (date) =>{
-        const dates = new Date(date).toDateString();
-        const time = new Date(date).toLocaleTimeString();
-        return {date: dates, time: time};
-    }
-
     useEffect(()=>{
         onGetSales?.();
     },[]);
     return(
         <IonPage>
             <IonContent>
-                <div className="max-size relative">
+                <div className="max-size relative silver">
                     <Loader isOpen={showLoader}/>
-                    <div className="pad-xxl silver2" style={{color:"black"}}>
+                    <div className="pad-xxl dark">
                         <IonIcon onClick={()=>history.push(routes.orderEntry)} class="float-top-left pad-xl" style={{fontSize:"30px"}} icon={homeOutline}/>
-                        <div className="half-width max-width-on-mobile item-center">
+                        <div className="half-width max-width-on-mobile search-left-pad-on-mobile item-center" style={{color:"black"}}>
                             <SearchBar placeholder="Search Customer" />
                         </div>
-                        <div className="item-center max-width-on-mobile" style={{color:"black"}}>
+                        <div className="item-center max-width-on-mobile">
                             <Dropdown cssClass="inline pad" options={["jeack"]}>Filter</Dropdown>
                             <Dropdown cssClass="inline pad" options={["jeack"]}>Filter</Dropdown>
                             <Dropdown cssClass="inline pad" options={["jeack"]}>Filter</Dropdown>
                             <Dropdown cssClass="inline pad" options={["jeack"]}>Filter</Dropdown>
                         </div>
                     </div>
-                    <div className="max-size refund-container item-center scrollbar scroll">
+                    <div className="max-size refund-container item-center scrollbar scroll" style={{backgroundColor:"white"}}>
                         {
                             sales?.length?
                             sales.map((sale, key)=>(
                                 <div style={{marginTop:"10px"}} key={key}>
-                                    <div onClick={()=>toggleItemOnHold(`${sale?.id}${key}`)} className="pad radius max-width pointer no-select silver2 relative">
+                                    <div onClick={()=>toggleItemOnHold(`${sale?.id}${key}`)} className="pad radius max-width pointer no-select silver relative">
                                         <div>
-                                            <div>Date: {handleDate(sale?.info?.date)?.date}</div>
-                                            <div>Time: {handleDate(sale?.info?.date)?.time}</div>
+                                            <div>Date: {sale?.info?.date}</div>
+                                            <div>Time: {sale?.info?.time}</div>
                                             <div>Customer: <b style={{color:"dodgerblue"}}>{sale?.customer?.name || <span style={{color:"teal"}}>None</span>}</b></div>
                                             <div>Net: {sale?.info?.net?.toFixed(2)}</div>
                                             <div>Tax: {sale?.info?.tax?.toFixed(2)}</div>

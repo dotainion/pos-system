@@ -1,16 +1,21 @@
 import { IonCol, IonContent, IonGrid, IonIcon, IonPage, IonRow } from '@ionic/react';
-import { addOutline, arrowBack, arrowBackOutline, arrowForwardOutline } from 'ionicons/icons';
-import React, { useRef, useState } from 'react';
+import { addOutline, arrowBack, arrowBackOutline, arrowForwardOutline, cardOutline } from 'ionicons/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Entry } from '../components/Entry';
+import { useStore } from '../context/Store';
+import { addUser } from '../database/database';
 import { routes } from '../global/Routes';
 import posImage from '../images/pos.jpg';
 import { tools } from '../tools/Tools';
+import { RiVisaLine } from 'react-icons/ri';
+import { FaCcMastercard, FaCcDiscover } from 'react-icons/fa';
 
 
 export const Register = () =>{
     const history = useHistory();
-    const [pages, setPages] = useState({first:true,second:false});
+    const { createUser, adminAccess, setAdminAccess } = useStore();
+    const [pages, setPages] = useState({first:true,second:false,third:false});
 
     const [firstNameError, setFirstNameError] = useState();
     const [lastNameError, setLastNameError] = useState();
@@ -23,6 +28,11 @@ export const Register = () =>{
     const [cityError, setCityError] = useState();
     const [addressError, setAddressError] = useState();
 
+    const [cardHolderNameError, setCardHolderNameError] = useState();
+    const [cardNumberError, setCardNumberError] = useState();
+    const [cardExpireError, setCardExpireError] = useState();
+    const [cardCvcError, setCardCvcError] = useState();
+
     const firstNameRef = useRef();
     const lastNameRef = useRef();
     const emailRef = useRef();
@@ -33,6 +43,11 @@ export const Register = () =>{
     const countryRef = useRef();
     const cityRef = useRef();
     const addressRef = useRef();
+
+    const cardHolderNameRef = useRef();
+    const cardNumberRef = useRef();
+    const cardExpireRef = useRef();
+    const cardCvcRef = useRef();
 
     const reset = (cmd) =>{
         if(cmd === "f"){
@@ -64,80 +79,147 @@ export const Register = () =>{
         }if(cmd === "a"){
             setAddressError("");
             addressRef.current.style.border = "";
+        }if(cmd === "chn"){
+            setCardHolderNameError("");
+            cardHolderNameRef.current.style.border = "";
+        }if(cmd === "cn"){
+            setCardNumberError("");
+            cardNumberRef.current.style.border = "";
+        }if(cmd === "ce"){
+            setCardExpireError("");
+            cardExpireRef.current.style.border = "";
+        }if(cmd === "cc"){
+            setCardCvcError("");
+            cardCvcRef.current.style.border = "";
         }
     }
 
-    const onNext = () =>{
+    const onNext = (cmd) =>{
         let ERROR = false;
-        if (!firstNameRef.current.value){
-            ERROR = true;
-            setFirstNameError("First name is required");
-        }if (!lastNameRef.current.value){
-            ERROR = true;
-            setLastNameError("Last name is required");
-        }if (!tools.isEmailValid(emailRef.current.value)){
-            ERROR = true;
-            setEmailError("Email is required");
-        }if (!passwordRef.current.value){
-            ERROR = true;
-            setPasswordError("Password is required");
-        }if (!confirmPasswordRef.current.value){
-            ERROR = true;
-            setConfirmPasswordError("Password is required");
-        }if (passwordRef.current.value !== confirmPasswordRef.current.value){
-            ERROR = true;
-            setConfirmPasswordError("Password is required");
+        if (cmd === "first"){
+            if (!firstNameRef.current.value){
+                ERROR = true;
+                setFirstNameError("First name is required");
+            }if (!lastNameRef.current.value){
+                ERROR = true;
+                setLastNameError("Last name is required");
+            }if (!tools.isEmailValid(emailRef.current.value)){
+                ERROR = true;
+                setEmailError("Email is required");
+            }if (!businessNameRef.current.value){
+                ERROR = true;
+                setBusinessNameError("Business Name is required");
+            }
+            if (ERROR) return;
+            setPages({first:false,second:true,third:false});
+        }else if (cmd === "second"){
+            if (!countryRef.current.value){
+                ERROR = true;
+                setCountryError("Country is required");
+            }if (!cityRef.current.value){
+                ERROR = true;
+                setCityError("City is required");
+            }if (!addressRef.current.value){
+                ERROR = true;
+                setAddressError("Address is required");
+            }if (!passwordRef.current.value){
+                ERROR = true;
+                setPasswordError("Password is required");
+            }if (!confirmPasswordRef.current.value){
+                ERROR = true;
+                setConfirmPasswordError("Password mistmatch");
+            }if (passwordRef.current.value !== confirmPasswordRef.current.value){
+                ERROR = true;
+                setConfirmPasswordError("Password mistmatch");
+            }
+            if (ERROR) return;
+            setPages({first:false,second:false,third:true});
+        }else if (cmd === "create"){
+            if (!cardHolderNameRef.current.value){
+                ERROR = true;
+                setCardHolderNameError("Card holder name is required");
+            }if (!cardNumberRef.current.value){
+                ERROR = true;
+                setCardNumberError("Card number is required");
+            }if (!cardExpireRef.current.value){
+                ERROR = true;
+                setCardExpireError("Card expire date is required");
+            }if (!cardCvcRef.current.value){
+                ERROR = true;
+                setCardCvcError("Card cvc is required");
+            }
+            //onSubmit();
+            alert("Unsuccessful payment");
         }
-        if(ERROR) return;
-
-        setPages({first:false,second:true});
     }
 
-    const onSubmit = () =>{
-        let ERROR = false;
-        const msg = "1px solid red";
-        if(!businessNameRef.current.value){
-            ERROR = true;
-            setBusinessNameError("Business name is required");
-        }if(!countryRef.current.value){
-            ERROR = true;
-            setCountryError("Country is required");
-        }if(!cityRef.current.value){
-            ERROR = true;
-            setCityError("City is required");
-        }if(!addressRef.current.value){
-            ERROR = true;
-            setAddressError("Address is required");
+    const onSubmit = async() =>{
+        const response = await createUser(emailRef.current.value, passwordRef.current.value);
+        if (response?.error) return alert(response?.error);
+        const userAdmin = {
+            name: `${firstNameRef.current.value || ""} ${lastNameRef.current.value || ""}`,
+            email: emailRef.current.value || "",
+            businessName: businessNameRef.current.value || "",
+            website: websiteRef.current.value || "",
+            country: countryRef.current.value || "",
+            city: cityRef.current.value || "",
+            address: addressRef.current.value || "",
+            storeId: response?.user?.uid || "",
+            role: "admin"
         }
-        if(ERROR) return;
-        
-        
+        const userResponse = await addUser(userAdmin, response?.user?.uid);
+        if (userResponse) setAdminAccess(true);
     }
+
+    useEffect(()=>{
+        if (adminAccess) history.push(routes.administration);
+    },[adminAccess]);
 
     return(
         <IonPage>
             <IonContent class="silver no-select">
-                <div className="flex d-flex-on-mobile border radius pad-xxl half-width silver2 float-center max-width-on-mobile">
+                <div className="flex d-flex-on-mobile border radius pad-xxl register-pad-on-mobile half-width silver2 float-center max-width-on-mobile">
                     <div className="max-width">
                         <div hidden={!pages.first}>
-                            <Entry onChange={()=>reset("f")} entryRef={firstNameRef} error={firstNameError} labelColor="rgb(5, 5, 5)" label="First Name" placeholder="First Name" />
-                            <Entry onChange={()=>reset("l")} entryRef={lastNameRef} error={lastNameError} labelColor="rgb(5, 5, 5)" label="Last Name" placeholder="Last Name" />
-                            <Entry onChange={()=>reset("e")} entryRef={emailRef} error={emailError} labelColor="rgb(5, 5, 5)" label="Email" placeholder="Email" />
-                            <Entry onChange={()=>reset("p")} entryRef={passwordRef} error={passwordError} labelColor="rgb(5, 5, 5)" label="Password" placeholder="Password" />
-                            <Entry onChange={()=>reset("c")} entryRef={confirmPasswordRef} error={confirmPasswordError} labelColor="rgb(5, 5, 5)" label="Confirm Password" placeholder="Confirmm Password" />
+                            <Entry onChange={()=>reset("f")} entryRef={firstNameRef} error={firstNameError} labelColor="rgb(5, 5, 5)" label="First Name" required placeholder="First Name" />
+                            <Entry onChange={()=>reset("l")} entryRef={lastNameRef} error={lastNameError} labelColor="rgb(5, 5, 5)" label="Last Name" required placeholder="Last Name" />
+                            <Entry onChange={()=>reset("e")} entryRef={emailRef} error={emailError} labelColor="rgb(5, 5, 5)" label="Email" required placeholder="Email" />
+                            <Entry onChange={()=>reset("b")} entryRef={businessNameRef} error={businessNameError} labelColor="rgb(5, 5, 5)" label="Business Name" required placeholder="Business Name" />
+                            <Entry onChange={()=>reset("w")} entryRef={websiteRef} error={websiteError} labelColor="rgb(5, 5, 5)" label="Website" optional placeholder="Website" />
                             <div className="pad-xxl">
-                                <button onClick={onNext} className="pad pad-h radius click dark" style={{float:"right"}}>Next <IonIcon icon={arrowForwardOutline}/></button>
+                                <button onClick={()=>onNext("first")} className="pad pad-h radius click dark" style={{float:"right"}}>Next <IonIcon icon={arrowForwardOutline}/></button>
                             </div>
                         </div>
                         <div hidden={!pages.second}>
-                            <Entry onChange={()=>reset("b")} entryRef={businessNameRef} error={businessNameError} labelColor="rgb(5, 5, 5)" label="Business Name" placeholder="Business Name" />
-                            <Entry onChange={()=>reset("w")} entryRef={websiteRef} error={websiteError} labelColor="rgb(5, 5, 5)" label="Website" placeholder="Website" />
-                            <Entry onChange={()=>reset("co")} entryRef={countryRef} error={countryError} labelColor="rgb(5, 5, 5)" label="Country" placeholder="Country" />
-                            <Entry onChange={()=>reset("ci")} entryRef={cityRef} error={cityError} labelColor="rgb(5, 5, 5)" label="City" placeholder="City" />
-                            <Entry onChange={()=>reset("a")} entryRef={addressRef} error={addressError} labelColor="rgb(5, 5, 5)" label="Address" placeholder="Address" />
+                            <Entry onChange={()=>reset("p")} entryRef={passwordRef} error={passwordError} type="password" labelColor="rgb(5, 5, 5)" required label="Password" placeholder="Password" />
+                            <Entry onChange={()=>reset("c")} entryRef={confirmPasswordRef} error={confirmPasswordError} type="password" labelColor="rgb(5, 5, 5)" required label="Confirm Password" placeholder="Confirmm Password" />
+                            <Entry onChange={()=>reset("co")} entryRef={countryRef} error={countryError} labelColor="rgb(5, 5, 5)" label="Country" required placeholder="Country" />
+                            <Entry onChange={()=>reset("ci")} entryRef={cityRef} error={cityError} labelColor="rgb(5, 5, 5)" label="City" required placeholder="City" />
+                            <Entry onChange={()=>reset("a")} entryRef={addressRef} error={addressError} labelColor="rgb(5, 5, 5)" label="Address" required placeholder="Address" />
                             <div className="pad-xxl">
-                                <button onClick={onSubmit} className="pad pad-h radius click dark" style={{float:"right",marginLeft:"10px"}}>Create <IonIcon icon={addOutline}/></button>
-                                <button onClick={()=>setPages({first:true,second:false})} className="pad pad-h radius click dark" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
+                                <button onClick={()=>onNext("second")} className="pad pad-h radius click dark" style={{float:"right",marginLeft:"10px"}}>Next <IonIcon icon={addOutline}/></button>
+                                <button onClick={()=>setPages({first:true,second:false,third:false})} className="pad pad-h radius click dark" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
+                            </div>
+                        </div>
+                        <div hidden={!pages.third}>
+                            <div className="centered silver pad">PAYMENT DETAILS</div>
+                            <div className="entry-input-container" style={{color:"black"}}>
+                                <label>Accept cards</label>
+                                <div className="inline" style={{fontSize:"40px"}}>
+                                    <span className="pad"><RiVisaLine/></span>
+                                    <span className="pad"><FaCcMastercard/></span>
+                                    <span className="pad"><FaCcDiscover/></span>
+                                </div>
+                            </div>
+                            <Entry onChange={()=>reset("chn")} entryRef={cardHolderNameRef} error={cardHolderNameError} type="password" labelColor="rgb(5, 5, 5)" required label="Card Holder's Name" placeholder="Full name" />
+                            <Entry onChange={()=>reset("cn")} entryRef={cardNumberRef} error={cardNumberError} type="number" labelColor="rgb(5, 5, 5)" required label="Card Number" placeholder="Card number" />
+                            <div className="flex">
+                                <Entry onChange={()=>reset("ce")} entryRef={cardExpireRef} error={cardExpireError} labelColor="rgb(5, 5, 5)" type="date" label="Expire Date" required placeholder="Expire date" />
+                                <div style={{minWidth:"100px"}}><Entry onChange={()=>reset("cc")} entryRef={cardCvcRef} error={cardCvcError} labelColor="rgb(5, 5, 5)" type="number" label="CVC" required placeholder="Cvc" /></div>
+                            </div>
+                            <div className="pad-xxl">
+                                <button onClick={()=>onNext("create")} className="pad pad-h radius click dark" style={{float:"right",marginLeft:"10px"}}>Create <IonIcon icon={addOutline}/></button>
+                                <button onClick={()=>setPages({first:false,second:true,third:false})} className="pad pad-h radius click dark" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
-export const Entry = ({placeholder, edit, entryRef, onChange, onClick, onKeyPress, label, cssClass, type, dollarSign, labelColor, style, error}) =>{
+export const Entry = ({placeholder, edit, entryRef, required, optional, onChange, onClick, onKeyPress, label, cssClass, type, dollarSign, percentSign, labelColor, style, error}) =>{
     const [value, setValue] = useState("");
     const triggerChange = (e) =>{
         setValue(e.target.value);
@@ -9,9 +9,13 @@ export const Entry = ({placeholder, edit, entryRef, onChange, onClick, onKeyPres
     }
     return(
         <div className={`entry-input-container ${cssClass}`} style={style}>
-            <div><label style={{color:labelColor}}>{label}</label></div>
-            <span className={dollarSign && "dollar-sign"} style={{position:"relative"}}>
-                <input ref={entryRef} onKeyPress={onKeyPress} onClick={onClick} onChange={triggerChange} type={type} style={{border:error && "1px solid red"}} className="input" placeholder={placeholder} />
+            <div>
+                <label style={{color:labelColor || "rgb(3, 37, 68)"}}>{label}</label>
+                <span style={{color:"red"}}>{required && "*"}</span>
+                <span style={{fontSize:"11px",color:"dodgerblue"}}>{optional && " Optional"}</span>
+            </div>
+            <span className={dollarSign && "dollar-sign" || percentSign && "percent-sign"} style={{position:"relative"}}>
+                <input ref={entryRef} onKeyPress={onKeyPress} onClick={onClick} onChange={triggerChange} type={type} style={{border:error && "1px solid red",height:type === "date"?"34px":null}} className="input" placeholder={placeholder} />
                 <div className="float-bottom-overflow font-mini" style={{color:"red",bottom:"-45%"}}>{error}</div>
             </span>
             <div hidden={!edit} className="input" style={{border:"none",height:"35px"}}>{value}</div>

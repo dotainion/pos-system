@@ -9,7 +9,7 @@ export const Select = ({options, defaultValue, edit, selectRef, onChange, label,
     }
     return(
         <div className={`entry-input-container ${cssClass}`}>
-            <div><label>{label}</label></div>
+            <div style={{color:"rgb(3, 37, 68)"}}><label>{label}</label></div>
             <select ref={selectRef} onChange={triggerChange} className="input">
                 <option defaultChecked hidden>{defaultValue || options?.[0]}</option>
                 {options?.map((option, key)=>(

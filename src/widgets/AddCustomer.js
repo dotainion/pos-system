@@ -8,7 +8,7 @@ import { useStore } from '../context/Store';
 
 
 export const AddCustomer = ({isOpen, onClose}) =>{
-    const { initCustomers } = useStore();
+    const { user, initCustomers } = useStore();
 
     const [image, setImage] = useState("");
     const [error, setError] = useState("");
@@ -34,6 +34,7 @@ export const AddCustomer = ({isOpen, onClose}) =>{
             email: customerEmailRef.current.value || "",
             number: customerNumberRef.current.value || "",
             id: customerIdRef.current.value || "",
+            storeId: user?.storeId || "",
         });
         onClearValues();
         initCustomers();

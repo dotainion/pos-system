@@ -40,7 +40,7 @@ export const SearchBar = ({placeholder, onTyping, onSearch, clearOnSearch, onCle
         if (defaultValue) setValue(defaultValue);
     },[defaultValue]);
     return(
-        <div hidden={hidden} className="search-container">
+        <div hidden={hidden} className="search-container silver2">
             <input onChange={onTriggerTyping} ref={searchRef} onKeyPress={onTriggerEnterKey} placeholder={placeholder} value={searchRef?.current?.value || value}/>
             <IonIcon class="close-hover" hidden={hideClose} onClick={onTriggerCear} icon={closeOutline}/>
             <IonIcon onClick={onTriggerSearch} icon={searchOutline}/>

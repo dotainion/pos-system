@@ -12,8 +12,9 @@ import { tools } from '../tools/Tools';
 import { Progressing } from '../widgets/Progressing';
 
 
+
 export const CreateEmployee = ({isOpen, record, onClose}) =>{
-    const { createUser } = useStore();
+    const { user } = useStore();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [inputStyle, setInputStyle] = useState("");
@@ -24,7 +25,6 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
         third: false
     });
 
-    const credsEmailRef = useRef();
     const credsPasswordRef = useRef();
     const credsConfirmRef = useRef();
 
@@ -49,43 +49,37 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
     const nextOfKinAddressRef = useRef();
 
     const onAddEmployee = async() =>{
-        const response = await createUser(
-            credsEmailRef.current.value,
-            credsPasswordRef.current.value,
-        );
+        setError("");
         setLoading(true);
-        setError("")
-        if (response?.error){
-            setError(response?.error);
-        }else {
-            const employee = {
-                name: nameRef.current.value || "",
-                email: emailRef.current.value || "",
-                phone1: phoneLine1Ref.current.value || "",
-                phone2: phoneLine2Ref.current.value || "",
-                country: countryRef.current.value || "",
-                city: cityRef.current.value || "",
-                address: addressRef.current.value || "",
+        if (Object.keys(user || {}).length <= 0) alert("no user");
+        const employee = {
+            name: nameRef.current.value || "",
+            email: emailRef.current.value || "",
+            phone1: phoneLine1Ref.current.value || "",
+            phone2: phoneLine2Ref.current.value || "",
+            country: countryRef.current.value || "",
+            city: cityRef.current.value || "",
+            address: addressRef.current.value || "",
+            
+            kinName: nextOfKinNameRef.current.value || "",
+            kinEmail: nextOfKinEmailRef.current.value || "",
+            kinPhone1: nextOfKinPhoneLine1Ref.current.value || "",
+            kinPhone2: nextOfKinPhoneLine2Ref.current.value || "",
+            kinCountry: nextOfKinCountryRef.current.value || "",
+            kinCity: nextOfKinCityRef.current.value || "",
+            kinAddress: nextOfKinAddressRef.current.value || "",
 
-                role: roleRef.current.value || "",
-                image: image,
-                
-                kinName: nextOfKinNameRef.current.value || "",
-                kinEmail: nextOfKinEmailRef.current.value || "",
-                kinPhone1: nextOfKinPhoneLine1Ref.current.value || "",
-                kinPhone2: nextOfKinPhoneLine2Ref.current.value || "",
-                kinCountry: nextOfKinCountryRef.current.value || "",
-                kinCity: nextOfKinCityRef.current.value || "",
-                kinAddress: nextOfKinAddressRef.current.value || "",
-            }
-            await addUser(employee, response?.user?.uid);
+            role: roleRef.current.value || "",
+            image: image || "",
+            storeId: user?.storeId || "",
         }
+        await addUser(employee);
         setLoading(false);
     }
 
     useEffect(()=>{
         if (Object.keys(record || {})?.length > 0){
-            setInputStyle("");
+            setInputStyle(" ");
             nameRef.current.value = record?.info?.name || "";
             emailRef.current.value = record?.info?.email || "";
             phoneLine1Ref.current.value = record?.info?.phone1 || "";
@@ -104,17 +98,17 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
             nextOfKinCountryRef.current.value = record?.info?.kinCountry || "";
             nextOfKinCityRef.current.value = record?.info?.kinCity || "";
             nextOfKinAddressRef.current.value = record?.info?.kinAddress || "";
-        }else setInputStyle("input-style");
+        }else setInputStyle("silver2");
     },[record]);
     return(
         <PopupContainer isOpen={isOpen} onClose={onClose}>
-            <div className="popup-header  popup-bg">
+            <div className="popup-header silver2">
                 <IonIcon onClick={onClose} class="close" icon={closeOutline}/>
                 <div className="pad">
                     {
-                        showEmplyeeInput.first && "Add employee information" ||
-                        showEmplyeeInput.second && "Add Next of Kin informatino" ||
-                        showEmplyeeInput.third && "Add employee credentials and role"
+                        showEmplyeeInput.first && `${Object.keys(record || {})?.length? "Update": "Add"} employee information` ||
+                        showEmplyeeInput.second && `${Object.keys(record || {})?.length? "Update": "Add"} Next of Kin informatino` ||
+                        showEmplyeeInput.third && `${Object.keys(record || {})?.length? "Update": "Add"} employee credentials and role`
                     }
                 </div>
             </div>
@@ -124,7 +118,6 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                     <div className="flex d-flex-on-mobile">
                         <div className="max-width">
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nameRef} placeholder="Full name" label="Full Name" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={emailRef} placeholder="example@gmail.com" label="Email" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={phoneLine1Ref} placeholder="Phone number" label="Phone Line 1" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={phoneLine2Ref} placeholder="Phone number" label="Phone Line 2" />
                         </div>
@@ -132,15 +125,15 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={countryRef} placeholder="Country" label="Country" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={cityRef} placeholder="city" label="City" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={addressRef} placeholder="Address" label="Address" />
-                            <IonThumbnail onClick={()=>imageRef.current?.click()} class="item-center relative" style={{width:"100px",height:"100px",borderRadius:"50%"}}>
+                            <IonThumbnail onClick={()=>imageRef.current?.click()} class="item-center relative" style={{width:"100px",height:"100px",borderRadius:"50%",marginTop:"40px"}}>
                                 <IonImg src={image || img} class="max-size" style={{borderRadius:"50%"}} />
                                 <IonIcon icon={imagesOutline} class="float-top-left" style={{boxShadow:"2px 2px 5px black",margin:"5px"}} />
                             </IonThumbnail>
                             <input hidden type="file" ref={imageRef} onChange={async e=>setImage(await tools.toBase64(e.target.files[0]))} />
                         </div>
                     </div>
-                    <div style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="add-btn">Next</button>
+                    <div className="pad-xxl" style={{float:"right"}}>
+                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="pad radius silver">Next</button>
                     </div>
                 </div>
                 <div hidden={!showEmplyeeInput.second} className="max-width">
@@ -157,15 +150,15 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinAddressRef} placeholder="Address" label="Next of kin Address" />
                         </div>
                     </div>
-                    <div style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:true,second:false,third:false})} style={{fontSize:"15px"}} className="add-btn">Back</button>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:false,third:true})} style={{fontSize:"15px"}} className="add-btn">Next</button>
+                    <div className="pad-xxl" style={{float:"right"}}>
+                        <button onClick={()=>setShowEmployeeInput({first:true,second:false,third:false})} style={{fontSize:"15px"}} className="pad radius silver">Back</button>
+                        <button onClick={()=>setShowEmployeeInput({first:false,second:false,third:true})} style={{fontSize:"15px",marginLeft:"10px"}} className="pad radius silver">Next</button>
                     </div>
                 </div>
                 <div hidden={!showEmplyeeInput.third}>
                     <div className="flex d-flex-on-mobile">
                         <div className="max-width">
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={credsEmailRef} placeholder="example@gmail.com" label="Email" type="email" />
+                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={emailRef} placeholder="example@gmail.com" label="Email" type="email" />
                             <Select edit={!inputStyle} cssClass={inputStyle} selectRef={roleRef} label="Role" options={roles}/>
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={credsPasswordRef} placeholder="*********" label="Password" type="password" />
                             <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={credsConfirmRef} placeholder="*********" label="Confirm Password" type="password" />                
@@ -178,9 +171,9 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                             <p style={{color:"red"}}>{error}</p>
                         </div>
                     </div>
-                    <div style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="add-btn">Back</button>
-                        <button disabled={loading} onClick={onAddEmployee} style={{fontSize:"15px"}} className="add-btn">Save</button>
+                    <div className="pad-xxl" style={{float:"right"}}>
+                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="pad radius silver">Back</button>
+                        <button disabled={loading} onClick={onAddEmployee} style={{fontSize:"15px",marginLeft:"10px"}} className="pad radius silver">{Object.keys(record || {})?.length? "Update": "Save"}</button>
                     </div>
                 </div>
             </div>

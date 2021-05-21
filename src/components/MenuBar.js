@@ -13,31 +13,37 @@ const nav = [
     {
         title: "Order Entry",
         icon: cartOutline,
-        url: routes.orderEntry
+        url: routes.orderEntry,
+        hidden: false
     },{
         title: "Administrator",
         icon: podiumOutline,
-        url: routes.administration
+        url: routes.administration,
+        hidden: false
     },{
         title: "Products",
         icon: pricetagOutline,
-        url: routes.products
+        url: routes.products,
+        hidden: false
     },{
         title: "Repors",
         icon: statsChartOutline,
-        url: routes.reports
+        url: routes.reports,
+        hidden: false
     },{
         title: "Employees",
         icon: peopleOutline,
-        url: routes.employees
+        url: routes.employees,
+        hidden: false
     },{
         title: "Settings",
         icon: constructOutline,
-        url: routes.settings
+        url: routes.settings,
+        hidden: false
     }
 ];
 
-export const MenuBarWrapper = ({onAdd, onSearch, children}) =>{
+export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, children}) =>{
     const history = useHistory();
     const { setAdminAccess } = useStore();
     const [showSideMenu, setShowSideMenu] = useState("hide-menu");
@@ -59,41 +65,58 @@ export const MenuBarWrapper = ({onAdd, onSearch, children}) =>{
     }
 
     useEffect(()=>{
-        if (onAdd || onSearch) setHideToolbar(false);
+        if (onAdd || onSearch || onSave) setHideToolbar(false);
         else setHideToolbar(true);
         if (tools.isMobile()) setHideToolbar(false);
-    },[onAdd, onSearch,]);
+    },[onAdd, onSearch, onSave]);
+    
     return(
         <div className="flex">
             <div hidden={!showSideMenu.includes("show-menu")} onClick={toggleMenu} className="menu-backdrop"/>
-            <div className={`menu-container ${showSideMenu}`}>
+            <div className={`menu-container scroll hide-scrollbar dark no-select ${showSideMenu}`}>
                 <IonList style={{marginBottom:"20px"}}>
                     <IonListHeader>POS System</IonListHeader>
                     <IonNote style={{marginLeft:"30px"}}>POS System</IonNote>
                 </IonList>
-                {nav.map((appPage, index) => (
-                    <IonMenuToggle autoHide={false} key={index}>
-                        <IonItem className={`menu-button ${isSelected(appPage.url)}`} onClick={()=>routeTo(appPage.url)} routerDirection="none" lines="none">
+                {nav.map((appPage, key) => (
+                    <IonMenuToggle hidden={appPage.hidden} autoHide={false} key={key}>
+                        <IonItem className={`menu-button menu-hover ${isSelected(appPage.url)}`} onClick={()=>routeTo(appPage.url)} routerDirection="none" lines="none">
                             <IonIcon class="menu-button-icon" slot="start" icon={appPage.icon} />
                             <IonLabel>{appPage.title}</IonLabel>
                         </IonItem>
                     </IonMenuToggle>
                 ))}
                 <IonMenuToggle autoHide={false}>
-                    <IonItem onClick={()=>{history.push(routes.orderEntry); setAdminAccess(false)}} className="menu-button" lines="none">
+                    <IonItem onClick={()=>{history.push(routes.orderEntry); setAdminAccess(false)}} className="menu-button close-hover" lines="none">
                         <IonIcon class="menu-button-icon" slot="start" icon={logOutOutline} />
                         <IonLabel>Log off</IonLabel>
                     </IonItem>
                 </IonMenuToggle>
+                <div className="menu-button-option-container">
+                    <div hidden={!optionsTitle} className="pad silver">{optionsTitle}</div>
+                    {options?.map((option, key) => (
+                        <IonMenuToggle autoHide={false} key={key}>
+                            <IonItem className={`menu-button menu-hover ${option.selected && "menu-button-selected"}`} onClick={()=>{optionWillClick?.();toggleMenu();option.command?.()}} routerDirection="none" lines="none">
+                                <IonIcon class="menu-button-icon" slot="start" icon={option.icon} />
+                                <IonLabel>{option.title}</IonLabel>
+                            </IonItem>
+                        </IonMenuToggle>
+                    ))}
+                </div>
             </div>
-            <div onClick={(e)=>setShowSideMenu("hide-menu")} className="menu-content-page max-width-on-mobile">
-                <div hidden={hideToolbar} onClick={(e)=>e.stopPropagation()} className="fixed flex menu-toolbar-container">
-                    <div>
-                        <button hidden={!onAdd} onClick={onAdd} style={{borderRadius:"50%",fontSize:"25px"}} className="add-btn hide-on-mobile"><IonIcon icon={addOutline}/></button>
-                        <IonIcon onClick={toggleMenu} class="hamburger-menu hide-on-desktop" icon={reorderFourOutline}/>
+            <div onClick={(e)=>setShowSideMenu("hide-menu")} className="menu-content-page silver max-width-on-mobile">
+                <div hidden={hideToolbar} onClick={(e)=>e.stopPropagation()} className="fixed flex dark menu-toolbar-container">
+                    <div className="relative menu-bar-btn-container hide-on-desktop">
+                        <IonIcon onClick={toggleMenu} class="hamburger-menu silver" icon={reorderFourOutline}/>
                     </div>
-                    <div className="float-center menu-toolbar-search">
-                        <SearchBar hidden={!onSearch} onSearch={onSearch} placeholder="Find employee"/>
+                    <div hidden={!onAdd} className="relative menu-bar-btn-container">
+                        <button onClick={onAdd} style={{borderRadius:"50%",fontSize:"25px"}} className="float-center silver click2 pad hide-on-mobile"><IonIcon icon={addOutline}/></button>
+                    </div>
+                    <div hidden={!onSave} className="relative menu-bar-btn-container">
+                        <button onClick={onSave} className={`float-center ${saveBtnHilight? "success2":"silver"} pad radius click2`}>Save</button>
+                    </div>
+                    <div hidden={!onSearch} className="float-center menu-toolbar-search" style={{color:"black"}}>
+                        <SearchBar onSearch={onSearch} placeholder="Find employee"/>
                     </div>
                 </div>
                 <div className="max-screen-height-for-menu-wrapper scroll scrollbar2">

@@ -9,6 +9,7 @@ import { SearchBar } from './SearchBar';
 import img from '../images/beach.jpg';
 import { tools } from '../tools/Tools';
 import { AddCustomer } from './AddCustomer';
+import { Alert } from './Alert';
 
 
 export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searchValue}) =>{
@@ -18,6 +19,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
     const [showAddCustomer, setShowAddCustomer] = useState(false);
     const [customer, setCustomer] = useState({});
     const [defaultSearchValue, setDefaultSearchValue] = useState("");
+    const [showCartNotEmptyAlert, setShowCartNotEmptyAlert] = useState({state:false,data:null});
 
     //hold image
     const [image, setImage] = useState("");
@@ -38,17 +40,21 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
     }
 
     const onRestore = (e,index) =>{
-        e.stopPropagation();
-        let holdStore = [];
-        let newOnHold = JSON.parse(JSON.stringify(cartOnHold || []));
-        for (let order of newOnHold){
-            if (newOnHold?.[index]?.title !== order?.title){
-                holdStore.push(order);
+        e?.stopPropagation?.();
+        if (!cart.length || e?.includes?.("override")){
+            let holdStore = [];
+            let newOnHold = JSON.parse(JSON.stringify(cartOnHold || []));
+            for (let order of newOnHold){
+                if (newOnHold?.[index]?.title !== order?.title){
+                    holdStore.push(order);
+                }
             }
-        }
-        if (newOnHold?.[index]){
-            setCart(newOnHold?.[index]?.order);
-            setCartOnHold(holdStore);
+            if (newOnHold?.[index]){
+                setCart(newOnHold?.[index]?.order);
+                setCartOnHold(holdStore);
+            }
+        }else{
+            setShowCartNotEmptyAlert({state:true,data:index});
         }
     }
 
@@ -100,8 +106,8 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
     return(
         <>
         <PopupContainer isOpen={isOpen} onClose={onClose}>
-            <div hidden={!toggleDisplay.addCustomer}  className="pad-xxl max-width input-style" style={{color:"black"}}>
-                <div className="half-width item-center">
+            <div hidden={!toggleDisplay.addCustomer}  className="pad-xxl max-width silver2" style={{color:"black"}}>
+                <div className="half-width max-width-on-mobile item-center">
                     <SearchBar
                         placeholder="Search customer..."
                         defaultValue={defaultSearchValue}
@@ -109,27 +115,33 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                     />
                 </div>
             </div>
-            <p hidden={toggleDisplay.addCustomer}  className="pad-xl" style={{color:"white",position:"relative"}}>
+            <p hidden={toggleDisplay.addCustomer}  className="pad-xl" style={{color:"black",position:"relative"}}>
                 Stash item thats in cart.<br/>
                 Give a name to this order to be saved so it can be itdentify when needed.<br/>
                 <label className="float-bottom-overflow max-width" style={{color:"red",textAlign:"center"}}>{error}</label>
             </p>
-            <div className="flex">
-                <button onClick={()=>toggleContainer("save-item")} style={{color:toggleDisplay.saveItem && "orange"}} className="add-btn btn-font">Save Item <IonIcon icon={saveOutline}/></button>
-                <button onClick={()=>toggleContainer("view-item")} style={{color:toggleDisplay.viewItem && "orange"}} className="add-btn btn-font">View Items <IonIcon icon={eyeOutline}/></button>
-                <button onClick={()=>toggleContainer("add-customer")} style={{color:toggleDisplay.addCustomer && "orange"}} className="add-btn btn-font">Customers <IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/></button>
+            <div className="flex pad-xxl">
+                <div className="max-width centered">
+                    <button onClick={()=>toggleContainer("save-item")} style={{color:toggleDisplay.saveItem && "brown"}} className="pad btn-font radius silver">Stash for later <IonIcon icon={saveOutline}/></button>
+                </div>
+                <div className="max-width centered">
+                    <button onClick={()=>toggleContainer("view-item")} style={{color:toggleDisplay.viewItem && "brown"}} className="pad btn-font radius silver">View stash lists <IonIcon icon={eyeOutline}/></button>
+                </div>
+                <div className="max-width centered">
+                    <button onClick={()=>toggleContainer("add-customer")} style={{color:toggleDisplay.addCustomer && "brown"}} className="pad btn-font radius silver">Customers <IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/></button>
+                </div>
             </div>
             <div hidden={!toggleDisplay.saveItem} className="pad entry-action-sub">
                 <div className="half-width item-center flex">
-                    <Entry cssClass="input-style" entryRef={titleRef} placeholder="Give a title to this order" label="Title" />
+                    <Entry cssClass="silver2" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
                     <div className="pad-xl" style={{position:"relative"}}>
                         <div className="float-left">
-                            <button onClick={onSaveCartItem} className="add-btn btn-font">Save</button>
+                            <button onClick={onSaveCartItem} className="pad btn-font silver radius" style={{marginLeft:"20px"}}>Save</button>
                         </div>
                     </div>
                 </div>
                 <div className="max-size entry-action-mini scrollbar" style={{position:"relative"}}>
-                    <div style={{color:"white"}} className="dark-blue">
+                    <div className="silver2">
                         <div style={{border:"none"}} className="sales-item-name-header radius">Title</div>
                         <div style={{border:"none"}} className="sales-item-qty-header radius">Qty</div>
                         <div style={{border:"none"}} className="sales-item-price-header radius">Price</div>
@@ -137,7 +149,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                     {
                         cart?.length?
                         cart.map((order, key)=>(
-                            <div style={{color:"white",borderBottom:"1px solid white"}} key={key}>
+                            <div style={{borderBottom:"1px solid white"}} key={key}>
                                 <div className="sales-item-name-header radius" style={{border:"none"}}>{order?.info?.title || "Not Provided"}</div>
                                 <div className="sales-item-qty-header radius" style={{border:"none"}}>{order?.qty || 1}</div>
                                 <div className="sales-item-price-header radius" style={{border:"none"}}>${order?.info?.salePrice || "Not Provided"}</div>
@@ -154,9 +166,9 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                         cartOnHold?.length?
                         cartOnHold.map((hold, key)=>(
                             <div key={key}>
-                                <div onClick={()=>toggleItemOnHold(`${hold?.title}${key}`)} className="pad radius max-width pointer no-select input-style">
+                                <div onClick={()=>toggleItemOnHold(`${hold?.title}${key}`)} className="pad radius max-width pointer no-select silver border-bottom">
                                     <span>{hold?.title}<IonIcon hidden id={`${hold?.title}${key}up`} icon={chevronUpOutline}/><IonIcon id={`${hold?.title}${key}down`} icon={chevronDownOutline}/></span>
-                                    <button onClick={e=>onRestore(e,key)} style={{backgroundColor:"inherit",color:"lightgreen",float:"right"}}>Restore</button>
+                                    <button onClick={e=>onRestore(e,key)} style={{backgroundColor:"inherit",color:"darkgreen",float:"right"}}>Restore</button>
                                 </div>
                                 <div hidden id={`${hold?.title}${key}`} className="no-select" style={{backgroundColor:"rgb(0,0,0,0.5)"}}>
                                     {hold?.order?.map((order, key)=>(
@@ -176,14 +188,14 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
 
             <div hidden={!toggleDisplay.addCustomer} className="pad entry-action-sub">
                 <div>
-                    <div style={{float:"left"}}>Selected Customer: <b style={{color:"orange"}}>{customer?.info?.name || "None"}</b></div>
+                    <div style={{float:"left"}}>Selected Customer: <b style={{color:"brown"}}>{customer?.info?.name}</b></div>
                     <IonIcon onClick={()=>setShowAddCustomer(true)} class="entry-action-add-btn" icon={addOutline}/>
                 </div>
                 <div className="max-size entry-action-mini scrollbar">
                     {
                         customers?.length?
                         customers.map((customer, key)=>(
-                            <div onClick={()=>setCustomer(customer)} className="flex customer-item-container input-style" key={key}>
+                            <div onClick={()=>setCustomer(customer)} className="flex customer-item-container silver border-bottom" key={key}>
                                 <div className="inline max-width pad">{customer?.info?.name}</div>
                                 <div className="inline max-width pad">{customer?.info?.email}</div>
                                 <div className="inline max-width pad">{customer?.info?.number}</div>
@@ -198,6 +210,13 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
         <AddCustomer
             isOpen={showAddCustomer}
             onClose={()=>setShowAddCustomer(false)}
+        />
+        <Alert
+            isOpen={showCartNotEmptyAlert.state}
+            header="Alert!!"
+            message="There is existing item in the cart. Must first stash items or continue to override?"
+            onClose={()=>setShowCartNotEmptyAlert({state:false,data:null})}
+            onConfirm={()=> onRestore("override", showCartNotEmptyAlert.data)}
         />
         </>
     )
