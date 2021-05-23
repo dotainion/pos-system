@@ -21,6 +21,7 @@
     "react-calendar": "^3.4.0",
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
+    "react-long-press": "^0.1.6",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-screen-orientation": "0.0.4",

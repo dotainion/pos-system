@@ -10,13 +10,17 @@ import { Loader } from '../widgets/Loader';
 import { SearchBar } from '../widgets/SearchBar';
 
 
-export const CustomerRefend = () =>{
+export const Payout = () =>{
     const history = useHistory();
     const { user } = useStore();
     const [sales, setSales] = useState([]);
     const [showLoader, setShowLoader] = useState(false);
 
-    const onGetSales = async() =>{
+    const onRefund = (object) =>{
+
+    }
+
+    const initSales = async() =>{
         setShowLoader(true);
         let tempStorage = [];
         const customerSales = await getSales(user?.storeId);
@@ -44,7 +48,7 @@ export const CustomerRefend = () =>{
     }
 
     useEffect(()=>{
-        onGetSales?.();
+        initSales?.();
     },[]);
     return(
         <IonPage>
@@ -63,13 +67,13 @@ export const CustomerRefend = () =>{
                             <Dropdown cssClass="inline pad" options={["jeack"]}>Filter</Dropdown>
                         </div>
                     </div>
-                    <div className="max-size refund-container item-center scrollbar scroll" style={{backgroundColor:"white"}}>
+                    <div className="max-size refund-container item-center scrollbar scroll silver2" style={{backgroundColor:"white"}}>
                         {
                             sales?.length?
                             sales.map((sale, key)=>(
                                 <div style={{marginTop:"10px"}} key={key}>
                                     <div onClick={()=>toggleItemOnHold(`${sale?.id}${key}`)} className="pad radius max-width pointer no-select silver relative">
-                                        <div>
+                                        <div className="half-width">
                                             <div>Date: {sale?.info?.date}</div>
                                             <div>Time: {sale?.info?.time}</div>
                                             <div>Customer: <b style={{color:"dodgerblue"}}>{sale?.customer?.name || <span style={{color:"teal"}}>None</span>}</b></div>
@@ -87,6 +91,9 @@ export const CustomerRefend = () =>{
                                             <div className="sales-item-name-header radius" style={{border:"none"}}>Item Name</div>
                                             <div className="sales-item-qty-header radius" style={{border:"none"}}>Quantity</div>
                                             <div className="sales-item-price-header radius" style={{border:"none"}}>Price</div>
+                                        </div>
+                                        <div className="pad">
+                                            <button onClick={()=>onRefund(sale)} className="pad silver click radius">Pay Out</button>
                                         </div>
                                         {sale?.info?.products?.map((prod, key)=>(
                                             <div className="no-select" style={{borderBottom:"1px solid gray",color:"black",marginLeft:"10px"}} key={key}>

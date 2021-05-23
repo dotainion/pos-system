@@ -7,26 +7,27 @@ import { Loader } from '../widgets/Loader';
 
 
 export const LowInventory = ({isOpen}) =>{
-    const { user } = useStore();
+    const { user, settings } = useStore();
 
     const [lowStocks, setLowStocks] = useState([]);
     const [showLoader, setShowLoader] = useState(false);
 
     const initLowStocks = async() =>{
         setShowLoader(true);
+        setLowStocks([]);
         const stocks = await getLowStocks(user?.storeId);
-        const lowQtyStocks = stocks.filter((stock)=>parseInt(stock?.info?.qty) <= 5);
+        const lowQtyStocks = stocks.filter((stock)=>parseInt(stock?.info?.qty) <= parseInt(settings?.lowStock || 5));
         setLowStocks(lowQtyStocks);
         setShowLoader(false);
     }
     useEffect(()=>{
         initLowStocks();
-    },[]);
+    },[settings]);
     return(
         <div hidden={!isOpen} className="max-size relative">
             <Loader isOpen={showLoader}/>
             <div className="centered pad-xxl">
-                <div onClick={initLowStocks} class="float-top-right" style={{marginRight:"40px",marginTop:"10px"}}>
+                <div onClick={initLowStocks} className="float-top-right" style={{marginRight:"40px",marginTop:"10px"}}>
                     <IonIcon icon={refreshOutline}/>
                     <div style={{fontSize:"9px"}}>Refresh</div>
                 </div>

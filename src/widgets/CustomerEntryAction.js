@@ -106,7 +106,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
     return(
         <>
         <PopupContainer isOpen={isOpen} onClose={onClose}>
-            <div hidden={!toggleDisplay.addCustomer}  className="pad-xxl max-width silver2" style={{color:"black"}}>
+            <div hidden={!toggleDisplay.addCustomer}  className="pad-xxl max-width" style={{color:"black"}}>
                 <div className="half-width max-width-on-mobile item-center">
                     <SearchBar
                         placeholder="Search customer..."
@@ -115,33 +115,33 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                     />
                 </div>
             </div>
-            <p hidden={toggleDisplay.addCustomer}  className="pad-xl" style={{color:"black",position:"relative"}}>
+            <p hidden={toggleDisplay.addCustomer}  className="pad-xl relative no-select">
                 Stash item thats in cart.<br/>
                 Give a name to this order to be saved so it can be itdentify when needed.<br/>
                 <label className="float-bottom-overflow max-width" style={{color:"red",textAlign:"center"}}>{error}</label>
             </p>
-            <div className="flex pad-xxl">
+            <div className="flex pad-xxl no-select" style={{backgroundColor:"gray"}}>
                 <div className="max-width centered">
-                    <button onClick={()=>toggleContainer("save-item")} style={{color:toggleDisplay.saveItem && "brown"}} className="pad btn-font radius silver">Stash for later <IonIcon icon={saveOutline}/></button>
+                    <button onClick={()=>toggleContainer("save-item")} style={{color:toggleDisplay.saveItem && "brown"}} className="pad btn-font radius silver shadow click">Stash for later <IonIcon icon={saveOutline}/></button>
                 </div>
                 <div className="max-width centered">
-                    <button onClick={()=>toggleContainer("view-item")} style={{color:toggleDisplay.viewItem && "brown"}} className="pad btn-font radius silver">View stash lists <IonIcon icon={eyeOutline}/></button>
+                    <button onClick={()=>toggleContainer("view-item")} style={{color:toggleDisplay.viewItem && "brown"}} className="pad btn-font radius silver shadow click">View stash lists <IonIcon icon={eyeOutline}/></button>
                 </div>
                 <div className="max-width centered">
-                    <button onClick={()=>toggleContainer("add-customer")} style={{color:toggleDisplay.addCustomer && "brown"}} className="pad btn-font radius silver">Customers <IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/></button>
+                    <button onClick={()=>toggleContainer("add-customer")} style={{color:toggleDisplay.addCustomer && "brown"}} className="pad btn-font radius silver shadow click">Customers <IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/></button>
                 </div>
             </div>
             <div hidden={!toggleDisplay.saveItem} className="pad entry-action-sub">
                 <div className="half-width item-center flex">
-                    <Entry cssClass="silver2" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
+                    <Entry cssClass="gray" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
                     <div className="pad-xl" style={{position:"relative"}}>
                         <div className="float-left">
-                            <button onClick={onSaveCartItem} className="pad btn-font silver radius" style={{marginLeft:"20px"}}>Save</button>
+                            <button onClick={onSaveCartItem} className="pad-mini btn-font silver radius shadow click" style={{marginLeft:"20px"}}>Save</button>
                         </div>
                     </div>
                 </div>
                 <div className="max-size entry-action-mini scrollbar" style={{position:"relative"}}>
-                    <div className="silver2">
+                    <div className="gray">
                         <div style={{border:"none"}} className="sales-item-name-header radius">Title</div>
                         <div style={{border:"none"}} className="sales-item-qty-header radius">Qty</div>
                         <div style={{border:"none"}} className="sales-item-price-header radius">Price</div>
@@ -155,7 +155,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                                 <div className="sales-item-price-header radius" style={{border:"none"}}>${order?.info?.salePrice || "Not Provided"}</div>
                             </div>
                         )):
-                        <div style={{color:"white"}}>Cart is empty</div>
+                        <div>Cart is empty</div>
                     }
                 </div>
             </div>
@@ -181,7 +181,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                                 </div>
                             </div>
                         )):
-                        <div style={{color:"white"}}>No item on hold</div>
+                        <div>No item on hold</div>
                     }
                 </div>
             </div>
@@ -202,7 +202,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                                 <div className="inline max-width pad">{customer?.info?.id}</div>
                             </div>
                         )):
-                        <div style={{color:"white"}}>No customers</div>
+                        <div>No customers</div>
                     }
                 </div>
             </div>

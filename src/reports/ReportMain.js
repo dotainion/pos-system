@@ -12,6 +12,8 @@ import { CashDrops } from './CashDrops';
 import { System } from './System';
 import { EmployeeBanking } from './EmployeeBanking';
 import { BlankPage } from '../widgets/BlankPage';
+import { useHistory } from 'react-router';
+import { routes } from '../global/Routes';
 
 
 
@@ -25,13 +27,14 @@ export const ReportWindow = () =>{
     const [showCashDrawers, setShowCashDrawers] = useState(false);
     const [showEmployeeBanking, setShowEmployeeBanking] = useState(false);
     const [showSystem, setShowSystem] = useState(false);
+    const [barChild, setBarChild] = useState();//hold component for menuBar top header
 
 
     const sideNav = [
         {
             title: "CASH DRAWERS",
             icon: expandOutline,
-            selected: null,
+            selected: showCashDrawers,
             command: ()=>setShowCashDrawers(true)
         },{
             title: "END OF DAY",
@@ -46,17 +49,17 @@ export const ReportWindow = () =>{
         },{
             title: "CASH DROPS",
             icon: shareOutline,
-            selected: null,
+            selected: showCashDrops,
             command: ()=>setShowCashDrops(true)
         },{
             title: "EMPLOYEE BANKING",
             icon: businessOutline,
-            selected: null,
+            selected: showEmployeeBanking,
             command: ()=>setShowEmployeeBanking(true)
         },{
             title: "SYSTEM",
             icon: settingsOutline,
-            selected: null,
+            selected: showSystem,
             command: ()=>setShowSystem(true)
         }
     ];
@@ -70,6 +73,7 @@ export const ReportWindow = () =>{
         setShowCashDrawers(false);
         setShowEmployeeBanking(false);
     }
+
     return(
         <IonPage>
             <Calendar
@@ -77,7 +81,7 @@ export const ReportWindow = () =>{
                 onClose={()=>setShowCalendar(false)}
                 onSelect={setCalandarValue}
             />
-            <MenuBarWrapper options={sideNav} optionWillClick={onClose} optionsTitle="Reports">
+            <MenuBarWrapper options={sideNav} optionWillClick={onClose} optionsTitle="Reports" barChild={barChild}>
                 <IonList class="item-container">
                     <EndOfDay
                         isOpen={showEndOfDay}
@@ -85,11 +89,11 @@ export const ReportWindow = () =>{
                         onRunEndOfDay={()=>setShowCalendar(true)}
                     />
                     <CashDrawers isOpen={showCashDrawers} />
-                    <CashDrops isOpen={showCashDrops} />
-                    <System isOpen={showSystem} />
+                    <CashDrops isOpen={showCashDrops} setBarChild={setBarChild} />
+                    <System isOpen={showSystem} setBarChild={setBarChild} />
                     <EmployeeBanking isOpen={showEmployeeBanking} />
                     <ReportBtnAndContainer isOpen={showReports} onSelect={setSwitchState} btnHilight={switchState}>
-                        <LowInventory isOpen={switchState === reportBtns[4]} />
+                        <LowInventory isOpen={switchState === reportBtns[4]}/>
                         <div hidden={switchState === reportBtns[4]} className="relative max-size" style={{height:"60vh"}}>
                             <BlankPage title={switchState} />
                         </div>

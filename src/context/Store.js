@@ -1,3 +1,4 @@
+import { documents } from 'ionicons/icons';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { auth } from '../config/auth';
@@ -110,7 +111,7 @@ export const AppContext = ({children}) =>{
 
     const changeSettings = async(setting) =>{
         setSettings(setting);
-        //await updateSettings(setting, user?.storeId);
+        await updateSettings(setting, user?.storeId);
     }
 
     const initialize = (uid) =>{
@@ -118,6 +119,12 @@ export const AppContext = ({children}) =>{
         initCustomers(uid);
         initSettings(uid);
     }
+
+    //listen for change in user
+    useEffect(()=>{
+        if (user) document.title = user?.businessName;
+        else document.title = "Pos system";
+    },[user]);
 
     useEffect(()=>{
         auth.onAuthStateChanged(async(user)=>{

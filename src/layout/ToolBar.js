@@ -8,7 +8,7 @@ import { Alert } from "../widgets/Alert";
 import { Dropdown } from "../widgets/Dropdown"
 
 
-export const ToolBar = () =>{
+export const ToolBar = ({onOpenCalc}) =>{
     const history = useHistory();
     const { signOut, adminAccess } = useStore();
     const [showAlert,setShowAlert] = useState({state:false, route:""});
@@ -17,15 +17,15 @@ export const ToolBar = () =>{
 
     ];
     const files = [
-        
+        {
+            title: "Calculator",
+            command: ()=>onOpenCalc?.()
+        }
     ];
     const views = [
         {
             title: tools.titleCase(routes.products,"/"),
             command: ()=>routeTo(routes.products)
-        },{
-            title: tools.titleCase(routes.administration,"/"),
-            command: ()=>routeTo(routes.administration)
         },{
             title: tools.titleCase(routes.reports,"/"),
             command: ()=>routeTo(routes.reports)
@@ -35,7 +35,10 @@ export const ToolBar = () =>{
         }
     ];
     const settings = [
-        
+        {
+            title: tools.titleCase(routes.settings,"/"),
+            command: ()=>routeTo(routes.settings)
+        }
     ];
 
     const routeTo = (path) =>{

@@ -1,7 +1,8 @@
 import { IonIcon } from '@ionic/react';
-import { calendarOutline } from 'ionicons/icons';
+import { calendarOutline, printOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { Select } from '../components/Select';
+import { useStore } from '../context/Store';
 import { getEndOfDayReporByTimeStamp } from '../database/database';
 import { printer } from '../document/Printer';
 import { tools } from '../tools/Tools';
@@ -9,6 +10,8 @@ import { tools } from '../tools/Tools';
 
 const unavailable = "Locked";
 export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
+    const { user } = useStore();
+    
     const [lastEndOfDay, setLastEndOfDay] = useState("");
     const [transactionCount, setTransactionCount] = useState("");
     const [subTotal, setSubTotal] = useState(0);
@@ -23,7 +26,7 @@ export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
         setGrandTotal(0);
     }
     const sarchEndOfDay = async(timeStamp) =>{
-        configureEndOfDay(await getEndOfDayReporByTimeStamp(timeStamp));
+        configureEndOfDay(await getEndOfDayReporByTimeStamp(timeStamp, user?.storeId));
     }
 
     const configureEndOfDay = (salesItems) =>{
@@ -122,11 +125,9 @@ export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
                 <div className="pad">
                     <IonIcon onClick={onRunEndOfDay} style={{fontSize:"30px"}} icon={calendarOutline}/>
                 </div>
-                <div className="max-width pad relative">
+                <div className="half-width max-width-on-mobile pad relative">
                     <span onClick={onRunEndOfDay} className="float-left">RUN END OF DAY</span>
-                </div>
-                <div className="max-width pad relative">
-                    <span onClick={()=>printer.print("end-of-day","end-of-day-frame")} className="float-left" style={{color:"dodgerblue"}}>Print</span>
+                    <IonIcon onClick={()=>printer.print("end-of-day","end-of-day-frame")} className="float-right" style={{fontSize:"30px",marginLeft:"40px"}} icon={printOutline} />
                 </div>
             </div>
             <iframe id="end-of-day-frame" className="print-preview-iframe"/>

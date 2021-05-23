@@ -276,7 +276,8 @@
     width: 100%;
     padding-left: 5px;
     border-radius: 15px;
-    background: linear-gradient(to bottom, white 0%, rgb(212, 212, 212) 100%);
+    background-color: white;
+    /*background: linear-gradient(to bottom, white 0%, rgb(212, 212, 212) 100%);*/
 }
 .max-width{
     width: 100%;
@@ -376,6 +377,16 @@
     color: rgb(3, 37, 68);
     background: linear-gradient(to bottom, gray 0%, white 50%, gray 100%);
     --ion-background-color: linear-gradient(to right, gray 0%, white 50%, gray 100%);
+}
+.gray{
+    color: rgb(3, 37, 68);
+    background: linear-gradient(to bottom, lightgray 0%, rgb(95, 95, 95) 100%);
+    --ion-background-color: linear-gradient(to bottom, lightgray 0%, rgb(95, 95, 95) 100%);
+}
+.gray2{
+    color: rgb(3, 37, 68);
+    background: linear-gradient(to right, lightgray 0%, rgb(95, 95, 95) 100%);
+    --ion-background-color: linear-gradient(to right, lightgray 0%, rgb(95, 95, 95) 100%);
 }
 .success{
     color: white;
@@ -750,12 +761,12 @@
 .scrollbar::-webkit-scrollbar{
     width: 10px;
     height: 10px;
-    background: linear-gradient(to right, dodgerblue 0%, rgb(1, 18, 34) 100%);
+    background: linear-gradient(to right, rgb(238, 236, 236) 0%, gray 100%);
 }
 .scrollbar::-webkit-scrollbar-thumb{
     border-radius: 10px;
     border: 1px solid gray;
-    background: linear-gradient(to right, lightgray 0%, rgb(22, 22, 22) 100%);
+    background: linear-gradient(to right, gray 0%, rgb(5, 5, 5) 100%);
 }
 .scrollbar::-webkit-scrollbar-button{
     color: black;
@@ -766,18 +777,18 @@
 .scrollbar2::-webkit-scrollbar{
     width: 15px;
     height: 15px;
-    background: linear-gradient(to right, dodgerblue 0%, rgb(1, 18, 34) 100%);
+    background: linear-gradient(to right, rgb(238, 236, 236) 0%, gray 100%);
 }
 .scrollbar2::-webkit-scrollbar-thumb{
     border-radius: 10px;
     border: 1px solid gray;
-    background: linear-gradient(to right, lightgray 0%, rgb(22, 22, 22) 100%);
+    background: linear-gradient(to right, gray 0%, rgb(5, 5, 5) 100%);
 }
 .scrollbar2::-webkit-scrollbar-button{
     color: black;
     height: 10px;
     border-radius: 50%;
-    background: linear-gradient(to right, lightgray 0%, rgb(22, 22, 22) 100%);
+    background: linear-gradient(to right, rgb(238, 236, 236) 0%, rgb(5, 5, 5) 100%);
 }
 .btn-font{
     font-size: 15px;
@@ -995,4 +1006,51 @@
 .report-children-container{
     height: 80vh;
     overflow-y: auto;
+}
+.number-pad-container{
+    position: relative;
+    width: 250px;
+    height: 250px;
+}
+.number-pad{
+    display: inline-block;
+    position: relative;
+    width: 33.33%;
+    height: 23%;
+    padding: 2px;
+}
+.number-pad div{
+    width: 100%;
+    height: 100%;
+    color: rgb(5, 5, 5);
+    background-color: white;
+    border: 1px solid rgb(5, 5, 5);
+}
+.number-pad-note{
+    resize: none;
+    width: 100%;
+    height: 70px;
+    outline: none;
+}
+.shadow{
+    box-shadow: 4px 4px 10px gray;
+}
+.shadow2{
+    box-shadow: 2px 2px 10px rgb(0, 0, 0, 3);
+}
+.calculator{
+    width: 300px;
+    background-color: white;
+}
+.calculator-number-pad{
+    display: inline-block;
+    width: 25%;
+    height: 50px;
+    padding: 3px;
+}
+.calculator-input{
+    width: 100%;
+    height: 35px;
+    outline: none;
+    border: none;
 }

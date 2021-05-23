@@ -35,7 +35,7 @@ import { Administration } from './admin/Administration';
 import { Employees } from './admin/Employees';
 import { Settings } from './admin/Settings';
 import { Register } from './authentication/Register';
-import { CustomerRefend } from './pages/CustomerRefund';
+import { Payout } from './pages/Payout';
 import { AdminAccess } from './authentication/AdminAccess';
 import { ReportWindow } from './reports/ReportMain';
 
@@ -52,7 +52,7 @@ const App: React.FC = () =>{
             <Route exact path={routes.employees} render={()=><SecureRoutes Components={Employees}/>}/>
             <Route exact path={routes.reports} render={()=><SecureRoutes Components={ReportWindow}/>}/>
             <Route exact path={routes.settings} render={()=><SecureRoutes Components={Settings}/>}/>
-            <Route exact path={routes.refund} render={()=><SecureRoutes Components={CustomerRefend}/>}/>
+            <Route exact path={routes.refund} render={()=><SecureRoutes Components={Payout}/>}/>
             <Route exact path={routes.adminAccess} render={()=><AdminAccess/>}/>
             <Route exact path={routes.login} render={()=><Login/>}/>
             <Route exact path={routes.register} render={()=><Register/>}/>

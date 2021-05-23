@@ -1,10 +1,11 @@
 import {IonButton, IonContent,IonIcon,IonItem,IonLabel,IonList,IonListHeader,IonMenu,IonMenuToggle,IonNote, IonRouterOutlet,} from '@ionic/react';
-import { addOutline, cartOutline, constructOutline, logOutOutline, peopleOutline, podiumOutline, pricetagOutline, reorderFourOutline, statsChartOutline } from 'ionicons/icons';
+import { addOutline, calendarOutline, cartOutline, constructOutline, logOutOutline, peopleOutline, podiumOutline, pricetagOutline, reorderFourOutline, statsChartOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useStore } from '../context/Store';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
+import { Calendar } from '../widgets/Calendar';
 import { SearchBar } from '../widgets/SearchBar';
 
 
@@ -43,9 +44,9 @@ const nav = [
     }
 ];
 
-export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, children}) =>{
+export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, barChild, children}) =>{
     const history = useHistory();
-    const { setAdminAccess } = useStore();
+    const { setAdminAccess, user } = useStore();
     const [showSideMenu, setShowSideMenu] = useState("hide-menu");
     const [hideToolbar, setHideToolbar] = useState(true);
 
@@ -65,10 +66,10 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
     }
 
     useEffect(()=>{
-        if (onAdd || onSearch || onSave) setHideToolbar(false);
+        if (onAdd || onSearch || onSave || barChild) setHideToolbar(false);
         else setHideToolbar(true);
         if (tools.isMobile()) setHideToolbar(false);
-    },[onAdd, onSearch, onSave]);
+    },[onAdd, onSearch, onSave, barChild]);
     
     return(
         <div className="flex">
@@ -76,7 +77,7 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
             <div className={`menu-container scroll hide-scrollbar dark no-select ${showSideMenu}`}>
                 <IonList style={{marginBottom:"20px"}}>
                     <IonListHeader>POS System</IonListHeader>
-                    <IonNote style={{marginLeft:"30px"}}>POS System</IonNote>
+                    <IonNote style={{marginLeft:"30px"}}>{user?.businessName}</IonNote>
                 </IonList>
                 {nav.map((appPage, key) => (
                     <IonMenuToggle hidden={appPage.hidden} autoHide={false} key={key}>
@@ -114,6 +115,9 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
                     </div>
                     <div hidden={!onSave} className="relative menu-bar-btn-container">
                         <button onClick={onSave} className={`float-center ${saveBtnHilight? "success2":"silver"} pad radius click2`}>Save</button>
+                    </div>
+                    <div hidden={!barChild} className="relative menu-bar-btn-container">
+                        <div className="float-center">{barChild}</div>
                     </div>
                     <div hidden={!onSearch} className="float-center menu-toolbar-search" style={{color:"black"}}>
                         <SearchBar onSearch={onSearch} placeholder="Find employee"/>

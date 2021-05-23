@@ -12,8 +12,8 @@ import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
-import posImage from '../images/pos.jpg';
-import prodImage from '../images/product-icon.png';
+import { MobileOrderEntryNav } from '../widgets/MobileProductNav';
+import { CalculatorDragable } from '../widgets/Calculator';
 
 
 
@@ -35,6 +35,7 @@ const OrderEntry = () => {
     const [reward, setReward] = useState({});
     const [paymentSubmited, setPaymentSubmited] = useState(false);
     const [showProductsOnMobile, setShowProductsOnMobile] = useState("hide-on-mobile");
+    const [showCalculator, setShowCalculator] = useState(false);
 
     const tenderedRef = useRef();
 
@@ -94,6 +95,7 @@ const OrderEntry = () => {
                 total,
                 date: tools.nowDate(),
                 time: tools.nowTime(),
+                processBy: user?.name || "",
                 storeId: user?.storeId || "",
                 customerId: customer?.id || ""
             });
@@ -158,7 +160,7 @@ const OrderEntry = () => {
     
     return (
         <IonPage className="page">
-            <ToolBar/>
+            <ToolBar onOpenCalc={()=>setShowCalculator(true)} />
             <CustomerEntryActions
                 isOpen={showCustomerAction}
                 onClose={()=>setShowCustomerAction(false)}
@@ -190,17 +192,18 @@ const OrderEntry = () => {
                     tools.route.set(routes.refund);
                     history.push(routes.refund);
                 }}
-                message="Refund of customers requires admin profilage, will you like to continue?"
+                message="Pay out of requires admininistrator profilage. Will you like to continue?"
+            />
+            <CalculatorDragable
+                isOpen={showCalculator}
+                onClose={()=>setShowCalculator(false)}
+                onBackdropDismiss
             />
             <IonContent>
-                <div className="toggle-prod-and-order-entry hide-on-desktop" style={{position:"fixed",top:"60px"}}>
-                    <img onClick={()=>setShowProductsOnMobile("backdrop-on-mobile")} src={prodImage} alt=""/>
-                </div>
-
                 <div className="order-entry-main-container">
                     <div className="order-entry-cart-container">
                         <div className="flex">
-                            <div className="max-width search-left-pad-on-mobile pad">
+                            <div className="max-width pad">
                                 <SearchBar onSearch={openCustomerListOnSearch} placeholder="Customer"/>
                             </div>
                             <div className="max-width pad hide-on-mobile">
@@ -208,10 +211,11 @@ const OrderEntry = () => {
                             </div>
                         </div>
 
-                        <div className="flex pad-v-xl font" style={{marginLeft:"40px"}}>
+                        <div className="flex pad-v-xl font relative" style={{marginLeft:"40px",color:"white"}}>
+                            <div className="float-top-right">{user?.businessName}</div>
                             <IonIcon class="customer-image-icon" icon={personOutline}/>
                             <div style={{position:"relative"}}>
-                                <div className="float-left no-wrap" style={{left:"20px",color:"white"}}>
+                                <div className="float-left no-wrap" style={{left:"20px"}}>
                                     <div>{customer?.info?.name || "Customer"}</div>
                                     <div>Loyalty program</div>
                                 </div>
@@ -221,7 +225,7 @@ const OrderEntry = () => {
                         <div className="flex font dark reward-container">
                             <div className="max-width pad-h">
                                 <div>STORE</div>
-                                <div className="text-right pad-v">{reward?.store || "0.0"}</div>
+                                <div className="text-right pad-v">{reward?.store || ""}</div>
                             </div>
                             <div className="max-width pad-h border-l-r">
                                 <div>REWARD</div>
@@ -260,7 +264,7 @@ const OrderEntry = () => {
                                 <div className="max-width pad-mini"><b>${total.toFixed(2)}</b></div>
                             </div>
                             <div className="flex font-mini">
-                                <div className="max-width pad-mini">TEX</div>
+                                <div className="max-width pad-mini">TAX</div>
                                 <div className="max-width pad-mini">{tax.toFixed(2)}</div>
                             </div>
                             <div className="flex font-mini">
@@ -272,13 +276,11 @@ const OrderEntry = () => {
                     <div className="order-entry-product-container">
                         <div className="order-entry-product-sub-container silver2">
                             <div className={`${showProductsOnMobile} order-entry-product-for-mobile`}>
-
-                                <div className="toggle-prod-and-order-entry hide-on-desktop">
-                                    <img onClick={()=>setShowProductsOnMobile("hide-on-mobile")} src={posImage} alt=""/>
-                                </div>
-
                                 <div className="scroll relative scrollbar2 order-entry-product-mini-container">
                                     <Loader isOpen={showProductLoader} />
+                                    <div className="max-width pad-xl hide-on-desktop">
+                                        <SearchBar onSearch={searchProducts} placeholder="Search product"/>
+                                    </div>
                                     {
                                         products.length?
                                         products.map((item, key)=>(
@@ -345,7 +347,7 @@ const OrderEntry = () => {
                                 </div>
                                 <div className="sales-action-btn-container">
                                     <div onClick={()=>setShowRefundAlert(true)} className="sales-action-btn click danger">
-                                        <div className="float-center">CANCEL</div>
+                                        <div className="float-center">PAY OUT</div>
                                     </div>
                                 </div>
                                 <div className="sales-action-btn-container">
@@ -354,6 +356,7 @@ const OrderEntry = () => {
                                     </div>
                                 </div>
                             </div>
+                            <MobileOrderEntryNav onClick={(value)=>setShowProductsOnMobile(value)} value={showProductsOnMobile} />
                         </div>
                     </div>
                 </div>

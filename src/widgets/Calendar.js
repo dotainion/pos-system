@@ -5,8 +5,12 @@ import ReactCalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 
-export const Calendar = ({isOpen, onClose, onSelect}) =>{
+export const Calendar = ({isOpen, onClose, onSelect, closeOnSelect}) =>{
     const [value, setValue] = useState(new Date());
+    const tiggerSelect = (dateValue) =>{
+        onSelect?.(dateValue);
+        if (closeOnSelect) onClose?.();
+    }
     return(
         <div hidden={!isOpen} onClick={onClose} className="backdrop">
             <div className="float-center" onClick={e=>e.stopPropagation()}>
@@ -14,7 +18,7 @@ export const Calendar = ({isOpen, onClose, onSelect}) =>{
                 <ReactCalendar
                     onChange={setValue}
                     value={value}
-                    onClickDay={onSelect}
+                    onClickDay={tiggerSelect}
                 />
                 <div className="pad" style={{backgroundColor:"white",margin:"1px",textAlign:"right"}}>
                     <button onClick={onClose} className="pad-mini silver">Done</button>

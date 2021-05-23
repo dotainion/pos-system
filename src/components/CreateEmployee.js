@@ -98,7 +98,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
             nextOfKinCountryRef.current.value = record?.info?.kinCountry || "";
             nextOfKinCityRef.current.value = record?.info?.kinCity || "";
             nextOfKinAddressRef.current.value = record?.info?.kinAddress || "";
-        }else setInputStyle("silver2");
+        }else setInputStyle("gray");
     },[record]);
     return(
         <PopupContainer isOpen={isOpen} onClose={onClose}>

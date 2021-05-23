@@ -50,10 +50,10 @@ export const AddCustomer = ({isOpen, onClose}) =>{
                     <img onClick={()=>imageRef.current?.click()} src={image || img} className="float-center" style={{width:"80%",height:"150px",top:"40%"}} alt=""/>
                 </div>
                 <div className="max-width">
-                    <Entry entryRef={customerNameRef} type="text" cssClass="input-style" label="Name" placeholder="Name" />
-                    <Entry entryRef={customerEmailRef} type="email" cssClass="input-style" label="Email" placeholder="example@gmail.com" />
-                    <Entry entryRef={customerNumberRef} type="number" cssClass="input-style" label="Phone Number" placeholder="1474999999" />
-                    <Entry entryRef={customerIdRef} type="text" cssClass="input-style" label="Id Number" placeholder="Id#" />
+                    <Entry entryRef={customerNameRef} type="text" cssClass="gray" label="Name" placeholder="Name" />
+                    <Entry entryRef={customerEmailRef} type="email" cssClass="gray" label="Email" placeholder="example@gmail.com" />
+                    <Entry entryRef={customerNumberRef} type="number" cssClass="gray" label="Phone Number" placeholder="1474999999" />
+                    <Entry entryRef={customerIdRef} type="text" cssClass="gray" label="Id Number" placeholder="Id#" />
                     <button onClick={onSaveCustomer} className="add-btn" style={{float:"right"}}>Save</button>
                 </div>
             </div>

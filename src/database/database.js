@@ -1,4 +1,4 @@
-import { addData, getData, getDataByField, getDataById, getDataMoreThanOrEqualTo, updateData } from "./databaseRef";
+import { addData, getData, getDataByField, getDataById, getDataByDoubleField, updateData } from "./databaseRef";
 
 const collection = {
     users: "users",
@@ -7,6 +7,7 @@ const collection = {
     customer: "customer",
     rewards: "rewards",
     settings: "settings",
+    cashDrops: "cashdrops",
 }
 
 export const addUser = async(data, uid=null) =>{
@@ -159,9 +160,9 @@ export const getSettings = async(id) =>{
     }
 }
 
-export const getEndOfDayReporByTimeStamp = async(timeStamp) =>{
+export const getEndOfDayReporByTimeStamp = async(timeStamp, id) =>{
     try{
-        return await getDataByField(collection.sales,"date", timeStamp);
+        return await getDataByDoubleField(collection.sales,"date", timeStamp,"storeId",id);
     }catch(error){
         console.log(error);
         return [];
@@ -171,6 +172,25 @@ export const getEndOfDayReporByTimeStamp = async(timeStamp) =>{
 export const getLowStocks = async(id) =>{
     try{
         return await getDataByField(collection.products,"storeId", id);
+    }catch(error){
+        console.log(error);
+        return [];
+    }
+}
+
+export const addCashDrops = async(data) =>{
+    try{
+        await addData(collection.cashDrops,data);
+        return true;
+    }catch(error){
+        console.log(error);
+        return false;
+    }
+}
+
+export const getCashDrops = async(date, id) =>{
+    try{
+        return await getDataByDoubleField(collection.cashDrops,"storeId",id,"date",date);
     }catch(error){
         console.log(error);
         return [];

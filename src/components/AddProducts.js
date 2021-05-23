@@ -62,7 +62,7 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
             costPriceRef.current.value = record?.info?.costPrice;
             quantityRef.current.value = record?.info?.qty;
         }else{
-            setInputStyle("silver2");
+            setInputStyle("gray");
             setImage("");
             titleRef.current.value = "";
             salepriceRef.current.value = "";
