@@ -99,6 +99,7 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
             </div>
             <div className="half-width pad-xxl">
                 <div style={{width:"250px"}}>
+                    <div>Opened by: <b>{user?.name}</b></div>
                     <Entry label="Amount" inputPops={{value:inputValue,onKeyDown:e=>onAddInputValue(e.key)}} dollarSign placeholder="Cash drop amount" />
                     <div className="number-pad-container">
                         {[1,2,3,4,5,6,7,8,9,".",0,"<="].map((num, key)=>(

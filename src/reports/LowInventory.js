@@ -3,6 +3,7 @@ import { refreshOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { useStore } from '../context/Store';
 import { getLowStocks } from '../database/database';
+import { tools } from '../tools/Tools';
 import { Loader } from '../widgets/Loader';
 
 
@@ -32,14 +33,14 @@ export const LowInventory = ({isOpen}) =>{
                     <div style={{fontSize:"9px"}}>Refresh</div>
                 </div>
                 <div className="pad-xl">
-                    <div>My Restaurant</div>
-                    <div>600 blcayne Blvd</div>
-                    <div>Miami, Fl 33120</div>
-                    <div>1 (473) 999 9999</div>
+                    <div>{user?.businessName}</div>
+                    <div>{user?.address}</div>
+                    <div>{user?.city}, {user?.country} {user?.zip}</div>
+                    <div>{user?.number}</div>
                 </div>
                 <div className="pad" style={{borderTop:"1px dashed black",borderBottom:"1px dashed black"}}>
                     <div>INVENTORY LOW STOCK</div>
-                    <div>4/15/2021 3:21.00 AM</div>
+                    <div>{tools.nowDate()} {tools.nowTime()}</div>
                 </div>
                 <div className="pad-xxl" style={{borderBottom:"1px dashed black"}}>
                     <div className="pad" style={{textAlign:"right"}}>IN STOCK/REORDER LEVEL</div>

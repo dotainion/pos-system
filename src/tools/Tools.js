@@ -90,13 +90,15 @@ class Tools{
         console.log('onDidDismiss resolved with role', role);
     }
     nowDate(){
-        return new Date().toLocaleDateString("zh-Hans-CN");
+        return new Date().toLocaleDateString("en-GB");
     }
     nowTime(){
         return new Date().toLocaleTimeString();
     }
     formatDate(date){
-        return new Date(date).toLocaleDateString("zh-Hans-CN");
+        const farmated = new Date(date).toLocaleDateString("en-GB");//zh-Hans-CN
+        if(farmated === "Invalid Date") return "";
+        return farmated;
     }
 }
 

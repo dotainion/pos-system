@@ -3,8 +3,10 @@ import { chevronDownOutline, chevronUpOutline, homeOutline } from 'ionicons/icon
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useStore } from '../context/Store';
-import { getCustomer, getCustomerById, getSales, getUser } from '../database/database';
+import { addPayout, getCustomer, getCustomerById, getSales, getUser, updateSales } from '../database/database';
 import { routes } from '../global/Routes';
+import { tools } from '../tools/Tools';
+import { Alert } from '../widgets/Alert';
 import { Dropdown } from '../widgets/Dropdown';
 import { Loader } from '../widgets/Loader';
 import { SearchBar } from '../widgets/SearchBar';
@@ -15,9 +17,25 @@ export const Payout = () =>{
     const { user } = useStore();
     const [sales, setSales] = useState([]);
     const [showLoader, setShowLoader] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [showAlert, setShowAlert] = useState({state:false,data:null});
 
-    const onRefund = (object) =>{
-
+    const onRefund = async(object) =>{
+        if (object?.info?.refunded) return;
+        if (!Object.keys(object || {}).length) return;
+        setShowLoader(true);
+        setLoading(true);
+        delete object?.info?.["products"];
+        await addPayout({
+            ...object?.info,
+            saleId: object?.id,
+            date: tools.nowDate(),
+            time: tools.nowTime(),
+        });
+        await updateSales({refunded: true},object?.id);
+        await initSales();
+        setShowLoader(false);
+        setLoading(false);
     }
 
     const initSales = async() =>{
@@ -52,6 +70,16 @@ export const Payout = () =>{
     },[]);
     return(
         <IonPage>
+            <Alert
+                isOpen={showAlert.state}
+                okText="Yes"
+                cancelText="No"
+                header="Alert!!"
+                headerColor="orangered"
+                message="Are you sure you want to process this refund?"
+                onClose={()=>setShowAlert({state:false,data:null})}
+                onConfirm={()=>onRefund(showAlert.data)}
+            />
             <IonContent>
                 <div className="max-size relative silver">
                     <Loader isOpen={showLoader}/>
@@ -73,7 +101,7 @@ export const Payout = () =>{
                             sales.map((sale, key)=>(
                                 <div style={{marginTop:"10px"}} key={key}>
                                     <div onClick={()=>toggleItemOnHold(`${sale?.id}${key}`)} className="pad radius max-width pointer no-select silver relative">
-                                        <div className="half-width">
+                                        <div className="half-width" style={{color: sale?.info?.refunded && "darkred"}}>
                                             <div>Date: {sale?.info?.date}</div>
                                             <div>Time: {sale?.info?.time}</div>
                                             <div>Customer: <b style={{color:"dodgerblue"}}>{sale?.customer?.name || <span style={{color:"teal"}}>None</span>}</b></div>
@@ -93,7 +121,8 @@ export const Payout = () =>{
                                             <div className="sales-item-price-header radius" style={{border:"none"}}>Price</div>
                                         </div>
                                         <div className="pad">
-                                            <button onClick={()=>onRefund(sale)} className="pad silver click radius">Pay Out</button>
+                                            <button hidden={sale?.info?.refunded} onClick={()=>setShowAlert({state:true,data:sale})} disabled={loading} className="pad silver click radius">Pay Out</button>
+                                            <div hidden={!sale?.info?.refunded} style={{color:"orangered"}}>Refunded</div>
                                         </div>
                                         {sale?.info?.products?.map((prod, key)=>(
                                             <div className="no-select" style={{borderBottom:"1px solid gray",color:"black",marginLeft:"10px"}} key={key}>

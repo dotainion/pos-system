@@ -8,18 +8,24 @@ import { Alert } from "../widgets/Alert";
 import { Dropdown } from "../widgets/Dropdown"
 
 
-export const ToolBar = ({onOpenCalc}) =>{
+export const ToolBar = ({onOpenCalc, onOpenPayOut, onOpenDiscounts}) =>{
     const history = useHistory();
     const { signOut, adminAccess } = useStore();
     const [showAlert,setShowAlert] = useState({state:false, route:""});
 
     const edits = [
-
+        {
+            title: "Pay out",
+            command: ()=>onOpenPayOut?.()
+        }
     ];
     const files = [
         {
             title: "Calculator",
             command: ()=>onOpenCalc?.()
+        },{
+            title: "Discounts",
+            command: ()=>onOpenDiscounts?.()
         }
     ];
     const views = [

@@ -72,12 +72,12 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
     },[record]);
     return(
         <PopupContainer isOpen={isOpen} onClose={onClose}>
-            <div className="popup-header silver2">
+            <div className="popup-header centered">
                 <div>Add new product to inventory</div>
                 <div style={{fontWeight:"normal",fontSize:"15px",color:"orangered",textAlign:"center"}}>{error}</div>
             </div>
             <Progressing isOpen={loading}/>
-            <div className="flex d-flex-on-mobile pad">
+            <div className="flex d-flex-on-mobile pad" style={{marginTop:"20px"}}>
                 <div className="max-width">
                     <IonThumbnail onClick={()=>imageRef.current?.click()} class="add-product-pop-thumbnail">
                         <IonIcon class="float-top-left add-image-icon" icon={imagesOutline}/>

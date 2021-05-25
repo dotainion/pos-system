@@ -80,6 +80,7 @@ export const ReportWindow = () =>{
                 isOpen={showCalendar}
                 onClose={()=>setShowCalendar(false)}
                 onSelect={setCalandarValue}
+                closeOnSelect
             />
             <MenuBarWrapper options={sideNav} optionWillClick={onClose} optionsTitle="Reports" barChild={barChild}>
                 <IonList class="item-container">

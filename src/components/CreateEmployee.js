@@ -102,7 +102,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
     },[record]);
     return(
         <PopupContainer isOpen={isOpen} onClose={onClose}>
-            <div className="popup-header silver2">
+            <div className="popup-header centered">
                 <IonIcon onClick={onClose} class="close" icon={closeOutline}/>
                 <div className="pad">
                     {
@@ -113,7 +113,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                 </div>
             </div>
             <Progressing isOpen={loading}/>
-            <div className="pad">
+            <div className="pad" style={{marginTop:"20px"}}>
                 <div hidden={!showEmplyeeInput.first}>
                     <div className="flex d-flex-on-mobile">
                         <div className="max-width">

@@ -36,3 +36,8 @@ export const weekDay = [
     "Friday",
     "Saturday"
 ];
+
+export const discountTypes = [
+    "Dollar Amount eg: ($0.00)",
+    "Percentage Amount eg: (%0)"
+]

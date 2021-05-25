@@ -27,6 +27,7 @@ export const Register = () =>{
     const [countryError, setCountryError] = useState();
     const [cityError, setCityError] = useState();
     const [addressError, setAddressError] = useState();
+    const [phoneNumberError, setPhoneNumberError] = useState();
 
     const [cardHolderNameError, setCardHolderNameError] = useState();
     const [cardNumberError, setCardNumberError] = useState();
@@ -43,6 +44,7 @@ export const Register = () =>{
     const countryRef = useRef();
     const cityRef = useRef();
     const addressRef = useRef();
+    const phoneNumberRef = useRef();
 
     const cardHolderNameRef = useRef();
     const cardNumberRef = useRef();
@@ -91,6 +93,9 @@ export const Register = () =>{
         }if(cmd === "cc"){
             setCardCvcError("");
             cardCvcRef.current.style.border = "";
+        }if(cmd === "ph"){
+            setPhoneNumberError("");
+            phoneNumberRef.current.style.border = "";
         }
     }
 
@@ -138,6 +143,9 @@ export const Register = () =>{
             if (!cardHolderNameRef.current.value){
                 ERROR = true;
                 setCardHolderNameError("Card holder name is required");
+            }if (!phoneNumberRef.current.value){
+                ERROR = true;
+                setPhoneNumberError("Contact number is required");
             }if (!cardNumberRef.current.value){
                 ERROR = true;
                 setCardNumberError("Card number is required");
@@ -148,6 +156,7 @@ export const Register = () =>{
                 ERROR = true;
                 setCardCvcError("Card cvc is required");
             }
+            if (ERROR) return;
             //onSubmit();
             alert("Unsuccessful payment");
         }
@@ -159,12 +168,14 @@ export const Register = () =>{
         const userAdmin = {
             name: `${firstNameRef.current.value || ""} ${lastNameRef.current.value || ""}`,
             email: emailRef.current.value || "",
+            number: phoneNumberRef.current.value || "",
             businessName: businessNameRef.current.value || "",
             website: websiteRef.current.value || "",
             country: countryRef.current.value || "",
             city: cityRef.current.value || "",
             address: addressRef.current.value || "",
             storeId: response?.user?.uid || "",
+            zip: "",
             role: "admin"
         }
         const userResponse = await addUser(userAdmin, response?.user?.uid);
@@ -187,7 +198,7 @@ export const Register = () =>{
                             <Entry onChange={()=>reset("b")} entryRef={businessNameRef} error={businessNameError} labelColor="rgb(5, 5, 5)" label="Business Name" required placeholder="Business Name" />
                             <Entry onChange={()=>reset("w")} entryRef={websiteRef} error={websiteError} labelColor="rgb(5, 5, 5)" label="Website" optional placeholder="Website" />
                             <div className="pad-xxl">
-                                <button onClick={()=>onNext("first")} className="pad pad-h radius click dark" style={{float:"right"}}>Next <IonIcon icon={arrowForwardOutline}/></button>
+                                <button onClick={()=>onNext("first")} className="pad pad-h radius click silver shadow" style={{float:"right"}}>Next <IonIcon icon={arrowForwardOutline}/></button>
                             </div>
                         </div>
                         <div hidden={!pages.second}>
@@ -197,8 +208,8 @@ export const Register = () =>{
                             <Entry onChange={()=>reset("ci")} entryRef={cityRef} error={cityError} labelColor="rgb(5, 5, 5)" label="City" required placeholder="City" />
                             <Entry onChange={()=>reset("a")} entryRef={addressRef} error={addressError} labelColor="rgb(5, 5, 5)" label="Address" required placeholder="Address" />
                             <div className="pad-xxl">
-                                <button onClick={()=>onNext("second")} className="pad pad-h radius click dark" style={{float:"right",marginLeft:"10px"}}>Next <IonIcon icon={addOutline}/></button>
-                                <button onClick={()=>setPages({first:true,second:false,third:false})} className="pad pad-h radius click dark" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
+                                <button onClick={()=>onNext("second")} className="pad pad-h radius click silver shadow" style={{float:"right",marginLeft:"10px"}}>Next <IonIcon icon={addOutline}/></button>
+                                <button onClick={()=>setPages({first:true,second:false,third:false})} className="pad pad-h radius click silver shadow" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
                             </div>
                         </div>
                         <div hidden={!pages.third}>
@@ -212,21 +223,22 @@ export const Register = () =>{
                                 </div>
                             </div>
                             <Entry onChange={()=>reset("chn")} entryRef={cardHolderNameRef} error={cardHolderNameError} type="password" labelColor="rgb(5, 5, 5)" required label="Card Holder's Name" placeholder="Full name" />
+                            <Entry onChange={()=>reset("ph")} entryRef={phoneNumberRef} error={phoneNumberError} type="number" labelColor="rgb(5, 5, 5)" required label="Phone Number" placeholder="Phone Number" />
                             <Entry onChange={()=>reset("cn")} entryRef={cardNumberRef} error={cardNumberError} type="number" labelColor="rgb(5, 5, 5)" required label="Card Number" placeholder="Card number" />
                             <div className="flex">
                                 <Entry onChange={()=>reset("ce")} entryRef={cardExpireRef} error={cardExpireError} labelColor="rgb(5, 5, 5)" type="date" label="Expire Date" required placeholder="Expire date" />
                                 <div style={{minWidth:"100px"}}><Entry onChange={()=>reset("cc")} entryRef={cardCvcRef} error={cardCvcError} labelColor="rgb(5, 5, 5)" type="number" label="CVC" required placeholder="Cvc" /></div>
                             </div>
                             <div className="pad-xxl">
-                                <button onClick={()=>onNext("create")} className="pad pad-h radius click dark" style={{float:"right",marginLeft:"10px"}}>Create <IonIcon icon={addOutline}/></button>
-                                <button onClick={()=>setPages({first:false,second:true,third:false})} className="pad pad-h radius click dark" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
+                                <button onClick={()=>onNext("create")} className="pad pad-h radius click silver shadow" style={{float:"right",marginLeft:"10px"}}>Create <IonIcon icon={addOutline}/></button>
+                                <button onClick={()=>setPages({first:false,second:true,third:false})} className="pad pad-h radius click silver shadow" style={{float:"right"}}><IonIcon icon={arrowBackOutline}/> Previous</button>
                             </div>
                         </div>
                     </div>
                     <div className="half-width hide-on-mobile" style={{position:"relative",overflow:"hidden"}}>
                         <img className="float-center" style={{borderRadius:"50%"}} src={posImage} alt="" />
                     </div>
-                    <button onClick={()=>history.push(routes.login)} className="float-bottom-left pad pad-h radius click silver2" style={{float:"right",margin:"30px"}}>Login instead</button>
+                    <button onClick={()=>history.push(routes.login)} className="float-bottom-left pad pad-h radius click silver shadow" style={{float:"right",margin:"30px"}}>Login instead</button>
                 </div>
             </IonContent>
         </IonPage>

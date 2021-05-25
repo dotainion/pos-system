@@ -3,6 +3,7 @@ import { closeOutline } from 'ionicons/icons';
 import React, { useState } from 'react';
 import ReactCalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { tools } from '../tools/Tools';
 
 
 export const Calendar = ({isOpen, onClose, onSelect, closeOnSelect}) =>{
@@ -20,7 +21,8 @@ export const Calendar = ({isOpen, onClose, onSelect, closeOnSelect}) =>{
                     value={value}
                     onClickDay={tiggerSelect}
                 />
-                <div className="pad" style={{backgroundColor:"white",margin:"1px",textAlign:"right"}}>
+                <div className="pad relative" style={{backgroundColor:"white",margin:"1px",textAlign:"right"}}>
+                    <label className="float-left pad-mini">{tools.formatDate(value)}</label>
                     <button onClick={onClose} className="pad-mini silver">Done</button>
                 </div>
             </div>

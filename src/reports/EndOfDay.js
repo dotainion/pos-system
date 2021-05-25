@@ -1,65 +1,92 @@
-import { IonIcon } from '@ionic/react';
+import { IonIcon, useIonViewWillEnter } from '@ionic/react';
 import { calendarOutline, printOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { Select } from '../components/Select';
 import { useStore } from '../context/Store';
-import { getEndOfDayReporByTimeStamp } from '../database/database';
+import { getEndOfDayReporByTimeStamp, getPayout } from '../database/database';
 import { printer } from '../document/Printer';
 import { tools } from '../tools/Tools';
+import { Loader } from '../widgets/Loader';
 
 
 const unavailable = "Locked";
 export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
     const { user } = useStore();
     
+    const [showLoader, setShowLoader] = useState(false);
     const [lastEndOfDay, setLastEndOfDay] = useState("");
     const [transactionCount, setTransactionCount] = useState("");
     const [subTotal, setSubTotal] = useState(0);
     const [tax, setTax] = useState(0);
     const [grandTotal, setGrandTotal] = useState(0);
+    const [discounts, setDiscount] = useState(0);
+    const [cashPayout, setCashPayout] = useState(0);
+    const [settledOrderCount, setSettledOrderCount] = useState(0);
 
     const resetEndOfDayValues = () =>{
-        //setLastEndOfDay("");
         setTransactionCount("");
         setSubTotal(0);
         setTax(0);
+        setCashPayout(0);
         setGrandTotal(0);
     }
-    const sarchEndOfDay = async(timeStamp) =>{
-        configureEndOfDay(await getEndOfDayReporByTimeStamp(timeStamp, user?.storeId));
+
+    const searchEndOfDay = async(timeStamp) =>{
+        setShowLoader(true);
+        const payoutReport = await getPayout(timeStamp, user?.storeId);
+        const salesReport = await getEndOfDayReporByTimeStamp(timeStamp, user?.storeId);
+        configureEndOfDay(salesReport, payoutReport);
     }
 
-    const configureEndOfDay = (salesItems) =>{
+    const configureEndOfDay = (salesItems, payoutItems) =>{
         if (salesItems?.length){
             setTransactionCount(salesItems?.length);
+            setSettledOrderCount(salesItems?.length - payoutItems?.length);
             let tempTax = 0;
             let tempNet = 0;
             let tempTotal = 0;
+            let tempDiscount = 0;
+
             for (let item of salesItems){
                 tempTax = tempTax + item?.info?.tax;
                 tempNet = tempNet + item?.info?.net;
                 tempTotal = tempTotal + item?.info?.total;
+                tempDiscount = tempDiscount + item?.info?.discountTotal;
+            }
+
+            let payout = 0;
+            for (let refund of payoutItems){
+                payout += refund?.info?.total;
             }
             setTax(tempTax);
             setSubTotal(tempNet);
-            setGrandTotal(tempTotal);
+            setCashPayout(payout);
+            setDiscount(tempDiscount);
+            setGrandTotal((tempTotal - payout) - tempDiscount);
         }else resetEndOfDayValues();
+        setShowLoader(false);
     }
 
     useEffect(()=>{
-        const dateformat = tools.formatDate(dateSelected);
-        if(dateformat === "Invalid Date") setLastEndOfDay("");
-        else setLastEndOfDay(dateformat);
-        sarchEndOfDay(dateformat);
+        let dateformat = tools.formatDate(dateSelected) || tools.nowDate();
+        setLastEndOfDay(dateformat);
+        searchEndOfDay(dateformat);
     },[dateSelected]);
+
+    useIonViewWillEnter(()=>{
+        let dateformat = tools.formatDate(dateSelected) || tools.nowDate();
+        setLastEndOfDay(dateformat);
+        searchEndOfDay(dateformat);
+    });
     return(
         <div id="end-of-day" hidden={!isOpen}>
+            <Loader isOpen={showLoader} />
             <div className="dark" style={{borderRadius:"25px"}}>
                 <Select options={["CURRENT DAY - POS STATIONS"]} />
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">LAST END OF DAY SELECT</div>
-                <div className="max-width pad">{lastEndOfDay || "None selected"}</div>
+                <div className="max-width pad">{lastEndOfDay}</div>
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">OPEN ORDERS COUNT</div>
@@ -75,7 +102,7 @@ export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">SETTLED ORDERS COUNT</div>
-                <div className="max-width pad">{unavailable}</div>
+                <div className="max-width pad">{settledOrderCount}</div>
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">TRANSACTIONS COUNT</div>
@@ -99,11 +126,11 @@ export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">DISCOUNTS</div>
-                <div className="max-width pad">{unavailable}</div>
+                <div className="max-width pad">$-{discounts?.toFixed?.(2) || 0}</div>
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">CASH PAID OUT</div>
-                <div className="max-width pad">{unavailable}</div>
+                <div className="max-width pad">$-{cashPayout?.toFixed?.(2) || 0}</div>
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">DELIVERY CHARGES</div>

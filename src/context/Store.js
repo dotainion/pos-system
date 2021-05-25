@@ -159,7 +159,7 @@ export const AppContext = ({children}) =>{
         setAdminAccess,
         settings,
         setSettings,
-        changeSettings
+        changeSettings,
     }
     return(
         <ContextProvider.Provider value={providerValue}>
