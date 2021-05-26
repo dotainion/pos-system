@@ -1,4 +1,4 @@
-import { IonIcon } from '@ionic/react';
+import { IonIcon, IonItemDivider } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { useStore } from '../context/Store';
@@ -40,13 +40,13 @@ export const Discounts = ({isOpen, onClose, onSelect}) =>{
 
     return(
         <div hidden={!isOpen} onClick={triggerClose} className="backdrop">
-            <div className="float-center silver" onClick={e=>e.stopPropagation()}>
+            <div className="float-center shadow2 bg" onClick={e=>e.stopPropagation()}>
                 <IonIcon onClick={triggerClose} class="close" icon={closeOutline}/>
-                <div className="popup-header">
-                    <span>Apply discounts</span>
+                <div className="popup-header silver">
+                    <span>Apply Discounts</span>
                     <div className="float-bottom-left pad-h error max-width" style={{fontWeight:"normal"}}>{error}</div>
                 </div>
-                <div className="discount-container scrollbar">
+                <div className="discount-container radius bg scrollbar">
                     {
                         settings?.discounts?.length?
                         settings?.discounts?.map((disc, key)=>(
@@ -58,8 +58,8 @@ export const Discounts = ({isOpen, onClose, onSelect}) =>{
                         <div>No discounts</div>
                     }
                 </div>
-                <div hidden className="pad-xl" style={{textAlign:"right"}}>
-                    <button className="pad radius click silver">Apply</button>
+                <div className="pad-xl" style={{textAlign:"right"}}>
+                    <button onClick={triggerClose} className="pad pad-h-x radius click silver shadow">Done</button>
                 </div>
             </div>
         </div>

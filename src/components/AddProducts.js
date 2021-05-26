@@ -12,7 +12,7 @@ import { PopupContainer } from './PopupContainer';
 import { Progressing } from '../widgets/Progressing';
 
 
-export const AddProducts = ({isOpen, record, onClose}) =>{
+export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
     const { user } = useStore();
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState("");
@@ -50,7 +50,8 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
         else await addProducts(object);
         onClear();
         setLoading(false);
-        if (typeof onClose === "function") onClose();
+        onClose?.();
+        onUpdateComplete?.();
     }
 
     useEffect(()=>{
@@ -62,7 +63,7 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
             costPriceRef.current.value = record?.info?.costPrice;
             quantityRef.current.value = record?.info?.qty;
         }else{
-            setInputStyle("gray");
+            setInputStyle("bg");
             setImage("");
             titleRef.current.value = "";
             salepriceRef.current.value = "";
@@ -76,7 +77,7 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
                 <div>Add new product to inventory</div>
                 <div style={{fontWeight:"normal",fontSize:"15px",color:"orangered",textAlign:"center"}}>{error}</div>
             </div>
-            <Progressing isOpen={loading}/>
+            <Progressing isOpen={loading} color="medium"/>
             <div className="flex d-flex-on-mobile pad" style={{marginTop:"20px"}}>
                 <div className="max-width">
                     <IonThumbnail onClick={()=>imageRef.current?.click()} class="add-product-pop-thumbnail">
@@ -88,11 +89,11 @@ export const AddProducts = ({isOpen, record, onClose}) =>{
                     <Entry entryRef={titleRef} cssClass={inputStyle} label="Title" placeholder="Title" />
                     <Entry entryRef={salepriceRef} cssClass={inputStyle} label="Sale Price" placeholder="Sale price" type="number" dollarSign />
                     <Entry entryRef={costPriceRef} cssClass={inputStyle} label="Cost Price" placeholder="Cost price" type="number" dollarSign />
-                    <Entry entryRef={quantityRef} cssClass={inputStyle} label="Quantity" placeholder="Quantity" type="number" dollarSign />
+                    <Entry entryRef={quantityRef} cssClass={inputStyle} label="Quantity" placeholder="Quantity" type="number" />
                 </div>
             </div>
             <div className="half-width max-width-on-mobile item-center">
-                <button disabled={loading} onClick={onAddProduct} className="pad radius silver" style={{float:"right",fontSize:"15px"}}>{Object.keys(record || {})?.length? "Update": "Save"}</button>
+                <button disabled={loading} onClick={onAddProduct} className="btn" style={{float:"right",fontSize:"15px"}}>{Object.keys(record || {})?.length? "Update": "Save"}</button>
             </div>
             <input hidden ref={imageRef} onChange={async(e)=>setImage(await tools.toBase64(e.target.files[0]))} type="file"/>
         </PopupContainer>

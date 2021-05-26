@@ -30,7 +30,11 @@ export const Login = () =>{
 
     //detect when user is loged in and route to order entery
     useEffect(()=>{
-        if (isAuthenticated) history.push(routes.orderEntry);
+        if (isAuthenticated){
+            emailRef.current.value = "";
+            passwordRef.current.value = "";
+            history.push(routes.orderEntry);
+        }
     },[isAuthenticated]);
 
     return(
@@ -43,13 +47,13 @@ export const Login = () =>{
                                 <div className="login-container no-select float-center">
                                     <div className="float-top-center singin-error">{error}</div>
                                     <p><Progressing isOpen={loading}/></p>
-                                    <IonItem color="light" lines="none">
+                                    <IonItem color="light" lines="none" style={{backgroundColor:"white"}}>
                                         <IonLabel position="floating">User Name/Email</IonLabel>
                                         <IonInput ref={emailRef} onKeyPress={onEnterPress} type="email" />
                                     </IonItem>
-                                    <IonItem color="light" lines="none">
+                                    <IonItem color="light" lines="none" style={{backgroundColor:"white"}}>
                                         <IonLabel position="floating">Password</IonLabel>
-                                        <IonInput ref={passwordRef} onKeyPress={onEnterPress} type='password' />
+                                        <IonInput ref={passwordRef} onKeyPress={onEnterPress} type="password" />
                                     </IonItem>
                                     <IonLabel style={{textShadow:"1px 1px 1px black"}} class="link-hover" color="danger">Forget Password</IonLabel>
                                     <IonButton onClick={onSignIn} style={{float:"right"}} size="small" color="light">Login</IonButton>

@@ -13,7 +13,7 @@ import { Progressing } from '../widgets/Progressing';
 
 
 
-export const CreateEmployee = ({isOpen, record, onClose}) =>{
+export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
     const { user } = useStore();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -75,6 +75,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
         }
         await addUser(employee);
         setLoading(false);
+        onUpdateComplete?.();
     }
 
     useEffect(()=>{
@@ -98,7 +99,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
             nextOfKinCountryRef.current.value = record?.info?.kinCountry || "";
             nextOfKinCityRef.current.value = record?.info?.kinCity || "";
             nextOfKinAddressRef.current.value = record?.info?.kinAddress || "";
-        }else setInputStyle("gray");
+        }else setInputStyle("bg");
     },[record]);
     return(
         <PopupContainer isOpen={isOpen} onClose={onClose}>
@@ -112,7 +113,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                     }
                 </div>
             </div>
-            <Progressing isOpen={loading}/>
+            <Progressing isOpen={loading} color="medium"/>
             <div className="pad" style={{marginTop:"20px"}}>
                 <div hidden={!showEmplyeeInput.first}>
                     <div className="flex d-flex-on-mobile">
@@ -133,7 +134,7 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                         </div>
                     </div>
                     <div className="pad-xxl" style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="pad radius silver">Next</button>
+                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="btn">Next</button>
                     </div>
                 </div>
                 <div hidden={!showEmplyeeInput.second} className="max-width">
@@ -151,8 +152,8 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                         </div>
                     </div>
                     <div className="pad-xxl" style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:true,second:false,third:false})} style={{fontSize:"15px"}} className="pad radius silver">Back</button>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:false,third:true})} style={{fontSize:"15px",marginLeft:"10px"}} className="pad radius silver">Next</button>
+                        <button onClick={()=>setShowEmployeeInput({first:true,second:false,third:false})} style={{fontSize:"15px"}} className="btn">Back</button>
+                        <button onClick={()=>setShowEmployeeInput({first:false,second:false,third:true})} style={{fontSize:"15px",marginLeft:"10px"}} className="btn">Next</button>
                     </div>
                 </div>
                 <div hidden={!showEmplyeeInput.third}>
@@ -172,8 +173,8 @@ export const CreateEmployee = ({isOpen, record, onClose}) =>{
                         </div>
                     </div>
                     <div className="pad-xxl" style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="pad radius silver">Back</button>
-                        <button disabled={loading} onClick={onAddEmployee} style={{fontSize:"15px",marginLeft:"10px"}} className="pad radius silver">{Object.keys(record || {})?.length? "Update": "Save"}</button>
+                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="btn">Back</button>
+                        <button disabled={loading} onClick={onAddEmployee} style={{fontSize:"15px",marginLeft:"10px"}} className="btn">{Object.keys(record || {})?.length? "Update": "Save"}</button>
                     </div>
                 </div>
             </div>

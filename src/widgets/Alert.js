@@ -9,12 +9,12 @@ export const Alert = ({isOpen, hideCancelButton, header, message, onConfirm, onC
     }
     return(
         <div hidden={!isOpen} onClick={onClose} className="backdrop">
-            <div className="float-center alert-container silver" onClick={e=>e.stopPropagation()}>
-                <p style={{color:headerColor}}><b>{header || "Confirm!"}</b></p>
-                <p style={{color:messageColor}}>{message}</p>
-                <p>
-                    <button onClick={onTriggerConfirm} className="pad radius silver" style={{float:"right",minWidth:"50px"}}>{okText || "Okay"}</button>
-                    <button hidden={hideCancelButton} onClick={onClose} className="pad radius silver" style={{float:"right",minWidth:"50px"}}>{cancelText || "Cancel"}</button>
+            <div className="float-center alert-container bg" onClick={e=>e.stopPropagation()}>
+                <p className="gray2 pad" style={{color:headerColor}}><b>{header || "Confirm!"}</b></p>
+                <p className="pad-xl" style={{color:messageColor}}>{message}</p>
+                <p style={{paddingRight:"25px"}}>
+                    <button onClick={onTriggerConfirm} className="btn">{okText || "Okay"}</button>
+                    <button hidden={hideCancelButton} onClick={onClose} className="btn">{cancelText || "Cancel"}</button>
                 </p>
             </div>
         </div>

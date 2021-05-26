@@ -128,13 +128,7 @@
         background: linear-gradient(to right, white, lightgray, gray);
     }
     .sales-item{
-        position: relative;
-        display: inline-block;
-        width: 33.33%;
-        padding: 10px;
-        height: 200px;
-        margin-bottom: -2px;
-        user-select: none;
+        width: 50%;
     }
     .register-pad-on-mobile{
         padding: 5px;

@@ -105,7 +105,7 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
                     ))}
                 </div>
             </div>
-            <div onClick={(e)=>setShowSideMenu("hide-menu")} className="menu-content-page silver max-width-on-mobile">
+            <div onClick={(e)=>setShowSideMenu("hide-menu")} className="menu-content-page bg max-width-on-mobile">
                 <div hidden={hideToolbar} onClick={(e)=>e.stopPropagation()} className="fixed flex dark menu-toolbar-container">
                     <div className="relative menu-bar-btn-container hide-on-desktop">
                         <IonIcon onClick={toggleMenu} class="hamburger-menu silver" icon={reorderFourOutline}/>

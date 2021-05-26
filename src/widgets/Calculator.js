@@ -78,7 +78,7 @@ export const Calculator = ({doPrevent}) =>{
     }
 
     return(
-        <div className="calculator silver">
+        <div className="calculator bg">
             <div className="border pad-xxl relative">
                 <div className="float-top-left pad-mini pad-h-xl">{stashed}</div>
                 <input className="calculator-input" onKeyDown={e=>onCalcHandler(e.key)} onChange={()=>null} {...doPrevent} value={inputValue}/>
@@ -86,7 +86,7 @@ export const Calculator = ({doPrevent}) =>{
             <div className="pad" {...doPrevent}>
                 {btns.map((num, key)=>(
                     <div className="calculator-number-pad" key={key}>
-                        <div onClick={()=>onCalcHandler(num?.cmd || num)} className="max-size relative silver click">
+                        <div onClick={()=>onCalcHandler(num?.cmd || num)} className="max-size relative bg click">
                             <div className="float-center"><b>{num?.title || num}</b></div>
                         </div>
                     </div>

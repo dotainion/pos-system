@@ -48,6 +48,7 @@ export const Products = () =>{
                 isOpen={showAddProducts}
                 record={selectedRecord}
                 onClose={()=>setShowAddProducts(false)}
+                onUpdateComplete={onGetProduts}
             />
             <MenuBarWrapper onAdd={onShowAddProducts} onSearch={onSearchProduts}>
                 <IonList class="item-container">
@@ -68,9 +69,7 @@ export const Products = () =>{
                                 </div>
                             </div>
                         )):
-                        <IonList>
-                            <IonLabel>No Products</IonLabel>
-                        </IonList>
+                        <div>No Products</div>
                     }
                 </IonList>
             </MenuBarWrapper>

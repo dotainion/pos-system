@@ -5,7 +5,7 @@ import { PopupContainer } from '../components/PopupContainer';
 import { useStore } from '../context/Store';
 import { ReceiptPreview } from '../document/Preview';
 import { printer } from '../document/Printer';
-import { Progressing } from './Progressing';
+import { Progressing } from '../widgets/Progressing';
 
 
 
@@ -57,18 +57,18 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
     return(
         <>
         <PopupContainer isOpen={isOpen} onClose={onTriggerClose} noBackdropDismist>
-            <div className="silver max-size">
-                <p className="pad-xl font-xl half-width item-center" style={{textAlign:"center",borderBottom:"1px solid white"}}>
+            <div className="max-size shadow2">
+                <p className="pad-xl font-xl half-width item-center" style={{textAlign:"center",borderBottom:"1px solid lightgray"}}>
                     Payment<br/>
-                    <label className="float-bottom-overflow max-width font" style={{color:"red",left:"0px"}}>{error}</label>
+                    <label className="float-bottom-overflow max-width error" style={{left:"0px"}}>{error}</label>
                 </p>
-                <div className="float-center half-width silver2" style={{minWidth:"350px"}}>
-                    <IonItemDivider class="silver" style={{marginTop:"20px",marginBottom:"20px"}}>
+                <div className="float-center half-width bg pad" style={{minWidth:"350px"}}>
+                    <IonItemDivider class="gray2" style={{marginTop:"20px",marginBottom:"20px"}}>
                         <div className="flex font-mini">
                             <div className="pad-mini">{cart?.length} Items</div>
                         </div>
                     </IonItemDivider>
-                    <Progressing isOpen={loading} />
+                    <Progressing isOpen={loading} color="medium" />
                     <div className="flex font-mini">
                         <div className="max-width pad-mini">NET</div>
                         <div className="max-width pad-mini">{net?.toFixed(2) || 0.0}</div>
@@ -81,10 +81,10 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                         <div className="max-width pad-mini"><b>TOTAL</b></div>
                         <div className="max-width pad-mini"><b>${total?.toFixed(2) || 0.0}</b></div>
                     </div>
-                    <Entry cssClass="silver2" dollarSign label="Tendered" onChange={(e)=>setTendered(e.target.value)} entryRef={tenderedRef} placeholder="Tendered Amount" type="number" />
+                    <Entry cssClass="bg2" dollarSign label="Tendered" onChange={(e)=>setTendered(e.target.value)} entryRef={tenderedRef} placeholder="Tendered Amount" type="number" />
                     <div className="pad-xl" style={{height:"70px"}}>
                         <div style={{float:"left"}}>Change ${changed && changed?.toFixed(2) || 0.0}</div>
-                        <div><button onClick={onTriggerPayment} disabled={loading} className="silver pad radius shadow pad-h-xl click" style={{float:"right"}}>PAY {total?.toFixed(2)}</button></div>
+                        <div><button onClick={onTriggerPayment} disabled={loading} className="btn" style={{float:"right"}}>PAY {total?.toFixed(2)}</button></div>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import { ToolBar } from '../layout/ToolBar';
 import { Alert } from '../widgets/Alert';
 import { Loader } from '../widgets/Loader';
 import { CustomerEntryActions } from '../widgets/CustomerEntryAction';
-import { PaymentWindow } from '../widgets/PaymentWindow';
+import { PaymentWindow } from './PaymentWindow';
 import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
 import { routes } from '../global/Routes';
@@ -242,6 +242,8 @@ const OrderEntry = () => {
                 onClose={()=>setShowAlert(false)}
                 onConfirm={()=>setCart([])}
                 message="Are you sure you will like to clear the cart?"
+                okText="Yes"
+                cancelText="No"
             />
             <Alert
                 isOpen={showPayOutAlert}
@@ -251,7 +253,9 @@ const OrderEntry = () => {
                     tools.route.set(routes.refund);
                     history.push(routes.refund);
                 }}
-                message="Pay out of requires admininistrator profilage. Will you like to continue?"
+                message="Pay out requires admininistrator profilage. Will you like to continue?"
+                okText="Yes"
+                cancelText="No"
             />
             <Alert
                 isOpen={showRecentAlert.state}
@@ -316,17 +320,17 @@ const OrderEntry = () => {
                         </div>
 
                         <div className="sales-item-header-container">
-                            <div className="sales-item-name-header dark">name</div>
+                            <div className="sales-item-name-header dark">Product</div>
                             <div className="sales-item-qty-header dark">Qty</div>
                             <div className="sales-item-price-header dark">Price</div>
                         </div>
 
-                        <div className="sales-item-container silver">
+                        <div className="sales-item-container bg">
                             {cart.map((order, key)=>(
                                 <div className="cart-item-hover relative" key={key} style={{color:order?.info?.type && "purple"}}>
                                     <div className="sales-item-name-header" style={{border:"none"}}>{order?.info?.title}</div>
                                     <div className="sales-item-qty cart-qty-item-hover" style={{border:"none"}}>
-                                        <input style={{visibility: order?.info?.type && "hidden"}} onChange={(e)=>updateCartQty(order,e.target.value)} value={order?.qty}/>
+                                        <input style={{visibility: order?.info?.type && "hidden",border:"none"}} onChange={(e)=>updateCartQty(order,e.target.value)} value={order?.qty}/>
                                     </div>
                                     <div className="sales-item-price-header" style={{border:"none"}}>
                                         {order?.info?.type? order?.info?.type: "$"}
@@ -355,7 +359,7 @@ const OrderEntry = () => {
                         </div>
                     </div>
                     <div className="order-entry-product-container">
-                        <div className="order-entry-product-sub-container silver2">
+                        <div className="order-entry-product-sub-container bg">
                             <div className={`${showProductsOnMobile} order-entry-product-for-mobile`}>
                                 <div className="scroll relative scrollbar2 order-entry-product-mini-container">
                                     <Loader isOpen={showProductLoader} />
@@ -418,7 +422,7 @@ const OrderEntry = () => {
                             <div className="action-btn-container">
                                 <div className="sales-action-btn-container">
                                     <div onClick={()=>setShowCustomerAction(true)} className="sales-action-btn click dodger">
-                                        <IonIcon className="float-center" style={{fontSize:"60px"}} icon={addOutline} />
+                                        <IonIcon className="float-center" style={{fontSize:"50px"}} icon={addOutline} />
                                     </div>
                                 </div>
                                 <div className="sales-action-btn-container">

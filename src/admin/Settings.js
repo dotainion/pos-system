@@ -80,17 +80,17 @@ export const Settings = () =>{
         <IonPage>
             <MenuBarWrapper onSave={onSave} saveBtnHilight={isChange}>
                 <IonList class="item-container">
-                    <div className="pad-h-xl silver border radius">
+                    <div className="pad-h-xl gray border radius">
                         <div className="popup-header">Sales reward and tax rate</div>
                         <div className="flex d-flex-on-mobile">
                             <Entry onChange={()=>setIsChange(true)} entryRef={rewardRef} label="Customer reward persentage" style={{width:"100%"}} placeholder="Reward percentage amount" type="number" percentSign />
                             <Entry onChange={()=>setIsChange(true)} entryRef={taxRef} label="Tax Rate" style={{width:"100%"}} placeholder="Tax rate" type="number" percentSign />
                         </div>
                     </div>
-                    <div className="pad-h-xl silver border radius" style={{marginTop:"20px"}}>
+                    <div className="pad-h-xl gray border radius" style={{marginTop:"20px"}}>
                         <div className="popup-header">Apply discounts</div>
                         <div className="flex d-flex-on-mobile">
-                            <div className="settings-discount-container gray3 scrollbar">
+                            <div className="settings-discount-container gray2 scrollbar">
                                 {
                                     appendedDiscounts?.length?
                                     appendedDiscounts?.map((disc, key)=>(

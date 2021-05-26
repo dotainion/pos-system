@@ -104,7 +104,7 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
                     <div className="number-pad-container">
                         {[1,2,3,4,5,6,7,8,9,".",0,"<="].map((num, key)=>(
                             <div className="number-pad" key={key}>
-                                <div onClick={()=>onAddInputValue(num)} className="silver click">
+                                <div onClick={()=>onAddInputValue(num)} className="bg click">
                                     <label hidden={num === "<="} className="float-center"><b>{num}</b></label>
                                     <IonIcon hidden={num !== "<="} className="float-center" icon={backspaceOutline}/>
                                 </div>
@@ -115,9 +115,9 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
                         <div>Note</div>
                         <textarea ref={noteRef} className="max-width number-pad-note"/>
                     </div>
-                    <div>
-                        <button onClick={onAddCashDrops} disabled={loading} className="pad silver click">Add Cash</button>
-                        <button onClick={onClear} className="pad silver click" style={{marginLeft:"5px"}}>Clear</button>
+                    <div style={{textAlign:"right"}}>
+                        <button onClick={onAddCashDrops} disabled={loading} className="btn">Add Cash</button>
+                        <button onClick={onClear} className="btn" style={{marginLeft:"5px"}}>Clear</button>
                     </div>
                 </div>
             </div>

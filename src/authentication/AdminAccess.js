@@ -41,21 +41,21 @@ export const AdminAccess = () =>{
     return(
         <IonPage>
             <IonContent>
-                <IonGrid class="silver2">
+                <IonGrid class="gray">
                     <IonRow>
                         <IonCol sizeMd="4" offsetMd="4">
                             <div className="login-main-container">
-                                <div className="login-container no-select float-center silver">
+                                <div className="login-container no-select float-center dark">
                                     <div className="pad-v-xl center">
                                         <label>NEEDS ADMINISTRATOR ACCESS</label>
                                         <div className="font" style={{color:"red"}}>{error}</div>
                                     </div>
-                                    <Progressing isOpen={loading} />
-                                    <Entry onKeyPress={onEnterPress} entryRef={emailRef} label="Email" placeholder="example@gmail.com" type="email" />
-                                    <Entry onKeyPress={onEnterPress} entryRef={passwordRef} label="Password" placeholder="Password1#" type="password" />
+                                    <Progressing isOpen={loading} color="medium" />
+                                    <Entry onKeyPress={onEnterPress} labelColor="white" entryRef={emailRef} label="Email" placeholder="example@gmail.com" type="email" />
+                                    <Entry onKeyPress={onEnterPress} labelColor="white" entryRef={passwordRef} label="Password" placeholder="Password1#" type="password" />
                                     <div style={{marginLeft:"20px", marginRight:"20px"}}>
-                                        <button className="pad silver click radius shadow" onClick={verifyAuth} style={{float:"right"}}>Confirm</button>
-                                        <button className="pad silver click radius shadow" onClick={()=>history.push(routes.orderEntry)} style={{float:"right",marginRight:"10px"}}>Cancel</button>
+                                        <button className="btn" onClick={verifyAuth} style={{float:"right"}}>Confirm</button>
+                                        <button className="btn" onClick={()=>history.push(routes.orderEntry)} style={{float:"right",marginRight:"10px"}}>Cancel</button>
                                     </div>
                                 </div>
                             </div>

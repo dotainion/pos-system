@@ -40,6 +40,7 @@ export const Employees = () =>{
                 isOpen={showCreateEmployee}
                 record={holdEmployeeToBeEdited}
                 onClose={()=>setShowCreateEmployee(false)}
+                onUpdateComplete={getMyEmployees}
             />
             <MenuBarWrapper onAdd={onAddEmployee}>
                 <IonList class="item-container">
@@ -61,9 +62,7 @@ export const Employees = () =>{
                                 </div>
                             </div>
                         )):
-                        <IonList>
-                            <IonLabel>No Empolyee</IonLabel>
-                        </IonList>
+                        <div>No Empolyee</div>
                     }
                 </IonList>
             </MenuBarWrapper>
