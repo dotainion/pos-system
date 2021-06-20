@@ -86,7 +86,7 @@ export const Calculator = ({doPrevent}) =>{
             <div className="pad" {...doPrevent}>
                 {btns.map((num, key)=>(
                     <div className="calculator-number-pad" key={key}>
-                        <div onClick={()=>onCalcHandler(num?.cmd || num)} className="max-size relative bg click">
+                        <div onClick={()=>onCalcHandler(num?.cmd || num)} className="max-size relative click" style={{backgroundColor:"lightgray"}}>
                             <div className="float-center"><b>{num?.title || num}</b></div>
                         </div>
                     </div>

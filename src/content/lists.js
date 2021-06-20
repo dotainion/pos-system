@@ -41,3 +41,8 @@ export const discountTypes = [
     "Dollar Amount eg: ($0.00)",
     "Percentage Amount eg: (%0)"
 ]
+
+export const productQtyType = [
+    "Quantity",
+    "lbs",
+]

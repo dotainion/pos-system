@@ -133,7 +133,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
             </div>
             <div hidden={!toggleDisplay.saveItem} className="pad entry-action-sub">
                 <div className="half-width item-center flex">
-                    <Entry cssClass="bg" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
+                    <Entry cssClass="bg2" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
                     <div className="pad-xl" style={{position:"relative"}}>
                         <div className="float-left">
                             <button onClick={onSaveCartItem} className="btn" style={{marginLeft:"20px"}}>Save</button>

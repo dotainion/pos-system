@@ -100,6 +100,16 @@ class Tools{
         if(farmated === "Invalid Date") return "";
         return farmated;
     }
+    randomColor(range=100){
+        /*colors = [];
+        const randNum = (Math.random() * range) + 1;
+        const randRange = Math.floor(randNum);
+        colors[randRange];*/
+        const cL = Math.floor((Math.random()*100)+1);
+        const cC = Math.floor((Math.random()*100)+1);
+        const cR = Math.floor((Math.random()*100)+1);
+        return `rgb(${cL},${cC},${cR})`;
+    }
 }
 
 export const tools = new Tools();

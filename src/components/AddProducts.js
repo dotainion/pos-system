@@ -1,7 +1,7 @@
 import { IonIcon, IonImg, IonList, IonLoading, IonThumbnail } from '@ionic/react';
 import { closeOutline, imagesOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { roles } from '../content/lists';
+import { productQtyType, roles } from '../content/lists';
 import { useStore } from '../context/Store';
 import { addProducts, addUser, updateProducts } from '../database/database';
 import { Entry } from './Entry';
@@ -24,6 +24,7 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
     const salepriceRef = useRef();
     const costPriceRef = useRef();
     const quantityRef = useRef();
+    const quantityTypeRef = useRef();
 
     const onClear = () =>{
         setImage("");
@@ -31,12 +32,14 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
         salepriceRef.current.value = "";
         costPriceRef.current.value = "";
         quantityRef.current.value = "";
+        quantityTypeRef.current.value = "";
     }
 
     const onAddProduct = async() =>{
         if (!titleRef.current.value) return setError("Must provide title");
         if (!salepriceRef.current.value) return setError("Must provide sale price");
         if (!quantityRef.current.value) return setError("Must provide quantity of item");
+        if (!quantityTypeRef.current.value) return setError("Must provide quantity type");
         setLoading(true);
         const object = {
             image: image,
@@ -44,7 +47,8 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
             salePrice: salepriceRef.current.value || "",
             costPrice: costPriceRef.current.value || "",
             qty: quantityRef.current.value || "",
-            storeId: user?.storeId || ""
+            storeId: user?.storeId || "",
+            qtyType: quantityTypeRef.current.value
         }
         if (Object.keys(record || {})?.length > 0) await updateProducts(object, record?.id);
         else await addProducts(object);
@@ -62,13 +66,15 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
             salepriceRef.current.value = record?.info?.salePrice;
             costPriceRef.current.value = record?.info?.costPrice;
             quantityRef.current.value = record?.info?.qty;
+            quantityTypeRef.current.value = record?.info?.qtyType;
         }else{
-            setInputStyle("bg");
+            setInputStyle("bg2");
             setImage("");
             titleRef.current.value = "";
             salepriceRef.current.value = "";
             costPriceRef.current.value = "";
             quantityRef.current.value = "";
+            quantityTypeRef.current.value = productQtyType[0];
         }
     },[record]);
     return(
@@ -89,7 +95,7 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
                     <Entry entryRef={titleRef} cssClass={inputStyle} label="Title" placeholder="Title" />
                     <Entry entryRef={salepriceRef} cssClass={inputStyle} label="Sale Price" placeholder="Sale price" type="number" dollarSign />
                     <Entry entryRef={costPriceRef} cssClass={inputStyle} label="Cost Price" placeholder="Cost price" type="number" dollarSign />
-                    <Entry entryRef={quantityRef} cssClass={inputStyle} label="Quantity" placeholder="Quantity" type="number" />
+                    <Entry entryRef={quantityRef} cssClass={inputStyle} placeholder={productQtyType} type="number" optionRef={quantityTypeRef} options={productQtyType} />
                 </div>
             </div>
             <div className="half-width max-width-on-mobile item-center">

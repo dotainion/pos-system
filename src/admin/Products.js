@@ -64,7 +64,7 @@ export const Products = () =>{
                                         <div className="pad-v-mini">Title: {prod?.info?.title}</div>
                                         <div className="pad-v-mini">Cost Price: ${prod?.info?.costPrice}</div>
                                         <div className="pad-v-mini">Sale Price: ${prod?.info?.salePrice}</div>
-                                        <div className="pad-v-mini">Quantity: {prod?.info?.qty}</div>
+                                        <div className="pad-v-mini">{prod?.info?.qtyType || "Quantity"}: {prod?.info?.qty}</div>
                                     </div>
                                 </div>
                             </div>

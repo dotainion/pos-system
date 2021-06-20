@@ -212,7 +212,7 @@ const OrderEntry = () => {
     useEffect(()=>{
         initCustomerReward(customer);
     },[customer]);
-
+    console.log(tools.randomColor());
     return (
         <IonPage className="page">
             <ToolBar
@@ -327,10 +327,18 @@ const OrderEntry = () => {
 
                         <div className="sales-item-container bg">
                             {cart.map((order, key)=>(
-                                <div className="cart-item-hover relative" key={key} style={{color:order?.info?.type && "purple"}}>
+                                <div className="cart-item-hover flex relative" key={key} style={{color:order?.info?.type && "purple"}}>
                                     <div className="sales-item-name-header" style={{border:"none"}}>{order?.info?.title}</div>
                                     <div className="sales-item-qty cart-qty-item-hover" style={{border:"none"}}>
-                                        <input style={{visibility: order?.info?.type && "hidden",border:"none"}} onChange={(e)=>updateCartQty(order,e.target.value)} value={order?.qty}/>
+                                        <div className="inline">{order?.qty}&nbsp;</div>
+                                        <div className="inline">{order?.info?.qtyType}</div>
+                                        <input 
+                                            hidden={order?.info?.type}
+                                            className="float-center max-height hide"
+                                            onChange={(e)=>updateCartQty(order,e.target.value)} 
+                                            value={order?.qty}
+                                            type="number"
+                                        />
                                     </div>
                                     <div className="sales-item-price-header" style={{border:"none"}}>
                                         {order?.info?.type? order?.info?.type: "$"}

@@ -74,7 +74,7 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
     return(
         <div className="flex">
             <div hidden={!showSideMenu.includes("show-menu")} onClick={toggleMenu} className="menu-backdrop"/>
-            <div className={`menu-container scroll hide-scrollbar dark no-select ${showSideMenu}`}>
+            <div className={`menu-container scroll scrollbar dark no-select ${showSideMenu}`}>
                 <IonList style={{marginBottom:"20px"}}>
                     <IonListHeader>POS System</IonListHeader>
                     <IonNote style={{marginLeft:"30px"}}>{user?.businessName}</IonNote>

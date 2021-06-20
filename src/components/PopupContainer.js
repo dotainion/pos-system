@@ -9,7 +9,7 @@ export const PopupContainer = ({isOpen, onClose, style, noBackdropDismist, child
     }
     return(
         <div hidden={!isOpen} onClick={closeOnBackdrop} className="backdrop">
-            <div className="float-center popup-container bg" style={style} onClick={(e)=>e.stopPropagation()}>
+            <div className="float-center popup-container bg shadow2" style={style} onClick={(e)=>e.stopPropagation()}>
                 <IonIcon onClick={onClose} class="close" icon={closeOutline}/>
                 {children}
             </div>

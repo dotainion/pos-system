@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 
 
-export const Entry = ({placeholder, edit, entryRef, required, optional, onChange, onClick, onKeyPress, inputPops, label, cssClass, type, dollarSign, percentSign, labelColor, style, error}) =>{
+export const Entry = ({placeholder, edit, entryRef, required, options, optionRef, optional, onChange, onOptionChange, onClick, onKeyPress, inputPops, label, defaultOptionValue, cssClass, type, dollarSign, percentSign, labelColor, style, error}) =>{
     const [value, setValue] = useState("");
+    const [showOption, setShowOption] = useState(false);
     const triggerChange = (e) =>{
         setValue(e.target.value);
         if (typeof onChange === "function") onChange(e);
     }
+
+    useEffect(()=>{
+        if (options || onOptionChange || defaultOptionValue){
+            setShowOption(true);
+        }else setShowOption(false);
+    },[options, onOptionChange, defaultOptionValue]);
     return(
         <div className={`entry-input-container ${cssClass}`} style={style}>
-            <div>
-                <label style={{color:labelColor || "rgb(3, 37, 68)"}}>{label}</label>
+            <div className="relative">
+                <label style={{color:labelColor || "rgb(3, 37, 68)"}}>
+                    <span>{label}</span>
+                    <select hidden={!showOption} onChange={onOptionChange} ref={optionRef} className="option-in-entry">
+                        <option defaultChecked hidden>{defaultOptionValue}</option>
+                        {options?.map((opts, key)=>(
+                            <option key={key}>{opts}</option>
+                        ))}
+                    </select>
+                </label>
                 <span style={{color:"red"}}>{required && "*"}</span>
                 <span style={{fontSize:"11px",color:"dodgerblue"}}>{optional && " Optional"}</span>
             </div>

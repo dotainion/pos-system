@@ -724,6 +724,16 @@
     border: 1px solid rgb(167, 165, 165);
     background-color: white;
 }
+.option-in-entry{
+    border: 1px solid white;
+    outline: none;
+    color: inherit;
+    border-radius: 15px;
+    background-color: inherit;
+}
+.option-in-entry option{
+    color: rgb(3, 37, 68);
+}
 .popup-bg{
     color: white;
     background: linear-gradient(to bottom, rgb(26, 133, 240) 0%, rgb(9, 36, 63) 100%);
@@ -731,16 +741,16 @@
 }
 .bg{
     color: black;
-    background: linear-gradient(to right, rgb(224, 222, 222) 0%, white 50%, rgb(224, 222, 222) 100%);
-    --ion-background-color: linear-gradient(to bottom, rgb(224, 222, 222) 0%, white 50%, rgb(224, 222, 222) 100%);
+    background-color: white;
+    --ion-background-color: white
 }
 .bg input{
     border: 1px solid lightgray;
 }
 .bg2{
     color: black;
-    background: linear-gradient(to bottom, rgb(212, 211, 211) 0%, white 50%, rgb(212, 211, 211) 100%);
-    --ion-background-color: linear-gradient(to bottom, rgb(212, 211, 211) 0%, white 50%, rgb(212, 211, 211) 100%);
+    background: linear-gradient(to bottom, rgb(228, 227, 227) 0%, white 50%, rgb(228, 227, 227) 100%);
+    --ion-background-color: linear-gradient(to bottom, rgb(228, 227, 227) 0%, white 50%, rgb(228, 227, 227) 100%);
 }
 .bg2 input{
     border: 1px solid lightgray;
@@ -957,6 +967,8 @@
     display: block;
 }
 .cart-qty-item-hover:hover input{
+    display: block;
+    border: none;
     color: dodgerblue;
     text-align: center;
     border-radius: 15px;
