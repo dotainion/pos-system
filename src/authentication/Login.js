@@ -35,7 +35,7 @@ export const Login = () =>{
             passwordRef.current.value = "";
             history.push(routes.orderEntry);
         }
-    },[isAuthenticated]);
+    },[isAuthenticated,history]);
 
     return(
         <IonPage className="page">

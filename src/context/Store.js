@@ -23,6 +23,7 @@ export const AppContext = ({children}) =>{
     const [showProductLoader, setShowProductLoader] = useState(false);
     const [adminAccess, setAdminAccess] = useState(false);
     const [settings, setSettings] = useState({});
+    const [discounts, setDiscounts] = useState([]);
 
     const signIn = async(email, password) =>{
         try{
@@ -160,6 +161,8 @@ export const AppContext = ({children}) =>{
         settings,
         setSettings,
         changeSettings,
+        discounts,
+        setDiscounts
     }
     return(
         <ContextProvider.Provider value={providerValue}>

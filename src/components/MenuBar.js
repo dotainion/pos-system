@@ -32,11 +32,6 @@ const nav = [
         url: routes.reports,
         hidden: false
     },{
-        title: "Employees",
-        icon: peopleOutline,
-        url: routes.employees,
-        hidden: false
-    },{
         title: "Settings",
         icon: constructOutline,
         url: routes.settings,
@@ -44,7 +39,7 @@ const nav = [
     }
 ];
 
-export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, barChild, children}) =>{
+export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, barChild, barChildren, children}) =>{
     const history = useHistory();
     const { setAdminAccess, user } = useStore();
     const [showSideMenu, setShowSideMenu] = useState("hide-menu");
@@ -66,10 +61,10 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
     }
 
     useEffect(()=>{
-        if (onAdd || onSearch || onSave || barChild) setHideToolbar(false);
+        if (onAdd || onSearch || onSave || barChild || barChildren) setHideToolbar(false);
         else setHideToolbar(true);
         if (tools.isMobile()) setHideToolbar(false);
-    },[onAdd, onSearch, onSave, barChild]);
+    },[onAdd, onSearch, onSave, barChild, barChildren]);
     
     return(
         <div className="flex">
@@ -118,6 +113,9 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
                     </div>
                     <div hidden={!barChild} className="relative menu-bar-btn-container">
                         <div className="float-center">{barChild}</div>
+                    </div>
+                    <div hidden={!barChildren} className="relative menu-bar-children-btn-container">
+                        <div className="float-center max-width">{barChildren}</div>
                     </div>
                     <div hidden={!onSearch} className="float-center menu-toolbar-search" style={{color:"black"}}>
                         <SearchBar onSearch={onSearch} placeholder="Find employee"/>

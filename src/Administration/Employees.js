@@ -1,58 +1,59 @@
-import { IonButton, IonCard, IonContent, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonThumbnail } from '@ionic/react';
+import { IonIcon, IonImg, IonList, IonPage, IonThumbnail } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
+import { FaDivide } from 'react-icons/fa';
 import { CreateEmployee } from '../components/CreateEmployee';
 import { MenuBarWrapper } from '../components/MenuBar';
 import { useStore } from '../context/Store';
 import { getEmployees } from '../database/database';
 import img from '../images/beach.jpg';
-import { SearchBar } from '../widgets/SearchBar';
 
 
-export const Employees = () =>{
+export const Employees = ({ isOpen }) => {
     const { user } = useStore();
     const [showCreateEmployee, setShowCreateEmployee] = useState(false);
     const [holdEmployeeToBeEdited, setHoldEmployeeToBeEdited] = useState({});
     const [employees, setEmployees] = useState([]);
 
-    const getMyEmployees = async() =>{
+    const getMyEmployees = async () => {
         let recordOfEmployees = await getEmployees(user?.storeId);
-        recordOfEmployees = recordOfEmployees.filter((agent)=>!agent?.info?.role.includes("admin"));
+        recordOfEmployees = recordOfEmployees.filter((agent) => !agent?.info?.role.includes("admin"));
         setEmployees(recordOfEmployees);
     }
 
-    const onAddEmployee = () =>{
+    const onAddEmployee = () => {
         setHoldEmployeeToBeEdited({});
         setShowCreateEmployee(true);
     }
 
-    const onEditEmployee = (employee) =>{
+    const onEditEmployee = (employee) => {
         setHoldEmployeeToBeEdited(employee);
         setShowCreateEmployee(true);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getMyEmployees();
-    },[]);
-    return(
-        <IonPage>
+    }, []);
+    return (
+        <div hidden={!isOpen}>
             <CreateEmployee
                 isOpen={showCreateEmployee}
                 record={holdEmployeeToBeEdited}
-                onClose={()=>setShowCreateEmployee(false)}
+                onClose={() => setShowCreateEmployee(false)}
                 onUpdateComplete={getMyEmployees}
             />
-            <MenuBarWrapper onAdd={onAddEmployee}>
-                <IonList class="item-container">
-                    {
-                        employees?.length?
-                        employees.map((employee, key)=>(
-                            <div onClick={()=>onEditEmployee(employee)} className="item-info-container" key={key}>
+            <IonIcon onClick={onAddEmployee} style={{borderRadius:"50%",fontSize:"30px"}} icon={addOutline} />
+
+            <IonList class="item-container">
+                {
+                    employees?.length ?
+                        employees.map((employee, key) => (
+                            <div onClick={() => onEditEmployee(employee)} className="item-info-container" key={key}>
                                 <div className="item-sub-info-container dark">
                                     <IonThumbnail>
-                                        <IonImg class="max-size" src={img}/>
+                                        <IonImg class="max-size" src={img} />
                                     </IonThumbnail>
-                                    <div style={{paddingTop:"10px"}}>
+                                    <div style={{ paddingTop: "10px" }}>
                                         <div className="pad-v-mini">{employee?.info?.name}</div>
                                         <div className="pad-v-mini">{employee?.info?.email}</div>
                                         <div className="pad-v-mini">{employee?.info?.phone1}</div>
@@ -61,11 +62,10 @@ export const Employees = () =>{
                                     </div>
                                 </div>
                             </div>
-                        )):
+                        )) :
                         <div>No Empolyee</div>
-                    }
-                </IonList>
-            </MenuBarWrapper>
-        </IonPage>
+                }
+            </IonList>
+        </div>
     )
 }

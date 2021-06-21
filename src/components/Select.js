@@ -8,7 +8,7 @@ export const Select = ({options, hide, defaultValue, edit, selectRef, onChange, 
         if (typeof onChange === "function") onChange(e);
     }
     return(
-        <div hidden={!hide} className={`entry-input-container ${cssClass}`} style={style}>
+        <div hidden={hide} className={`entry-input-container ${cssClass}`} style={style}>
             <div style={{color:"rgb(3, 37, 68)"}}><label>{label}</label></div>
             <select ref={selectRef} onChange={triggerChange} className={`input ${cssOptionClass}`} style={optionStyle}>
                 <option defaultChecked hidden>{defaultValue || options?.[0]}</option>
