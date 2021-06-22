@@ -105,7 +105,7 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
         <PopupContainer isOpen={isOpen} onClose={onClose}>
             <div className="popup-header centered">
                 <IonIcon onClick={onClose} class="close" icon={closeOutline}/>
-                <div className="pad">
+                <div className="pad" style={{borderBottom:"1px solid black"}}>
                     {
                         showEmplyeeInput.first && `${Object.keys(record || {})?.length? "Update": "Add"} employee information` ||
                         showEmplyeeInput.second && `${Object.keys(record || {})?.length? "Update": "Add"} Next of Kin informatino` ||

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
 import { MenuBarWrapper } from '../components/MenuBar';
 import { useStore } from '../context/Store';
+import { FlickerLabel } from '../widgets/FlickerLable';
 import { UpdateDiscount } from '../widgets/UpdateDiscount';
 
 
@@ -43,21 +44,33 @@ export const Settings = () =>{
     return(
         <IonPage>
             <MenuBarWrapper onSave={onSave} barChildren={
-                <div>
-                    <button hidden={!isChange} onClick={onClearChanges} className="silver radius pad click" style={{color:"orangeRed"}}>Clear Changes</button>
-                </div>
+                <button
+                    hidden={!isChange} 
+                    onClick={onClearChanges} 
+                    className="silver radius pad click" 
+                    style={{color:"orangeRed"
+                }}>Clear Changes</button>
             } saveBtnHilight={isChange}>
                 <IonList class="item-container">
-                    <div hidden={!isChange} className="float-top-left centered max-width pad-mini" style={{color:"green"}}>You may have items that needs to be save</div>
+                    <FlickerLabel
+                        isOpen={isChange}
+                        cssClass="float-top-left max-width"
+                        innerCssClass="pad-mini"
+                        message="You may have items that needs to be save."
+                        onIconClick={onClearChanges}
+                    />
+                    
                     <div className="pad-h-xl gray border radius" style={{marginBottom:"20px"}}>
-                        <div className="popup-header">Sales reward and tax rate</div>
+                        <div className="popup-header">Reward and tax rate</div>
                         <div className="flex d-flex-on-mobile">
                             <Entry onChange={()=>setIsChange(true)} entryRef={rewardRef} label="Customer reward persentage" style={{width:"100%"}} placeholder="Reward percentage amount" type="number" percentSign />
                             <Entry onChange={()=>setIsChange(true)} entryRef={taxRef} label="Tax Rate" style={{width:"100%"}} placeholder="Tax rate" type="number" percentSign />
                         </div>
                     </div>
+
                     <UpdateDiscount
                         isOpen={true}
+                        isChange={isChange}
                         onChangeDetect={setIsChange}
                     />
                 </IonList>

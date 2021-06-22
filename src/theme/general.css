@@ -238,7 +238,9 @@
     background-color: white;
 }
 .btn{
-    padding: 8px;
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     color: rgb(2, 26, 48);
     border-radius: 5px;
     border: 1px solid lightgray;
@@ -801,6 +803,7 @@
     font-size: 20px;
     font-weight: bold;
     padding: 20px;
+    user-select: none;
 }
 .dollar-sign{
     position: relative;
@@ -1161,4 +1164,7 @@
 .settings-discount-left-container{
     width: 100%;
     text-align: left;
+}
+.flicker{
+    animation: blink 1s infinite linear;
 }

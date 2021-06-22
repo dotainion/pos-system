@@ -37,19 +37,19 @@ export const CashDrawers = ({isOpen}) =>{
         <div hidden={!isOpen} className="relative gray2" style={{height:"80vh"}}>
             <div className="float-top-center half-width max-width-on-mobile" style={{whiteSpace:"nowrap",height:"100%"}}>
                 <div className="popup-header">Cash Drawers for today {tools.nowDate()}</div>
-                <div className="pad-xl gray2" style={{margin:"10px",overflow:"hidden"}}>
+                <div className="pad-xl gray2" style={{border:"1px solid lightgray",margin:"10px",overflow:"hidden"}}>
                     <div>TOTAL TRANSACTIONS</div>
                     <div><b>{transactionCount}</b></div>
                 </div>
-                <div className="pad-xl gray2" style={{margin:"10px",overflow:"hidden"}}>
+                <div className="pad-xl gray2" style={{border:"1px solid lightgray",margin:"10px",overflow:"hidden"}}>
                     <div>TOTAL TAX</div>
                     <div><b>${tax?.toFixed(2)}</b></div>
                 </div>
-                <div className="pad-xl gray2" style={{margin:"10px",overflow:"hidden"}}>
+                <div className="pad-xl gray2" style={{border:"1px solid lightgray",margin:"10px",overflow:"hidden"}}>
                     <div>TOTAL WITHOUT TAX</div>
                     <div><b>${subTotal?.toFixed(2)}</b></div>
                 </div>
-                <div className="pad-xl gray2" style={{margin:"10px",overflow:"hidden"}}>
+                <div className="pad-xl gray2" style={{border:"1px solid lightgray",margin:"10px",overflow:"hidden"}}>
                     <div>CASH IN DRAWER</div>
                     <div><b>${grandTotal?.toFixed(2)}</b></div>
                 </div>

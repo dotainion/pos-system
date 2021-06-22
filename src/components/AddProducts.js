@@ -80,7 +80,7 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
     return(
         <PopupContainer isOpen={isOpen} onClose={onClose}>
             <div className="popup-header centered">
-                <div>Add new product to inventory</div>
+                <div className="pad" style={{borderBottom:"1px solid black"}}>Add new product to inventory</div>
                 <div style={{fontWeight:"normal",fontSize:"15px",color:"orangered",textAlign:"center"}}>{error}</div>
             </div>
             <Progressing isOpen={loading} color="medium"/>

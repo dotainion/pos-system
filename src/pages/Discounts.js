@@ -1,6 +1,6 @@
 import { IonIcon, IonItemDivider } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '../context/Store';
 
 
@@ -8,8 +8,10 @@ export const Discounts = ({isOpen, onClose, onSelect}) =>{
     const { cart, settings } = useStore();
 
     const [error, setError] = useState("");
+    const timeOutVar = useRef();
 
     const onSelected = (discount) =>{
+        clearInterval(timeOutVar);
         let idExt = "";
         const msg = "This discount can only be added once";
         if (discount?.runOnce){
@@ -33,7 +35,7 @@ export const Discounts = ({isOpen, onClose, onSelect}) =>{
 
     //detect change in error
     useEffect(()=>{
-        if (error) setTimeout(() => {
+        if (error) timeOutVar.current = setTimeout(() => {
             setError("");
         }, 4000);
     },[error]);
@@ -51,7 +53,7 @@ export const Discounts = ({isOpen, onClose, onSelect}) =>{
                         settings?.discounts?.length?
                         settings?.discounts?.map((disc, key)=>(
                             <div onClick={()=>onSelected(disc)} className="discount-item relative click" key={key}>
-                                <div className="float-left">{disc?.title}</div>
+                                <div>{disc?.title}</div>
                                 <div className="float-right">{disc?.type}{disc?.discount}</div>
                             </div>
                         )):

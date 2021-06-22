@@ -45,4 +45,7 @@ export const discountTypes = [
 export const productQtyType = [
     "Quantity",
     "lbs",
+    "Bottles",
+    "boxs",
+    "Packets"
 ]
