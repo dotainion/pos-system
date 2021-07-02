@@ -1,7 +1,7 @@
 import { IonItemDivider } from '@ionic/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
-import { PopupContainer } from '../components/PopupContainer';
+import { ModalContainer } from '../container/ModalContainer';
 import { useStore } from '../context/Store';
 import { ReceiptPreview } from '../document/Preview';
 import { printer } from '../document/Printer';
@@ -56,7 +56,7 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
     },[paymentSubmited]);
     return(
         <>
-        <PopupContainer isOpen={isOpen} onClose={onTriggerClose} noBackdropDismist>
+        <ModalContainer isOpen={isOpen} onClose={onTriggerClose} noBackdropDismist>
             <div className="max-size shadow2">
                 <p className="pad-xl font-xl half-width item-center" style={{textAlign:"center",borderBottom:"1px solid lightgray"}}>
                     Payment<br/>
@@ -88,7 +88,7 @@ export const PaymentWindow = ({isOpen, onClose, onConfirmPayment, paymentSubmite
                     </div>
                 </div>
             </div>
-        </PopupContainer>
+        </ModalContainer>
         <ReceiptPreview
             isOpen={showPreview}
             onClose={()=>{

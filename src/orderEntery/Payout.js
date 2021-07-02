@@ -6,9 +6,9 @@ import { useStore } from '../context/Store';
 import { addPayout, getCustomer, getCustomerById, getSales, getUser, updateSales } from '../database/database';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
-import { Alert } from '../widgets/Alert';
+import { Alert } from '../components/Alert';
 import { Dropdown } from '../widgets/Dropdown';
-import { Loader } from '../widgets/Loader';
+import { Loader } from '../components/Loader';
 import { SearchBar } from '../widgets/SearchBar';
 
 

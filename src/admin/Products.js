@@ -2,7 +2,7 @@ import { IonButton, IonCard, IonContent, IonIcon, IonImg, IonInput, IonItem, Ion
 import { addOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { AddProducts } from '../components/AddProducts';
-import { MenuBarWrapper } from '../components/MenuBar';
+import { MenuBarWrapper } from '../container/MenuBar';
 import { useStore } from '../context/Store';
 import { getProducts } from '../database/database';
 import img from '../images/beach.jpg';

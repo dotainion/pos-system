@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '../context/Store';
 import { getLowStocks } from '../database/database';
 import { tools } from '../tools/Tools';
-import { Loader } from '../widgets/Loader';
+import { Loader } from '../components/Loader';
 
 
 export const LowInventory = ({isOpen}) =>{

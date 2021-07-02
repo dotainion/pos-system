@@ -161,6 +161,7 @@
 }
 .cost-display-container{
     height: 16%;
+    min-height: 100px;
     border-top: 1px solid white;
     border-radius: 30px;
     margin-top: 15px;
@@ -251,8 +252,21 @@
     background-color: rgb(235, 233, 233);
 }
 .btn:active{
-    transform: scale(1.01);
     box-shadow: 0px 0px 3px gray;
+}
+.btn-dark-hoverride{
+    padding: 5px;
+    color: white;
+}
+.btn-dark-hoverride:hover{
+    color: lightgray;
+}
+.btn-dark-hoverride:active{
+    color: var(--border-heilight);
+    border: 1px solid var(--border-heilight);
+}
+.btn-color-override{
+    color: var(--bg-text-color);
 }
 .action-btn-container{
     position: relative;
@@ -717,25 +731,27 @@
     margin-bottom: 10px;
     margin-left: 5px;
     margin-right: 5px;
+    border-bottom: 1px solid white;
 }
 .input{
     outline: none;
     padding: 7px;
     width: 100%;
     border-radius: 50px;
-    color: black;
+    color: var(--bg-text-color);
     border: 1px solid rgb(167, 165, 165);
     background-color: white;
 }
 .option-in-entry{
-    border: 1px solid white;
+    border: none;
     outline: none;
     color: inherit;
     border-radius: 15px;
     background-color: inherit;
+    border-top: 1px solid white;
 }
 .option-in-entry option{
-    color: rgb(3, 37, 68);
+    color: var(--bg-text-color);
 }
 .popup-bg{
     color: white;
@@ -743,9 +759,9 @@
     --ion-background-color: linear-gradient(to bottom, rgb(26, 133, 240) 0%, rgb(9, 36, 63) 100%);
 }
 .bg{
-    color: black;
-    background-color: white;
-    --ion-background-color: white
+    color: var(--bg-text-color);
+    background-color: var(--bg-color);
+    --ion-background-color: var(--bg-color)
 }
 .bg input{
     border: 1px solid lightgray;
@@ -757,6 +773,10 @@
 }
 .bg2 input{
     border: 1px solid lightgray;
+}
+.inherit{
+    border: none;
+    background-color: inherit;
 }
 .link{
     color: rgb(61, 60, 60);
@@ -876,6 +896,10 @@
 }
 .radius-xl{
     border-radius: 10px;
+}
+.radius-top{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .pointer{
     cursor: pointer;

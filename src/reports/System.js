@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
 import { useStore } from '../context/Store';
-import { Loader } from '../widgets/Loader';
+import { Loader } from '../components/Loader';
 
 
 

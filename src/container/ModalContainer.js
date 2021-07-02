@@ -3,7 +3,7 @@ import { closeOutline } from 'ionicons/icons';
 import React from 'react';
 
 
-export const PopupContainer = ({isOpen, onClose, style, noBackdropDismist, children}) =>{
+export const ModalContainer = ({isOpen, onClose, style, noBackdropDismist, children}) =>{
     const closeOnBackdrop = () =>{
         if (!noBackdropDismist) onClose?.();
     }

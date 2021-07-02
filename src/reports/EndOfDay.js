@@ -6,7 +6,7 @@ import { useStore } from '../context/Store';
 import { getEndOfDayReporByTimeStamp, getPayout } from '../database/database';
 import { printer } from '../document/Printer';
 import { tools } from '../tools/Tools';
-import { Loader } from '../widgets/Loader';
+import { Loader } from '../components/Loader';
 
 
 const unavailable = "Locked";

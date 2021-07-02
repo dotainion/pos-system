@@ -1,6 +1,6 @@
 import { IonButton, IonItem } from '@ionic/react';
 import React, { useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
+import { Entry } from './Entry';
 import { useStore } from '../context/Store';
 
 

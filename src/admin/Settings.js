@@ -2,7 +2,7 @@ import { IonButton, IonCard, IonContent, IonIcon, IonInput, IonItem, IonLabel, I
 import { addOutline, settings } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
-import { MenuBarWrapper } from '../components/MenuBar';
+import { MenuBarWrapper } from '../container/MenuBar';
 import { useStore } from '../context/Store';
 import { FlickerLabel } from '../widgets/FlickerLable';
 import { UpdateDiscount } from '../widgets/UpdateDiscount';

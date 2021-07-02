@@ -8,8 +8,9 @@ import { Entry } from './Entry';
 import { Select } from './Select';
 import img from '../images/beach.jpg';
 import { tools } from '../tools/Tools';
-import { PopupContainer } from './PopupContainer';
+import { ModalContainer } from '../container/ModalContainer';
 import { Progressing } from '../widgets/Progressing';
+import { Button } from '../widgets/Button';
 
 
 export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
@@ -60,7 +61,6 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
 
     useEffect(()=>{
         if (Object.keys(record || {})?.length > 0){
-            setInputStyle(" ");
             setImage(record?.info?.image);
             titleRef.current.value = record?.info?.title;
             salepriceRef.current.value = record?.info?.salePrice;
@@ -68,7 +68,6 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
             quantityRef.current.value = record?.info?.qty;
             quantityTypeRef.current.value = record?.info?.qtyType;
         }else{
-            setInputStyle("bg2");
             setImage("");
             titleRef.current.value = "";
             salepriceRef.current.value = "";
@@ -78,7 +77,7 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
         }
     },[record]);
     return(
-        <PopupContainer isOpen={isOpen} onClose={onClose}>
+        <ModalContainer isOpen={isOpen} onClose={onClose}>
             <div className="popup-header centered">
                 <div className="pad" style={{borderBottom:"1px solid black"}}>Add new product to inventory</div>
                 <div style={{fontWeight:"normal",fontSize:"15px",color:"orangered",textAlign:"center"}}>{error}</div>
@@ -92,16 +91,16 @@ export const AddProducts = ({isOpen, record, onUpdateComplete, onClose}) =>{
                     </IonThumbnail>
                 </div>
                 <div className="max-width">
-                    <Entry entryRef={titleRef} cssClass={inputStyle} label="Title" placeholder="Title" />
-                    <Entry entryRef={salepriceRef} cssClass={inputStyle} label="Sale Price" placeholder="Sale price" type="number" dollarSign />
-                    <Entry entryRef={costPriceRef} cssClass={inputStyle} label="Cost Price" placeholder="Cost price" type="number" dollarSign />
-                    <Entry entryRef={quantityRef} cssClass={inputStyle} placeholder={productQtyType} type="number" optionRef={quantityTypeRef} options={productQtyType} />
+                    <Entry entryRef={titleRef} label="Title" placeholder="Title" />
+                    <Entry entryRef={salepriceRef} label="Sale Price" placeholder="Sale price" type="number" dollarSign />
+                    <Entry entryRef={costPriceRef} label="Cost Price" placeholder="Cost price" type="number" dollarSign />
+                    <Entry entryRef={quantityRef} placeholder={productQtyType} type="number" optionRef={quantityTypeRef} options={productQtyType} />
                 </div>
             </div>
-            <div className="half-width max-width-on-mobile item-center">
-                <button disabled={loading} onClick={onAddProduct} className="btn" style={{float:"right",fontSize:"15px"}}>{Object.keys(record || {})?.length? "Update": "Save"}</button>
+            <div className="item-center max-width" style={{textAlign:"right",padding:"40px"}}>
+                <Button disabled={loading} onClick={onAddProduct} text={Object.keys(record || {})?.length? "Update": "Save"} />
             </div>
             <input hidden ref={imageRef} onChange={async(e)=>setImage(await tools.toBase64(e.target.files[0]))} type="file"/>
-        </PopupContainer>
+        </ModalContainer>
     )
 }

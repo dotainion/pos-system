@@ -4,16 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../context/Store';
 import { getProducts, addSale, updateCustomerReward, getCustomerReward, updateProducts, getEndOfDayReporByTimeStamp, getProductsById } from '../database/database';
 import { ToolBar } from '../layout/ToolBar';
-import { Alert } from '../widgets/Alert';
-import { Loader } from '../widgets/Loader';
-import { CustomerEntryActions } from '../widgets/CustomerEntryAction';
+import { Alert } from '../components/Alert';
+import { Loader } from '../components/Loader';
+import { CustomerEntryActions } from './CustomerEntryAction';
 import { PaymentWindow } from './PaymentWindow';
 import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
 import { MobileOrderEntryNav } from '../widgets/MobileProductNav';
-import { CalculatorDragable } from '../widgets/Calculator';
+import { CalculatorDragable } from '../app/Calculator';
 import { Discounts } from './Discounts';
 
 

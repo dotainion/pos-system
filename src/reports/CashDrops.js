@@ -5,8 +5,9 @@ import { Entry } from '../components/Entry';
 import { useStore } from '../context/Store';
 import { addCashDrops, getCashDrops } from '../database/database';
 import { tools } from '../tools/Tools';
-import { Calendar } from '../widgets/Calendar';
-import { Loader } from '../widgets/Loader';
+import { Calendar } from '../app/Calendar';
+import { Loader } from '../components/Loader';
+import { Button } from '../widgets/Button';
 
 
 
@@ -81,8 +82,8 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
             onSelect={onSearch}
             closeOnSelect
         />
-        <div hidden={!isOpen} className="flex">
-            <div className="half-width scroll pad scrollbar2 relative" style={{height:"80vh"}}>
+        <div hidden={!isOpen} className="flex d-flex-on-mobile">
+            <div className="max-width scroll border radius pad-xl scrollbar2 relative" style={{height:"80vh"}}>
                 <Loader isOpen={loading}/>
                 {
                     cashDrops.length?
@@ -97,8 +98,8 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
                     <div>No drops</div>
                 }
             </div>
-            <div className="half-width pad-xxl">
-                <div style={{width:"250px"}}>
+            <div className="max-width pad-xxl">
+                <div className="border radius pad-xl">
                     <div>Opened by: <b>{user?.name}</b></div>
                     <Entry label="Amount" inputPops={{value:inputValue,onKeyDown:e=>onAddInputValue(e.key)}} dollarSign placeholder="Cash drop amount" />
                     <div className="number-pad-container">
@@ -116,8 +117,8 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
                         <textarea ref={noteRef} className="max-width number-pad-note"/>
                     </div>
                     <div style={{textAlign:"right"}}>
-                        <button onClick={onAddCashDrops} disabled={loading} className="btn">Add Cash</button>
-                        <button onClick={onClear} className="btn" style={{marginLeft:"5px"}}>Clear</button>
+                        <Button disabled={loading} onClick={onAddCashDrops} text="Add Cash" />
+                        <Button onClick={onClear} text="Clear" spacing/>
                     </div>
                 </div>
             </div>

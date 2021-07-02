@@ -1,12 +1,12 @@
 import { IonList, IonPage } from '@ionic/react';
 import { businessOutline, calendarOutline, documentOutline, expandOutline, settingsOutline, shareOutline } from 'ionicons/icons';
 import React, { useState } from 'react';
-import { MenuBarWrapper } from '../components/MenuBar';
+import { MenuBarWrapper } from '../container/MenuBar';
 import { EndOfDay } from './EndOfDay';
 import { ReportBtnAndContainer } from './ReportBtnAndContainer';
 import { reportBtns } from '../content/lists';
 import { LowInventory } from './LowInventory';
-import { Calendar } from '../widgets/Calendar';
+import { Calendar } from '../app/Calendar';
 import { CashDrawers } from './CashDrawers';
 import { CashDrops } from './CashDrops';
 import { System } from './System';

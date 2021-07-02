@@ -134,7 +134,7 @@ export const AppContext = ({children}) =>{
             setIsAuthenticated(user);
             setLoading(false);
         });
-    },[]);  
+    },[]);
 
     const providerValue = {
         user,
@@ -170,3 +170,4 @@ export const AppContext = ({children}) =>{
         </ContextProvider.Provider>
     )
 }
+

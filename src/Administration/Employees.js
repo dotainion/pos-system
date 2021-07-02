@@ -3,13 +3,13 @@ import { addOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { FaDivide } from 'react-icons/fa';
 import { CreateEmployee } from '../components/CreateEmployee';
-import { MenuBarWrapper } from '../components/MenuBar';
+import { MenuBarWrapper } from '../container/MenuBar';
 import { useStore } from '../context/Store';
 import { getEmployees } from '../database/database';
 import img from '../images/beach.jpg';
 
 
-export const Employees = ({ isOpen }) => {
+export const Employees = ({ isOpen, onCreateOpen, onCreateClose }) => {
     const { user } = useStore();
     const [showCreateEmployee, setShowCreateEmployee] = useState(false);
     const [holdEmployeeToBeEdited, setHoldEmployeeToBeEdited] = useState({});
@@ -34,6 +34,14 @@ export const Employees = ({ isOpen }) => {
     useEffect(() => {
         getMyEmployees();
     }, []);
+
+    useEffect(()=>{
+        if (onCreateOpen) onAddEmployee();
+    },[onCreateOpen]);
+
+    useEffect(()=>{
+        if (!showCreateEmployee) onCreateClose?.();
+    },[showCreateEmployee]);
     return (
         <div hidden={!isOpen}>
             <CreateEmployee
@@ -42,7 +50,6 @@ export const Employees = ({ isOpen }) => {
                 onClose={() => setShowCreateEmployee(false)}
                 onUpdateComplete={getMyEmployees}
             />
-            <IonIcon onClick={onAddEmployee} style={{borderRadius:"50%",fontSize:"30px"}} icon={addOutline} />
 
             <IonList class="item-container">
                 {

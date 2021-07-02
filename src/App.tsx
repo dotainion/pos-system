@@ -25,16 +25,16 @@ import './theme/responsive.css';
 import './theme/actions.css';
 
 /* pages */
-import OrderEntry from './pages/OrderEntry';
+import OrderEntry from './orderEntery/OrderEntry';
 import { Login } from './authentication/Login';
 import { routes } from './global/Routes';
 import SecureRoutes from './SecureRoute';
-import { AppContext } from './context/Store';
+import { AppContext} from './context/Store';
 import { Products } from './admin/Products';
 import { Administration } from './Administration/Administration';
 import { Settings } from './admin/Settings';
 import { Register } from './authentication/Register';
-import { Payout } from './pages/Payout';
+import { Payout } from './orderEntery/Payout';
 import { AdminAccess } from './authentication/AdminAccess';
 import { ReportWindow } from './reports/ReportMain';
 

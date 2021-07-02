@@ -5,8 +5,9 @@ import { useHistory } from 'react-router';
 import { useStore } from '../context/Store';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
-import { Calendar } from '../widgets/Calendar';
+import { Calendar } from '../app/Calendar';
 import { SearchBar } from '../widgets/SearchBar';
+import { Button } from '../widgets/Button';
 
 
 
@@ -106,7 +107,13 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
                         <IonIcon onClick={toggleMenu} class="hamburger-menu silver" icon={reorderFourOutline}/>
                     </div>
                     <div hidden={!onAdd} className="relative menu-bar-btn-container">
-                        <button onClick={onAdd} style={{borderRadius:"50%",fontSize:"25px"}} className="float-center silver click2 pad hide-on-mobile"><IonIcon icon={addOutline}/></button>
+                        <Button 
+                            onClick={onAdd} 
+                            cssClass="hide-on-mobile float-center" 
+                            type="add"
+                            largeIcon
+                            transparent
+                        />
                     </div>
                     <div hidden={!onSave} className="relative menu-bar-btn-container">
                         <button onClick={onSave} className={`float-center ${saveBtnHilight? "success2":"silver"} pad radius click2`}>Save</button>

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
 import { tools } from '../tools/Tools';
 import img from '../images/beach.jpg';
-import { PopupContainer } from '../components/PopupContainer';
+import { ModalContainer } from '../container/ModalContainer';
 import { addCustomer } from '../database/database';
 import { useStore } from '../context/Store';
 
@@ -40,7 +40,7 @@ export const AddCustomer = ({isOpen, onClose}) =>{
         initCustomers();
     }
     return(
-        <PopupContainer isOpen={isOpen} onClose={onClose}>
+        <ModalContainer isOpen={isOpen} onClose={onClose}>
             <p className="pad-xl font-xl" style={{position:"relative",textAlign:"center"}}>
                 Add valued customer<br/>
                 <label className="float-bottom-overflow max-width font" style={{color:"red",left:"0px",textAlign:"center"}}>{error}</label>
@@ -58,6 +58,6 @@ export const AddCustomer = ({isOpen, onClose}) =>{
                 </div>
             </div>
             <input hidden ref={imageRef} onChange={async e=>setImage(await tools.toBase64(e.target.files[0] || "") || "")} type="file"/>
-        </PopupContainer>
+        </ModalContainer>
     )
 }

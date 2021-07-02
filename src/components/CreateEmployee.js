@@ -5,11 +5,12 @@ import { roles } from '../content/lists';
 import { useStore } from '../context/Store';
 import { addUser } from '../database/database';
 import { Entry } from './Entry';
-import { PopupContainer } from './PopupContainer';
+import { ModalContainer } from '../container/ModalContainer';
 import { Select } from './Select';
 import img from '../images/beach.jpg';
 import { tools } from '../tools/Tools';
 import { Progressing } from '../widgets/Progressing';
+import { Button } from '../widgets/Button';
 
 
 
@@ -17,7 +18,6 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
     const { user } = useStore();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [inputStyle, setInputStyle] = useState("");
     const [image, setImage] = useState("");
     const [showEmplyeeInput, setShowEmployeeInput] = useState({
         first: true,
@@ -80,7 +80,6 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
 
     useEffect(()=>{
         if (Object.keys(record || {})?.length > 0){
-            setInputStyle(" ");
             nameRef.current.value = record?.info?.name || "";
             emailRef.current.value = record?.info?.email || "";
             phoneLine1Ref.current.value = record?.info?.phone1 || "";
@@ -99,10 +98,10 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
             nextOfKinCountryRef.current.value = record?.info?.kinCountry || "";
             nextOfKinCityRef.current.value = record?.info?.kinCity || "";
             nextOfKinAddressRef.current.value = record?.info?.kinAddress || "";
-        }else setInputStyle("bg2");
+        }
     },[record]);
     return(
-        <PopupContainer isOpen={isOpen} onClose={onClose}>
+        <ModalContainer isOpen={isOpen} onClose={onClose}>
             <div className="popup-header centered">
                 <IonIcon onClick={onClose} class="close" icon={closeOutline}/>
                 <div className="pad" style={{borderBottom:"1px solid black"}}>
@@ -118,14 +117,14 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
                 <div hidden={!showEmplyeeInput.first}>
                     <div className="flex d-flex-on-mobile">
                         <div className="max-width">
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nameRef} placeholder="Full name" label="Full Name" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={phoneLine1Ref} placeholder="Phone number" label="Phone Line 1" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={phoneLine2Ref} placeholder="Phone number" label="Phone Line 2" />
+                            <Entry entryRef={nameRef} placeholder="Full name" label="Full Name" />
+                            <Entry entryRef={phoneLine1Ref} placeholder="Phone number" label="Phone Line 1" />
+                            <Entry entryRef={phoneLine2Ref} placeholder="Phone number" label="Phone Line 2" />
                         </div>
                         <div className="max-width">
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={countryRef} placeholder="Country" label="Country" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={cityRef} placeholder="city" label="City" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={addressRef} placeholder="Address" label="Address" />
+                            <Entry entryRef={countryRef} placeholder="Country" label="Country" />
+                            <Entry entryRef={cityRef} placeholder="city" label="City" />
+                            <Entry entryRef={addressRef} placeholder="Address" label="Address" />
                             <IonThumbnail onClick={()=>imageRef.current?.click()} class="item-center relative" style={{width:"100px",height:"100px",borderRadius:"50%",marginTop:"40px"}}>
                                 <IonImg src={image || img} class="max-size" style={{borderRadius:"50%"}} />
                                 <IonIcon icon={imagesOutline} class="float-top-left" style={{boxShadow:"2px 2px 5px black",margin:"5px"}} />
@@ -134,35 +133,35 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
                         </div>
                     </div>
                     <div className="pad-xxl" style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="btn">Next</button>
+                        <Button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} text="Next" />
                     </div>
                 </div>
                 <div hidden={!showEmplyeeInput.second} className="max-width">
                     <div className="flex d-flex-on-mobile">
                         <div className="max-width">
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinNameRef} placeholder="Full name" label="Next of kin Full Name" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinEmailRef} placeholder="example@gmail.com" label="Next of kin Email" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinPhoneLine1Ref} placeholder="Phone number" label="Next of kin Phone Line 1" />
+                            <Entry entryRef={nextOfKinNameRef} placeholder="Full name" label="Next of kin Full Name" />
+                            <Entry entryRef={nextOfKinEmailRef} placeholder="example@gmail.com" label="Next of kin Email" />
+                            <Entry entryRef={nextOfKinPhoneLine1Ref} placeholder="Phone number" label="Next of kin Phone Line 1" />
                         </div>
                         <div className="max-width">
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinPhoneLine2Ref} placeholder="Phone number" label="Next of kin Phone Line 2" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinCountryRef} placeholder="Country" label="Next of kin Country" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinCityRef} placeholder="city" label="Next of kin City" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={nextOfKinAddressRef} placeholder="Address" label="Next of kin Address" />
+                            <Entry entryRef={nextOfKinPhoneLine2Ref} placeholder="Phone number" label="Next of kin Phone Line 2" />
+                            <Entry entryRef={nextOfKinCountryRef} placeholder="Country" label="Next of kin Country" />
+                            <Entry entryRef={nextOfKinCityRef} placeholder="city" label="Next of kin City" />
+                            <Entry entryRef={nextOfKinAddressRef} placeholder="Address" label="Next of kin Address" />
                         </div>
                     </div>
                     <div className="pad-xxl" style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:true,second:false,third:false})} style={{fontSize:"15px"}} className="btn">Back</button>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:false,third:true})} style={{fontSize:"15px",marginLeft:"10px"}} className="btn">Next</button>
+                        <Button onClick={()=>setShowEmployeeInput({first:true,second:false,third:false})} text="Back" />
+                        <Button onClick={()=>setShowEmployeeInput({first:false,second:false,third:true})} text="Next" spacing />
                     </div>
                 </div>
                 <div hidden={!showEmplyeeInput.third}>
                     <div className="flex d-flex-on-mobile">
                         <div className="max-width">
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={emailRef} placeholder="example@gmail.com" label="Email" type="email" />
-                            <Select edit={!inputStyle} cssClass={inputStyle} selectRef={roleRef} label="Role" options={roles}/>
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={credsPasswordRef} placeholder="*********" label="Password" type="password" />
-                            <Entry edit={!inputStyle} cssClass={inputStyle} entryRef={credsConfirmRef} placeholder="*********" label="Confirm Password" type="password" />                
+                            <Entry entryRef={emailRef} placeholder="example@gmail.com" label="Email" type="email" />
+                            <Select selectRef={roleRef} label="Role" options={roles}/>
+                            <Entry entryRef={credsPasswordRef} placeholder="*********" label="Password" type="password" />
+                            <Entry entryRef={credsConfirmRef} placeholder="*********" label="Confirm Password" type="password" />                
                         </div>
                         <div className="max-width no-select pad">
                             <p>
@@ -173,11 +172,11 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
                         </div>
                     </div>
                     <div className="pad-xxl" style={{float:"right"}}>
-                        <button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} style={{fontSize:"15px"}} className="btn">Back</button>
-                        <button disabled={loading} onClick={onAddEmployee} style={{fontSize:"15px",marginLeft:"10px"}} className="btn">{Object.keys(record || {})?.length? "Update": "Save"}</button>
+                        <Button onClick={()=>setShowEmployeeInput({first:false,second:true,third:false})} text="Back" />
+                        <Button disabled={loading} onClick={onAddEmployee} text={Object.keys(record || {})?.length? "Update": "Save"} spacing />
                     </div>
                 </div>
             </div>
-        </PopupContainer>
+        </ModalContainer>
     )
 }

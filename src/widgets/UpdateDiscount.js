@@ -158,9 +158,9 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
                 </div>
                 <div className="settings-discount-left-container relative">
                     <div hidden={allowEdit} className="float-top-left max-size" style={{zIndex:"9"}}/>
-                    <Select label="Discount type" selectRef={discountTypRef} onChange={e=>setOnDiscountTypeChange(e.target.value)} options={discountTypes} defaultValue={discountTypes[1]} />
-                    <Entry label="Name of discount" entryRef={discountNameRef} error={error?.includes("name") ? error : ""} placeholder="Give discount a name" />
-                    <Entry label="Discounts" entryRef={discountAmountRef} error={error?.includes("amount") ? error : ""} placeholder="Play discount here" type="number" dollarSign={onDiscountTypeChange?.includes?.("$")} percentSign={onDiscountTypeChange?.includes?.("%")} />
+                    <Select cssOptionClass={!allowEdit && "inherit"} label="Discount type" selectRef={discountTypRef} onChange={e=>setOnDiscountTypeChange(e.target.value)} options={discountTypes} defaultValue={discountTypes[1]} />
+                    <Entry inputCss={!allowEdit && "inherit"} label="Name of discount" entryRef={discountNameRef} error={error?.includes("name") ? error : ""} placeholder="Give discount a name" />
+                    <Entry inputCss={!allowEdit && "inherit"} label="Discounts" entryRef={discountAmountRef} error={error?.includes("amount") ? error : ""} placeholder="Play discount here" type="number" dollarSign={onDiscountTypeChange?.includes?.("$")} percentSign={onDiscountTypeChange?.includes?.("%")} />
                 </div>
             </div>
             <div onClick={()=>toggleDiscRounds("once")} className="flex pad-mini">

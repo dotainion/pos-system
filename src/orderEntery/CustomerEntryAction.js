@@ -2,14 +2,14 @@ import { IonIcon } from '@ionic/react';
 import { addOutline, chevronDownOutline, chevronUpOutline, closeOutline, eyeOutline, saveOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Entry } from '../components/Entry';
-import { PopupContainer } from '../components/PopupContainer';
+import { ModalContainer } from '../container/ModalContainer';
 import { useStore } from '../context/Store';
 import { addCustomer } from '../database/database';
-import { SearchBar } from './SearchBar';
+import { SearchBar } from '../widgets/SearchBar';
 import img from '../images/beach.jpg';
 import { tools } from '../tools/Tools';
 import { AddCustomer } from './AddCustomer';
-import { Alert } from './Alert';
+import { Alert } from '../components/Alert';
 
 
 export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searchValue}) =>{
@@ -105,7 +105,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
     },[searchValue]);
     return(
         <>
-        <PopupContainer isOpen={isOpen} onClose={onClose}>
+        <ModalContainer isOpen={isOpen} onClose={onClose}>
             <div hidden={!toggleDisplay.addCustomer}  className="pad-xxl max-width" style={{color:"black"}}>
                 <div className="half-width max-width-on-mobile item-center">
                     <SearchBar
@@ -206,7 +206,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                     }
                 </div>
             </div>
-        </PopupContainer>
+        </ModalContainer>
         <AddCustomer
             isOpen={showAddCustomer}
             onClose={()=>setShowAddCustomer(false)}

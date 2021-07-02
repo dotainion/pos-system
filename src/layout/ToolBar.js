@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { useStore } from "../context/Store";
 import { routes } from "../global/Routes";
 import { tools } from "../tools/Tools";
-import { Alert } from "../widgets/Alert";
+import { Alert } from "../components/Alert";
 import { Dropdown } from "../widgets/Dropdown"
 
 
