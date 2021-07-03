@@ -2,7 +2,7 @@ import { IonCol, IonContent, IonGrid, IonIcon, IonPage, IonRow } from '@ionic/re
 import { addOutline, arrowBack, arrowBackOutline, arrowForwardOutline, cardOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { useStore } from '../context/Store';
 import { addUser } from '../database/database';
 import { routes } from '../global/Routes';

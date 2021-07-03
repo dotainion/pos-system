@@ -32,7 +32,7 @@ import SecureRoutes from './SecureRoute';
 import { AppContext} from './context/Store';
 import { Products } from './admin/Products';
 import { Administration } from './Administration/Administration';
-import { Settings } from './admin/Settings';
+import { Settings } from './settings/Settings';
 import { Register } from './authentication/Register';
 import { Payout } from './orderEntery/Payout';
 import { AdminAccess } from './authentication/AdminAccess';

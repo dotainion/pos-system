@@ -1,7 +1,7 @@
 import { IonIcon } from '@ionic/react';
 import { backspaceOutline, calendarOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { useStore } from '../context/Store';
 import { addCashDrops, getCashDrops } from '../database/database';
 import { tools } from '../tools/Tools';

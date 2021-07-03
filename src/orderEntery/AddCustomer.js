@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { tools } from '../tools/Tools';
 import img from '../images/beach.jpg';
 import { ModalContainer } from '../container/ModalContainer';
 import { addCustomer } from '../database/database';
 import { useStore } from '../context/Store';
+import { Button } from '../widgets/Button';
 
 
 export const AddCustomer = ({isOpen, onClose}) =>{
@@ -50,11 +51,16 @@ export const AddCustomer = ({isOpen, onClose}) =>{
                     <img onClick={()=>imageRef.current?.click()} src={image || img} className="float-center img-hover" style={{width:"80%",height:"150px",top:"40%"}} alt=""/>
                 </div>
                 <div className="max-width">
-                    <Entry entryRef={customerNameRef} type="text" cssClass="bg2" label="Name" placeholder="Name" />
-                    <Entry entryRef={customerEmailRef} type="email" cssClass="bg2" label="Email" placeholder="example@gmail.com" />
-                    <Entry entryRef={customerNumberRef} type="number" cssClass="bg2" label="Phone Number" placeholder="1474999999" />
-                    <Entry entryRef={customerIdRef} type="text" cssClass="bg2" label="Id Number" placeholder="Id#" />
-                    <button onClick={onSaveCustomer} className="btn" style={{float:"right",margin:"20px"}}>Save</button>
+                    <Entry entryRef={customerNameRef} type="text" label="Name" placeholder="Name" />
+                    <Entry entryRef={customerEmailRef} type="email" label="Email" placeholder="example@gmail.com" />
+                    <Entry entryRef={customerNumberRef} type="number" label="Phone Number" placeholder="1474999999" />
+                    <Entry entryRef={customerIdRef} type="text" label="Id Number" placeholder="Id#" />
+                    <div className="pad-xl" style={{float:"right"}}>
+                        <Button 
+                            onClick={onSaveCustomer}
+                            text="Save"
+                        />
+                    </div>
                 </div>
             </div>
             <input hidden ref={imageRef} onChange={async e=>setImage(await tools.toBase64(e.target.files[0] || "") || "")} type="file"/>

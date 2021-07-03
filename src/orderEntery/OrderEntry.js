@@ -12,22 +12,21 @@ import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
-import { MobileOrderEntryNav } from '../widgets/MobileProductNav';
+import { MobileOrderEntryNav } from '../layout/MobileProductNav';
 import { CalculatorDragable } from '../app/Calculator';
-import { Discounts } from './Discounts';
+import { Discounts } from '../app/Discounts';
+import { EditCart } from './EditCart';
+import { calc } from '../calc/Calculate';
 
 
 
 const OrderEntry = () => {
     const history = useHistory();
 
-    const { cart, user, setCart, products, initProducts, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, settings } = useStore();
+    const { cart, user, net, tax, discount, total, setCart, products, initProducts, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, settings } = useStore();
+    
     const [loading, setLoading] = useState(false);
     const [moreOption, setMoreOption] = useState(false);
-    const [tax, setTax] = useState(0);
-    const [net, setNet] = useState(0);
-    const [total, setTotal] = useState(0);
-    const [discount, setDiscount] = useState(0);
     const [showCustomerAction, setShowCustomerAction] = useState(false);
     const [customer, setCustomer] = useState({});
     const [customerSearchValue, setCustomerSearchValue] = useState("");
@@ -41,6 +40,7 @@ const OrderEntry = () => {
     const [showRecentAlert, setShowRecentAlert] = useState({state:false,data:null});
     const [showDiscounts, setShowDiscounts] = useState(false);
     const [showCostingAlert, setShowCostingAlert] = useState(false);
+    const [showEditCart, setShowEditCart] = useState({state:false,data:{}});
 
     const tenderedRef = useRef();
 
@@ -50,54 +50,20 @@ const OrderEntry = () => {
     }
 
     const updateCartQty = (item,value=null) =>{
-        let tempCart = [];
-        for (let cartItem of cart){
-            if (cartItem?.id === item?.id){
-                if (value) cartItem["qty"] = value;
-                else cartItem["qty"] = parseInt(cartItem["qty"]) +1;
-                if (tools.isMobile()) tools.toast(`(${item?.info?.title}) quantity changed to ${cartItem["qty"]}`);
-            }
-            tempCart.push(cartItem);
-        }
-        setCart(tempCart);
+        calc.updateCartQty(item, value);
     }
 
     const addToCart = (item) =>{
-        const qtyMessage = "No more item in stock";
-        const noStockErr = () =>tools.toast(qtyMessage,"warning",3000);
-        for (let cartItem of cart){
-            if (cartItem?.id === item?.id){
-                if (parseInt(cartItem?.qty) >= parseInt(item?.info?.qty)) return noStockErr();
-                return updateCartQty(item);
-            }
-        }
-        if (parseInt(item?.info?.qty) <= 0) return noStockErr();
-        if (tools.isMobile()) tools.toast(`(${item?.info?.title}) was added`);
-        let newItem = JSON.parse(JSON.stringify(item));
-        newItem["qty"] = 1;
-        delete newItem?.info["image"];
-        delete newItem?.info["costPrice"];
-        setCart([newItem,...cart]);
+        calc.addToCart(item);
     }
 
     const addMostRecentToCart = async(item) =>{
-        for (let cartProd of cart){//first check cart if item included
-            if (cartProd?.id === item?.id) return addToCart(cartProd);
-        }
-        for (let inProd of products){//then check products for item included
-            if (inProd?.id === item?.id) return addToCart(inProd);
-        }
-        const prod = await getProductsById(item?.id);//check if avaible in database if above fail
-        if (Object.keys(prod || {}).length) addToCart({info:prod,id:item?.id});
-        else setShowRecentAlert({state:true,data:item});//show alert if item not found
+        const prod = await calc.addMostRecentToCart(item);
+        if (Object.keys(prod || {}).length <= 0) setShowRecentAlert({state:true,data:item});
     }
 
     const deleteFromCart = (item) =>{
-        let tempCart = [];
-        for (let cartItem of cart){
-            if (cartItem?.id !== item?.id) tempCart.push(cartItem);
-        }
-        setCart(tempCart);
+        calc.deleteFromCart(item);
     }
 
     const onCloseSale = async() =>{
@@ -178,41 +144,14 @@ const OrderEntry = () => {
 
     //detect change in cart and update NET and TOTAL accordingly
     useEffect(()=>{
-        let sub = 0;
-        //calculate cost of sales items (cart or sales from database)
-        for (let cartItem of cart){
-            if (!cartItem?.info?.type){
-                let qty = parseFloat(cartItem?.qty);
-                let price = parseFloat(cartItem?.info?.salePrice);
-                sub = sub + (price * qty);
-            }
-        }
-        //calculate tax of total
-        let tempTax = ((sub / 100) * parseFloat(settings?.tax) || 0);
-
-        let disc = 0;
-        //calculate discounts if added in sales
-        for (let cartItem of cart){
-            if (cartItem?.info?.type){
-                if (cartItem?.info?.type?.includes("%")){
-                    let discAmount = parseFloat(cartItem?.info?.discount);
-                    disc += (((sub + tempTax) / 100) * parseFloat(discAmount) || 0);
-                }if (cartItem?.info?.type?.includes("$")){
-                    disc += parseFloat(cartItem?.info?.discount);
-                }
-            }
-        }
-        setNet(sub);
-        setTax(tempTax);
-        setDiscount(disc);
-        setTotal((sub + tempTax) - disc);
+        calc.caclulate();
     },[cart, settings]);
 
     //detect change in customer and update accordingly
     useEffect(()=>{
         initCustomerReward(customer);
     },[customer]);
-    console.log(tools.randomColor());
+
     return (
         <IonPage className="page">
             <ToolBar
@@ -281,6 +220,11 @@ const OrderEntry = () => {
                 onClose={()=>setShowDiscounts(false)}
                 onSelect={(discount)=>setCart([...cart, discount])}
             />
+            <EditCart
+                isOpen={showEditCart.state}
+                record={showEditCart.data}
+                onClose={()=>setShowEditCart({state:false,data:null})}
+            />
             <IonContent>
                 <div className="order-entry-main-container">
                     <div className="order-entry-cart-container">
@@ -327,9 +271,9 @@ const OrderEntry = () => {
 
                         <div className="sales-item-container bg">
                             {cart.map((order, key)=>(
-                                <div className="cart-item-hover flex relative" key={key} style={{color:order?.info?.type && "purple"}}>
+                                <div onClick={()=>setShowEditCart({state:true,data:order})} className="cart-item-hover flex relative" key={key} style={{color:order?.info?.type && "purple" || order?.info?.discount && "dodgerblue"}}>
                                     <div className="sales-item-name-header" style={{border:"none"}}>{order?.info?.title}</div>
-                                    <div className="sales-item-qty cart-qty-item-hover" style={{border:"none"}}>
+                                    <div onClick={e=>e.stopPropagation()} className="sales-item-qty cart-qty-item-hover" style={{border:"none"}}>
                                         <div className="inline">{order?.qty}&nbsp;</div>
                                         <div className="inline">{order?.info?.qtyType}</div>
                                         <input 
@@ -344,7 +288,7 @@ const OrderEntry = () => {
                                         {order?.info?.type? order?.info?.type: "$"}
                                         {order?.info?.type && "-"}{order?.info?.salePrice || order?.info?.discount}
                                     </div>
-                                    <span className="hide" style={{border:"none"}}>
+                                    <span onClick={e=>e.stopPropagation()} className="hide" style={{border:"none"}}>
                                         <IonIcon onClick={()=>deleteFromCart(order)} class="float-right close-hover font-xl" icon={closeOutline}/>
                                     </span>
                                 </div>

@@ -1,11 +1,11 @@
 import { IonIcon } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
-import { Select } from '../components/Select';
-import { discountTypes } from '../content/lists';
-import { useStore } from '../context/Store';
-import { tools } from '../tools/Tools';
+import { Entry } from '../../widgets/Entry';
+import { Select } from '../../widgets/Select';
+import { discountTypes } from '../../content/lists';
+import { useStore } from '../../context/Store';
+import { tools } from '../../tools/Tools';
 
 
 export const UpdateDiscount = ({onChangeDetect, isChange}) =>{

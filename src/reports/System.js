@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { useStore } from '../context/Store';
 import { Loader } from '../components/Loader';
 

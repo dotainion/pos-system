@@ -6,6 +6,8 @@ import { roles } from '../content/lists';
 import { getCustomer, getProducts, getSettings, getUser, updateSettings } from '../database/database';
 import { routes } from '../global/Routes';
 import { Landscape, Portrait } from '../screen/Screen';
+import { calc } from '../calc/Calculate';
+import { CacheableResponse } from 'workbox-cacheable-response';
 
 
 const ContextProvider = createContext();
@@ -24,6 +26,19 @@ export const AppContext = ({children}) =>{
     const [adminAccess, setAdminAccess] = useState(false);
     const [settings, setSettings] = useState({});
     const [discounts, setDiscounts] = useState([]);
+
+    //for caclulation of cart items
+    const [tax, setTax] = useState(0);
+    const [net, setNet] = useState(0);
+    const [total, setTotal] = useState(0);
+    const [discount, setDiscount] = useState(0);
+
+    calc.initCart(cart, setCart);
+    calc.initTax(tax, setTax);
+    calc.initNet(net, setNet);
+    calc.initTotal(total, setTotal);
+    calc.initDiscount(discount, setDiscount);
+    calc.initSettings(settings, setSettings);
 
     const signIn = async(email, password) =>{
         try{
@@ -162,7 +177,11 @@ export const AppContext = ({children}) =>{
         setSettings,
         changeSettings,
         discounts,
-        setDiscounts
+        setDiscounts,
+        net,
+        tax,
+        discount,//for calculation of cart
+        total,
     }
     return(
         <ContextProvider.Provider value={providerValue}>

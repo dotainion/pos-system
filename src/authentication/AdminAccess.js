@@ -1,7 +1,7 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonItem, IonPage, IonRow } from '@ionic/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { useStore } from '../context/Store';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';

@@ -1,11 +1,11 @@
 import { IonButton, IonCard, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonViewWillLeave } from '@ionic/react';
 import { addOutline, settings } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { MenuBarWrapper } from '../container/MenuBar';
 import { useStore } from '../context/Store';
 import { FlickerLabel } from '../widgets/FlickerLable';
-import { UpdateDiscount } from '../widgets/UpdateDiscount';
+import { UpdateDiscount } from './widgets/UpdateDiscount';
 
 
 

@@ -3,7 +3,7 @@ import { addOutline } from 'ionicons/icons';
 import React from 'react';
 
 
-export const Button = ({text, disabled, type, heilight, defaultColor, withBorder, transparent, cssClass, hidden, largeIcon, spacing, onClick, style, children}) =>{
+export const Button = ({text, color, disabled, type, heilight, defaultColor, withBorder, withBorderColor, transparent, cssClass, hidden, largeIcon, spacing, topSpacing, onClick, style, children}) =>{
     return(
         <button
             onClick={onClick}
@@ -11,15 +11,16 @@ export const Button = ({text, disabled, type, heilight, defaultColor, withBorder
             hidden={hidden}
             style={{
                 ...style,
-                color: heilight && "var(--border-heilight)",
+                color: !color? heilight && "var(--border-heilight)":color,
+                marginTop: topSpacing && "5px",
                 marginLeft: spacing && "10px",
                 marginRight: spacing && "10px",
                 background: transparent && "transparent",
-                border:!heilight? transparent && withBorder? "": "none":"1px solid var(--border-heilight)",
+                border:!heilight? transparent && withBorder? `1px solid ${withBorderColor}`: "none":"1px solid var(--border-heilight)",
                 boxShadow:transparent && "none",
             }}
             className={`${cssClass} ${defaultColor && "btn-color-override"} pad btn`}
-        >{text}
+        >{text}{children}
             {
                 type?.includes("add")
                 ?   <IonIcon

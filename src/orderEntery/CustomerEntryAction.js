@@ -1,7 +1,7 @@
 import { IonIcon } from '@ionic/react';
 import { addOutline, chevronDownOutline, chevronUpOutline, closeOutline, eyeOutline, saveOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../components/Entry';
+import { Entry } from '../widgets/Entry';
 import { ModalContainer } from '../container/ModalContainer';
 import { useStore } from '../context/Store';
 import { addCustomer } from '../database/database';
@@ -10,6 +10,7 @@ import img from '../images/beach.jpg';
 import { tools } from '../tools/Tools';
 import { AddCustomer } from './AddCustomer';
 import { Alert } from '../components/Alert';
+import { Button } from '../widgets/Button';
 
 
 export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searchValue}) =>{
@@ -122,13 +123,35 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
             </p>
             <div className="flex pad-xxl no-select" style={{backgroundColor:"gray"}}>
                 <div className="max-width centered">
-                    <button onClick={()=>toggleContainer("save-item")} style={{color:toggleDisplay.saveItem && "brown"}} className="pad btn-font radius silver shadow click">Stash for later <IonIcon icon={saveOutline}/></button>
+                    <Button 
+                        onClick={()=>toggleContainer("save-item")}
+                        //style={{color:toggleDisplay.saveItem && "brown"}}
+                        color={toggleDisplay.saveItem && "brown"}
+                        cssClass="silver"
+                        text="Stash for later"
+                    >
+                        &nbsp;<IonIcon icon={saveOutline}/>
+                    </Button>
                 </div>
                 <div className="max-width centered">
-                    <button onClick={()=>toggleContainer("view-item")} style={{color:toggleDisplay.viewItem && "brown"}} className="pad btn-font radius silver shadow click">View stash lists <IonIcon icon={eyeOutline}/></button>
+                    <Button 
+                        onClick={()=>toggleContainer("view-item")}
+                        color={toggleDisplay.viewItem && "brown"}
+                        cssClass="silver"
+                        text="View stash lists"
+                    >
+                        &nbsp;<IonIcon icon={eyeOutline}/>
+                    </Button>
                 </div>
                 <div className="max-width centered">
-                    <button onClick={()=>toggleContainer("add-customer")} style={{color:toggleDisplay.addCustomer && "brown"}} className="pad btn-font radius silver shadow click">Customers <IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/></button>
+                    <Button 
+                        onClick={()=>toggleContainer("add-customer")}
+                        color={toggleDisplay.addCustomer && "brown"}
+                        cssClass="silver"
+                        text="Customers"
+                    >
+                        &nbsp;<IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/>
+                    </Button>
                 </div>
             </div>
             <div hidden={!toggleDisplay.saveItem} className="pad entry-action-sub">
@@ -136,7 +159,11 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                     <Entry cssClass="bg2" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
                     <div className="pad-xl" style={{position:"relative"}}>
                         <div className="float-left">
-                            <button onClick={onSaveCartItem} className="btn" style={{marginLeft:"20px"}}>Save</button>
+                            <Button 
+                                onClick={onSaveCartItem}
+                                text="Save"
+                                spacing
+                            />
                         </div>
                     </div>
                 </div>
@@ -168,7 +195,10 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                             <div key={key}>
                                 <div onClick={()=>toggleItemOnHold(`${hold?.title}${key}`)} className="pad radius max-width pointer no-select silver border-bottom">
                                     <span>{hold?.title}<IonIcon hidden id={`${hold?.title}${key}up`} icon={chevronUpOutline}/><IonIcon id={`${hold?.title}${key}down`} icon={chevronDownOutline}/></span>
-                                    <button onClick={e=>onRestore(e,key)} style={{backgroundColor:"inherit",color:"darkgreen",float:"right"}}>Restore</button>
+                                    <Button 
+                                        onClick={e=>onRestore(e,key)}
+                                        text="Restore"
+                                    />
                                 </div>
                                 <div hidden id={`${hold?.title}${key}`} className="no-select" style={{backgroundColor:"rgb(0,0,0,0.5)"}}>
                                     {hold?.order?.map((order, key)=>(

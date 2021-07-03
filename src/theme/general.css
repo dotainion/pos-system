@@ -55,7 +55,9 @@
 }
 .inline{
     display: inline-block;
-    
+}
+.block{
+    display: block;
 }
 .label-hover:hover{
     background-color: lightgray;

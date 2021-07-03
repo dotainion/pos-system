@@ -1,7 +1,7 @@
 import { IonIcon, useIonViewWillEnter } from '@ionic/react';
 import { calendarOutline, printOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
-import { Select } from '../components/Select';
+import { Select } from '../widgets/Select';
 import { useStore } from '../context/Store';
 import { getEndOfDayReporByTimeStamp, getPayout } from '../database/database';
 import { printer } from '../document/Printer';
