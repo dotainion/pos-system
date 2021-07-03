@@ -90,6 +90,25 @@ export const AppContext = ({children}) =>{
         }
     }
 
+    const searchMostRecent = (value) =>{
+        let holdMatch = [];
+        let holdIds = [];
+        let most_recent = window.localStorage.getItem("most-recent");
+        if (most_recent){
+            for (let record of JSON.parse(most_recent)){
+                if (record?.info?.title.toLowerCase()?.includes(value?.toLowerCase()) && !holdIds?.includes(record?.id)){
+                    holdMatch.push(record);
+                    holdIds.push(record?.id);
+                }
+                if (record?.info?.salePrice.toLowerCase()?.includes(value?.toLowerCase()) && !holdIds?.includes(record?.id)){
+                    holdMatch.push(record);
+                    holdIds.push(record?.id);
+                }
+            }
+            setMostRecent(holdMatch);
+        }
+    }
+
     const initProducts = async(uid) =>{
         setShowProductLoader(true);
         setProducts(await getProducts(uid));
@@ -169,6 +188,7 @@ export const AppContext = ({children}) =>{
         mostRecent,
         saveMostRecent,
         removeMostRecent,
+        searchMostRecent,
         customers,
         initCustomers,
         adminAccess,

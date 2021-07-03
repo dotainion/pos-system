@@ -38,7 +38,7 @@ export const System = ({isOpen, setBarChild}) =>{
             <Loader isOpen={loading}/>
             <div className="half-width max-width-on-mobile float-top-center">
                 <div className="popup-header">Report System</div>
-                <Entry label="Low stock limit" entryRef={lowStockLimitRef} type="number" placeholder="Set low stock limit value here" />
+                <Entry label="Low stock limit" entryRef={lowStockLimitRef} type="number" placeholder="Set low stock limit value here - default to 5" />
             </div>
         </div>
     )

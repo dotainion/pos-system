@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { MenuBar, MenuBarWrapper } from '../container/MenuBar';
 import { BlankPage } from '../widgets/BlankPage';
 import { Button } from '../widgets/Button';
-import { Employees } from './Employees';
+import { Employees } from './employee/Employees';
 
 
 export const Administration = () =>{

@@ -2,11 +2,11 @@ import { IonIcon, IonImg, IonList, IonPage, IonThumbnail } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { FaDivide } from 'react-icons/fa';
-import { CreateEmployee } from '../components/CreateEmployee';
-import { MenuBarWrapper } from '../container/MenuBar';
-import { useStore } from '../context/Store';
-import { getEmployees } from '../database/database';
-import img from '../images/beach.jpg';
+import { CreateEmployee } from './widgets/CreateEmployee';
+import { MenuBarWrapper } from '../../container/MenuBar';
+import { useStore } from '../../context/Store';
+import { getEmployees } from '../../database/database';
+import img from '../../images/beach.jpg';
 
 
 export const Employees = ({ isOpen, onCreateOpen, onCreateClose }) => {

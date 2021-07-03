@@ -1,16 +1,16 @@
 import { IonIcon, IonImg, IonList, IonThumbnail } from '@ionic/react';
 import { closeOutline, imagesOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { roles } from '../content/lists';
-import { useStore } from '../context/Store';
-import { addUser } from '../database/database';
-import { Entry } from '../widgets/Entry';
-import { ModalContainer } from '../container/ModalContainer';
-import { Select } from '../widgets/Select';
-import img from '../images/beach.jpg';
-import { tools } from '../tools/Tools';
-import { Progressing } from '../widgets/Progressing';
-import { Button } from '../widgets/Button';
+import { roles } from '../../../content/lists';
+import { useStore } from '../../../context/Store';
+import { addUser } from '../../../database/database';
+import { Entry } from '../../../widgets/Entry';
+import { ModalContainer } from '../../../container/ModalContainer';
+import { Select } from '../../../widgets/Select';
+import img from '../../../images/beach.jpg';
+import { tools } from '../../../tools/Tools';
+import { Progressing } from '../../../widgets/Progressing';
+import { Button } from '../../../widgets/Button';
 
 
 

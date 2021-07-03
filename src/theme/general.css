@@ -77,11 +77,11 @@
 .v-seperator{
     border-right: 1px solid lightgray;
 }
-.more-option-float{
+.float-recent-option{
     position: absolute;
     width: 100%;
     transform: translateY(-100%);
-    border-top: 1px solid gray;
+    border-top: 5px solid black;
     border-bottom: 1px solid white;
 }
 .float-top-center{
@@ -506,17 +506,6 @@
     padding: 5px;
     color: rgb(48, 46, 46);
     background: linear-gradient(to bottom, rgb(235, 240, 243) 0%, rgb(129, 155, 170) 100%);
-}
-.more-option-btn{
-    position: relative;
-    display: inline;
-    margin-left: 20px;
-    padding-right: 20px;
-}
-.more-option-button-conotainer{
-    position: relative;
-    width: 60%;
-    text-align: center;
 }
 .click:active{
     transform: scale(1.02);
@@ -1193,4 +1182,10 @@
 }
 .flicker{
     animation: blink 1s infinite linear;
+}
+.recent-option-btn{
+    padding: 5px;
+    padding-left: 10px;
+    border-top-right-radius: 10px;
+    transform: translateY(-100%);
 }

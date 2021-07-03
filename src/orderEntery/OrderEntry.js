@@ -1,5 +1,5 @@
 import { IonCard, IonCardContent, IonContent, IonIcon, IonLabel, IonList, IonPage, useIonViewWillEnter } from '@ionic/react';
-import { addOutline, chevronDown, chevronDownOutline, chevronUpOutline, closeOutline, pencilOutline, personOutline, reorderFourOutline, saveOutline } from 'ionicons/icons';
+import { addOutline, chevronDown, chevronDownOutline, chevronUpOutline, closeOutline, pencilOutline, personOutline, radioButtonOnOutline, reorderFourOutline, saveOutline } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../context/Store';
 import { getProducts, addSale, updateCustomerReward, getCustomerReward, updateProducts, getEndOfDayReporByTimeStamp, getProductsById } from '../database/database';
@@ -17,13 +17,14 @@ import { CalculatorDragable } from '../app/Calculator';
 import { Discounts } from '../app/Discounts';
 import { EditCart } from './EditCart';
 import { calc } from '../calc/Calculate';
+import { NoRecords } from '../reports/NoRecords';
 
 
 
 const OrderEntry = () => {
     const history = useHistory();
 
-    const { cart, user, net, tax, discount, total, setCart, products, initProducts, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchProducts, settings } = useStore();
+    const { cart, user, net, tax, discount, total, setCart, products, initProducts, showProductLoader, mostRecent, saveMostRecent, removeMostRecent, searchMostRecent, searchProducts, settings } = useStore();
     
     const [loading, setLoading] = useState(false);
     const [moreOption, setMoreOption] = useState(false);
@@ -47,6 +48,17 @@ const OrderEntry = () => {
     const moreOptionToggle = () =>{
         if (moreOption) setMoreOption(false);
         else setMoreOption(true);
+    }
+
+    const isInMostRecent = (order) =>{
+        for (let recent of mostRecent){
+            if (recent?.id === order?.id) return true;
+        }
+        return false;
+    }
+
+    const searchRecent = (value) =>{
+        searchMostRecent(value);
     }
 
     const updateCartQty = (item,value=null) =>{
@@ -331,43 +343,49 @@ const OrderEntry = () => {
                                                     <div>${item?.info?.salePrice}</div>
                                                 </div>
                                             </div>
-                                            <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini click2 hide" style={{right:"10px",bottom:"8px"}}>
-                                                <IonIcon onClick={()=>saveMostRecent(item)} icon={saveOutline}/>
+                                            <div onClick={e=>e.stopPropagation()} className={`float-bottom-right pad-mini hide ${isInMostRecent(item) || "click2"}`} style={{right:"10px",bottom:"8px"}}>
+                                                <IonIcon hidden={isInMostRecent(item)} color="primary" onClick={()=>saveMostRecent(item)} icon={saveOutline}/>
+                                                <IonIcon hidden={!isInMostRecent(item)} color="success" icon={radioButtonOnOutline}/>
                                             </div>
                                         </div>
                                         )):
                                         <div className="pad-xxl">No records</div>
                                     }
                                 </div> 
-                                <div className="more-option-float">
-                                    <div onClick={moreOptionToggle} className="dark dark-hover pad-mini more-option-button-conotainer">
-                                        <div className="more-option-btn pad-mini">
-                                            <label>More</label>
-                                            <div className="float-right">
-                                                <IonIcon hidden={moreOption} style={{fontSize:"20px"}} icon={chevronUpOutline}/>
-                                            </div>
-                                            <div className="float-right">
-                                                <IonIcon hidden={!moreOption} style={{fontSize:"20px"}} icon={chevronDownOutline}/>
-                                            </div>
+                                <div className="float-recent-option">
+                                    <div onClick={moreOptionToggle} className="float-top-left dark dark-hover recent-option-btn">
+                                        <div hidden={moreOption} className="flex">
+                                            <label>Recent</label>
+                                            <IonIcon icon={chevronUpOutline}/>
+                                        </div>
+                                        <div hidden={!moreOption} className="flex" onClick={e=>e.stopPropagation()} style={{width:"250px"}}>
+                                            <SearchBar onSearch={searchRecent} placeholder="Search Recent" />
+                                            <IonIcon onClick={moreOptionToggle} style={{fontSize:"30px",color:"red"}} icon={closeOutline}/>
                                         </div>
                                     </div>
                                     <div hidden={!moreOption} className="more-option-item-container scrollbar2">
-                                        {mostRecent.map((item, key)=>(
-                                            <div className="sales-item" key={key}>
-                                                <div onClick={()=>addMostRecentToCart(item)} className="sales-item-sub dark-blue click">
-                                                    <div className="sales-item-image">
-                                                        <img hidden={!item?.info?.image} className="max-size" src={item?.info?.image} alt=""/>
+                                        {
+                                            mostRecent.length?
+                                            mostRecent.map((item, key)=>(
+                                                <div className="sales-item" key={key}>
+                                                    <div onClick={()=>addMostRecentToCart(item)} className="sales-item-sub dark-blue click">
+                                                        <div className="sales-item-image">
+                                                            <img hidden={!item?.info?.image} className="max-size" src={item?.info?.image} alt=""/>
+                                                        </div>
+                                                        <div className="sales-item-content">
+                                                            <div>{item?.info?.title}</div>
+                                                            <div>${item?.info?.salePrice}</div>
+                                                        </div>
                                                     </div>
-                                                    <div className="sales-item-content">
-                                                        <div>{item?.info?.title}</div>
-                                                        <div>${item?.info?.salePrice}</div>
+                                                    <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini click2"  style={{right:"10px",bottom:"8px"}}>
+                                                        <IonIcon onClick={()=>removeMostRecent(item)} class="close-hover" icon={closeOutline}/>
                                                     </div>
                                                 </div>
-                                                <div onClick={e=>e.stopPropagation()} className="float-bottom-right pad-mini click2"  style={{right:"10px",bottom:"8px"}}>
-                                                    <IonIcon onClick={()=>removeMostRecent(item)} class="close-hover" icon={closeOutline}/>
-                                                </div>
+                                            )):
+                                            <div style={{height:"200px"}}>
+                                                <NoRecords onRefresh={()=>searchRecent("")} color="white" />
                                             </div>
-                                        ))}
+                                        }
                                     </div>
                                 </div> 
                             </div>

@@ -1,7 +1,7 @@
 import { IonButton, IonCard, IonContent, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonThumbnail } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
-import { AddProducts } from '../components/AddProducts';
+import { AddProducts } from './AddProducts';
 import { MenuBarWrapper } from '../container/MenuBar';
 import { useStore } from '../context/Store';
 import { getProducts } from '../database/database';
