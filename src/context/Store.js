@@ -8,6 +8,7 @@ import { routes } from '../global/Routes';
 import { Landscape, Portrait } from '../screen/Screen';
 import { calc } from '../calc/Calculate';
 import { CacheableResponse } from 'workbox-cacheable-response';
+import { tools } from '../tools/Tools';
 
 
 const ContextProvider = createContext();
@@ -136,6 +137,11 @@ export const AppContext = ({children}) =>{
         setShowProductLoader(false);
     }
 
+    const logOffAdmin = () =>{
+        tools.token.clear();
+        setAdminAccess(false);
+    }
+
     const initCustomers = async(uid) =>{
         setCustomers(await getCustomer(uid));
     }
@@ -157,8 +163,11 @@ export const AppContext = ({children}) =>{
 
     //listen for change in user
     useEffect(()=>{
-        if (user) document.title = user?.businessName;
-        else document.title = "Pos system";
+        if (user){
+            document.title = user?.businessName;
+            //check if authentication saved in jwt
+            if (tools.token.isActive(user?.email)) setAdminAccess(true);
+        }else document.title = "Pos system";
     },[user]);
 
     useEffect(()=>{
@@ -193,6 +202,7 @@ export const AppContext = ({children}) =>{
         initCustomers,
         adminAccess,
         setAdminAccess,
+        logOffAdmin,
         settings,
         setSettings,
         changeSettings,

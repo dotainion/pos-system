@@ -11,7 +11,7 @@ import { Progressing } from '../widgets/Progressing';
 export const AdminAccess = () =>{
     const history = useHistory();
 
-    const { signIn, adminAccess, setAdminAccess } = useStore();
+    const { user, signIn, adminAccess, setAdminAccess } = useStore();
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -27,6 +27,7 @@ export const AdminAccess = () =>{
         if (response?.error) return setError(response?.error);
         emailRef.current.value = "";
         passwordRef.current.value = "";
+        tools.token.set(user?.email);
         setAdminAccess(true);
     }
 

@@ -42,7 +42,7 @@ const nav = [
 
 export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, barChild, barChildren, children}) =>{
     const history = useHistory();
-    const { setAdminAccess, user } = useStore();
+    const { logOffAdmin, user } = useStore();
     const [showSideMenu, setShowSideMenu] = useState("hide-menu");
     const [hideToolbar, setHideToolbar] = useState(true);
 
@@ -59,6 +59,11 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
 
     const routeTo = (path) =>{
         history.push({pathname:path,state:path});
+    }
+
+    const logOff = () =>{
+        logOffAdmin();
+        history.push(routes.orderEntry);
     }
 
     useEffect(()=>{
@@ -84,7 +89,7 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
                     </IonMenuToggle>
                 ))}
                 <IonMenuToggle autoHide={false}>
-                    <IonItem onClick={()=>{history.push(routes.orderEntry); setAdminAccess(false)}} className="menu-button close-hover" lines="none">
+                    <IonItem onClick={logOff} className="menu-button close-hover" lines="none">
                         <IonIcon class="menu-button-icon" slot="start" icon={logOutOutline} />
                         <IonLabel>Log off</IonLabel>
                     </IonItem>

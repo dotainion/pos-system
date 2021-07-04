@@ -1,6 +1,51 @@
 import { routes } from "../global/Routes";
-import { weekDay } from '../content/lists';
+const jwt = require('jsonwebtoken');
 
+class Token{
+    tokenKey = "somekey";
+    storagekey = "pop-token";
+    set(ref="",hour=1){
+        const token = jwt.sign({email:ref}, this.tokenKey, { expiresIn: `${hour}h`});
+        try{
+            const getToken = this.get();
+            if (getToken){
+                let tokenList = [];
+                for (let tok of getToken) tokenList.push(tok);
+                tokenList.push(token);
+                window.localStorage.setItem(this.storagekey,JSON.stringify(tokenList));
+            }else window.localStorage.setItem(this.storagekey,JSON.stringify([token]));
+        }catch{
+            window.localStorage.setItem(this.storagekey,JSON.stringify([token]));
+        }
+    }
+    get(){
+        const token = window.localStorage.getItem(this.storagekey);
+        if (token) return JSON.parse(token);
+        return [];
+    }
+    detete(refToken){
+        let storeSave = [];
+        for (let token of this.get()){
+            if (token !== refToken) storeSave.push(token);
+        }
+        window.localStorage.setItem(this.storagekey,JSON.stringify(storeSave));
+    }
+    isActive(ref=""){
+        try{
+            for (let token of this.get()){
+                const res = jwt.verify(token, this.tokenKey);
+                if (res){
+                    if (res.email === ref) return true;
+                }else this.detete(token);
+            }
+            return false;
+        }catch{return false;}
+    }
+    clear(key="all"){
+        if (key.toLowerCase() === "all") window.localStorage.clear();
+        else window.localStorage.removeItem(key);
+    }
+}
 
 class Routes{
     key = "routes-for-admin-access";
@@ -13,8 +58,10 @@ class Routes{
         return routes.orderEntry;
     }
 }
+
 class Tools{
     route = new Routes();
+    token = new Token();
     isMobile(){
         if (window.innerWidth <= 767) return true
         else return false;
