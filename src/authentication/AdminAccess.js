@@ -27,7 +27,6 @@ export const AdminAccess = () =>{
         if (response?.error) return setError(response?.error);
         emailRef.current.value = "";
         passwordRef.current.value = "";
-        tools.token.set(user?.email);
         setAdminAccess(true);
     }
 
@@ -37,7 +36,10 @@ export const AdminAccess = () =>{
 
     //detects change in adminAccess and push route
     useEffect(()=>{
-        if (adminAccess) history.push(tools.route.get());
+        if (adminAccess){
+            tools.token.set(user?.email);
+            history.push(tools.route.get());
+        }
     },[adminAccess]);
     return(
         <IonPage>

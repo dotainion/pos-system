@@ -11,32 +11,43 @@ class Token{
             if (getToken){
                 let tokenList = [];
                 for (let tok of getToken) tokenList.push(tok);
-                tokenList.push(token);
-                window.localStorage.setItem(this.storagekey,JSON.stringify(tokenList));
-            }else window.localStorage.setItem(this.storagekey,JSON.stringify([token]));
+                tokenList.push({email:ref, key:token});
+                this.save(tokenList);
+            }else this.save([token]);
         }catch{
-            window.localStorage.setItem(this.storagekey,JSON.stringify([token]));
+            this.save([{email:ref, key:token}]);
         }
+    }
+    save(obj){
+        window.localStorage.setItem(this.storagekey,JSON.stringify(obj));
     }
     get(){
         const token = window.localStorage.getItem(this.storagekey);
         if (token) return JSON.parse(token);
         return [];
     }
-    detete(refToken){
+    detete(ref, refToken=null){
         let storeSave = [];
         for (let token of this.get()){
-            if (token !== refToken) storeSave.push(token);
+            if (!refToken){
+                if (token?.email !== ref) storeSave.push(token);
+            }else{
+                if (token?.email === ref && token.key !== refToken) storeSave.push(token);
+            }
         }
-        window.localStorage.setItem(this.storagekey,JSON.stringify(storeSave));
+        this.save(storeSave);
     }
     isActive(ref=""){
         try{
             for (let token of this.get()){
-                const res = jwt.verify(token, this.tokenKey);
-                if (res){
-                    if (res.email === ref) return true;
-                }else this.detete(token);
+                let res = null;
+                try{
+                    res = jwt.verify(token?.key, this.tokenKey);
+                }finally{
+                    if (res){
+                        if (res.email === ref) return true;
+                    }else this.detete(ref, token?.key);
+                }
             }
             return false;
         }catch{return false;}

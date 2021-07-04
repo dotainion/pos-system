@@ -114,7 +114,7 @@ export const AppContext = ({children}) =>{
         setShowProductLoader(true);
         setProducts(await getProducts(uid));
         setShowProductLoader(false);
-        setMostRecent(JSON.parse(window.localStorage.getItem("most-recent") || []));
+        setMostRecent(JSON.parse(window.localStorage.getItem("most-recent")) || []);
     }
 
     //on search value
@@ -138,7 +138,7 @@ export const AppContext = ({children}) =>{
     }
 
     const logOffAdmin = () =>{
-        tools.token.clear();
+        tools.token.detete(user?.email);
         setAdminAccess(false);
     }
 
@@ -163,7 +163,7 @@ export const AppContext = ({children}) =>{
 
     //listen for change in user
     useEffect(()=>{
-        if (user){
+        if (Object.keys(user || {}).length){
             document.title = user?.businessName;
             //check if authentication saved in jwt
             if (tools.token.isActive(user?.email)) setAdminAccess(true);
