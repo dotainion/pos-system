@@ -2,6 +2,7 @@ import { IonIcon, IonItemDivider } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '../context/Store';
+import { Button } from '../widgets/Button';
 
 
 export const Discounts = ({isOpen, onClose, onSelect}) =>{
@@ -61,7 +62,7 @@ export const Discounts = ({isOpen, onClose, onSelect}) =>{
                     }
                 </div>
                 <div className="pad-xl" style={{textAlign:"right"}}>
-                    <button onClick={triggerClose} className="pad pad-h-x radius click silver shadow">Done</button>
+                    <Button onClick={triggerClose} text="Done" />
                 </div>
             </div>
         </div>

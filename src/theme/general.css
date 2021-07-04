@@ -40,6 +40,19 @@
     background-repeat: no-repeat;
     background-image: url(../images/beach.jpg);
 }
+.floating-side-bar-backdrop{
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    z-index: 99999999999999;
+    animation: modal 0.5s linear forwards;
+}
+.floating-side-bar{
+    width: 300px;
+    height: 100vh;
+    position: absolute;
+    z-index: 99999999999999;
+}
 .login-main-container{
     height: 98vh;
 }
@@ -949,7 +962,7 @@
 }
 .refund-container{
     width: 95%;
-    height: 70%;
+    height: 85%;
     padding: 20px;
     margin-top: 10px;
     box-shadow: 1px 1px 5px black;
@@ -1183,9 +1196,17 @@
 .flicker{
     animation: blink 1s infinite linear;
 }
+.payout-search-container{
+    width: 30%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
 .recent-option-btn{
     padding: 5px;
     padding-left: 10px;
     border-top-right-radius: 10px;
     transform: translateY(-100%);
+}
+.alert-shack{
+    animation: shack 0.1s linear infinite;
 }

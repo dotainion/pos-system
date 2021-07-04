@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { useStore } from '../context/Store';
 import { routes } from '../global/Routes';
 import { tools } from '../tools/Tools';
-import { Calendar } from '../app/Calendar';
+import { CalendarPopup } from '../app/Calendar';
 import { SearchBar } from '../widgets/SearchBar';
 import { Button } from '../widgets/Button';
 

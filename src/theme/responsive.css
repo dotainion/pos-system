@@ -110,8 +110,8 @@
         height: 93vh;
         padding-bottom: 40px;
     }
-    .search-left-pad-on-mobile{
-        padding-left:35px;
+    .payout-search-container{
+        width: 70%;
     }
     .customer-image-icon{
         font-size: 30px;
@@ -163,6 +163,9 @@
         width: 5px;
         height: 5px;
         background: linear-gradient(to right, rgb(238, 236, 236) 0%, rgb(5, 5, 5) 100%);
+    }
+    .refund-container{
+        padding: 10px;
     }
     .prod-mobile-bottom-nav{
         position: fixed;

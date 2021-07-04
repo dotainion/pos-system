@@ -66,6 +66,8 @@ export const ToolBar = ({onOpenCalc, onOpenPayOut, onOpenDiscounts}) =>{
                     tools.route.set(showAlert.route);
                     history.push(showAlert.route);
                 }}
+                okText="Yes"
+                cancelText="No"
                 message="Requires admin profilage, will you like to continue?"
             />
             <div className="no-select h-seperator pad dark font-mini" style={{position:"relative"}}>

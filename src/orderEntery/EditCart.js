@@ -85,7 +85,7 @@ export const EditCart = ({isOpen, onClose, record}) =>{
     return(
         <>
         <FlexContainer isOpen={isOpen} onClose={onClose}>
-            <div className="flex pad-xl relative">
+            <div className="flex pad-xl relative radius" style={{border:"1px solid white"}}>
                 <div hidden={!record?.info?.discount} className="float-center max-size no-select" style={{zIndex:"1"}}>
                     <div className="float-center half-width pad-xl centered bg border radius">
                         <div>Will you like to delete this discount</div>
@@ -101,11 +101,11 @@ export const EditCart = ({isOpen, onClose, record}) =>{
                     <Entry entryRef={priceRef} inherit disabled placeholder="Price" dollarSign />
                 </div>
                 <div className="pad-xl">
-                    <Button onClick={()=>discountOpen(discType.order)} topSpacing withBorder withBorderColor="white" color="blue" text="Order Descount" cssClass="block max-width" transparent />
-                    <Button onClick={()=>discountOpen(discType.item)} topSpacing withBorder withBorderColor="white" color="dodgerblue" text="Item Descount" cssClass="block max-width" transparent />
-                    <Button onClick={onApply} text="Apply" topSpacing withBorder withBorderColor="white" color="green" cssClass="block max-width" transparent />
-                    <Button onClick={onCancel} text="Cancel" topSpacing withBorder withBorderColor="white" color="black" cssClass="block max-width" transparent />
-                    <Button onClick={onDelete} text="Delete" topSpacing withBorder withBorderColor="white" color="red" cssClass="block max-width" transparent />
+                    <Button onClick={()=>discountOpen(discType.order)} topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="blue" text="Order Descount" cssClass="block max-width link-hover" />
+                    <Button onClick={()=>discountOpen(discType.item)} topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="dodgerblue" text="Item Descount" cssClass="block max-width link-hover" />
+                    <Button onClick={onApply} text="Apply" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="green" cssClass="block max-width link-hover" />
+                    <Button onClick={onCancel} text="Cancel" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="black" cssClass="block max-width link-hover" />
+                    <Button onClick={onDelete} text="Delete" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="red" cssClass="block max-width link-hover" />
                 </div>
             </div>
         </FlexContainer>

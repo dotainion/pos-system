@@ -6,7 +6,7 @@ import { EndOfDay } from './EndOfDay';
 import { ReportBtnAndContainer } from './ReportBtnAndContainer';
 import { reportBtns } from '../content/lists';
 import { LowInventory } from './LowInventory';
-import { Calendar } from '../app/Calendar';
+import { CalendarPopup } from '../app/Calendar';
 import { CashDrawers } from './CashDrawers';
 import { CashDrops } from './CashDrops';
 import { System } from './System';
@@ -76,7 +76,7 @@ export const ReportWindow = () =>{
 
     return(
         <IonPage>
-            <Calendar
+            <CalendarPopup
                 isOpen={showCalendar}
                 onClose={()=>setShowCalendar(false)}
                 onSelect={setCalandarValue}

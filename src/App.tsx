@@ -34,7 +34,7 @@ import { Products } from './admin/Products';
 import { Administration } from './Administration/Administration';
 import { Settings } from './settings/Settings';
 import { Register } from './authentication/Register';
-import { Payout } from './orderEntery/Payout';
+import { Payout } from './payout/Payout';
 import { AdminAccess } from './authentication/AdminAccess';
 import { ReportWindow } from './reports/ReportMain';
 

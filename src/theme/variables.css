@@ -76,9 +76,10 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 
   /* custome variables*/
-  --bg-color: rgb(207, 205, 205);
+  --bg-color: rgb(187, 187, 187);
   --bg-text-color: rgb(5, 5, 5);
   --border-heilight: orange;
+  --dark-gray: rgb(56, 56, 56);
 }
 
 @media (prefers-color-scheme: dark) {

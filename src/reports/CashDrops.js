@@ -5,7 +5,7 @@ import { Entry } from '../widgets/Entry';
 import { useStore } from '../context/Store';
 import { addCashDrops, getCashDrops } from '../database/database';
 import { tools } from '../tools/Tools';
-import { Calendar } from '../app/Calendar';
+import { CalendarPopup } from '../app/Calendar';
 import { Loader } from '../components/Loader';
 import { Button } from '../widgets/Button';
 
@@ -76,7 +76,7 @@ export const CashDrops = ({isOpen, setBarChild}) =>{
     },[isOpen]);
     return(
         <>
-        <Calendar
+        <CalendarPopup
             isOpen={showCalendar}
             onClose={()=>setShowCalendar(false)}
             onSelect={onSearch}
