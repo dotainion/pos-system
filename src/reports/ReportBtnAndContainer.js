@@ -1,5 +1,5 @@
 import { IonIcon, IonItem } from '@ionic/react';
-import { backspaceOutline, people, peopleOutline, reorderFourOutline, reorderThreeOutline } from 'ionicons/icons';
+import { backspaceOutline, lockClosedOutline, people, peopleOutline, reorderFourOutline, reorderThreeOutline } from 'ionicons/icons';
 import React, { useState } from 'react';
 import { AiOutlineMenuUnfold } from 'react-icons/ai';
 import { IoReturnUpBack } from 'react-icons/io5';
@@ -8,6 +8,10 @@ import { reportBtns } from '../content/lists';
 export const ReportBtnAndContainer = ({isOpen, onSelect, btnHilight, children}) =>{
     const [showChildReport, setShowChildReport] = useState("");
     
+    const isLocked = (title) =>{
+        if (reportBtns[4] === title) return false;
+        return true;
+    }
 
     const triggerSelect = (value) =>{
         onSelect?.(value);
@@ -29,13 +33,14 @@ export const ReportBtnAndContainer = ({isOpen, onSelect, btnHilight, children}) 
             <div className="report-main-container">
                 {reportBtns.map((title, key)=>(
                     <div className="report-container" key={key}>
-                        <div onClick={()=>triggerSelect(title)} style={{color:btnHilight === title? "orange": ""}} className="report-inner-container flex dark">
+                        <div onClick={()=>triggerSelect(title)} style={{color:btnHilight === title? "orange": ""}} className="report-inner-container relative flex dark">
                             <div className="pad">
                                 <AiOutlineMenuUnfold style={{fontSize:"30px"}}/>
                             </div>
                             <div className="relative max-width">
                                 <span className="float-left">{title}</span>
                             </div>
+                            <IonIcon hidden={!isLocked(title)} class="float-bottom-right pad-xl" color="danger" icon={lockClosedOutline} />
                         </div>
                     </div>
                 ))}

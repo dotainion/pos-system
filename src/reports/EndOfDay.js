@@ -82,7 +82,7 @@ export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
         <div id="end-of-day" hidden={!isOpen}>
             <Loader isOpen={showLoader} />
             <div className="dark" style={{borderRadius:"25px"}}>
-                <Select options={["CURRENT DAY - POS STATIONS"]} />
+                <Select options={["CURRENT DAY - POS STATIONS"]} style={{border:"none"}} />
             </div>
             <div className="flex border-bottom">
                 <div className="max-width pad">LAST END OF DAY SELECT</div>

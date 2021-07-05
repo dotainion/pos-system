@@ -90,6 +90,9 @@
 .v-seperator{
     border-right: 1px solid lightgray;
 }
+.margin-v-bottom{
+    margin-bottom: 20px;
+}
 .float-recent-option{
     position: absolute;
     width: 100%;

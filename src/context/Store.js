@@ -7,7 +7,6 @@ import { getCustomer, getProducts, getSettings, getUser, updateSettings } from '
 import { routes } from '../global/Routes';
 import { Landscape, Portrait } from '../screen/Screen';
 import { calc } from '../calc/Calculate';
-import { CacheableResponse } from 'workbox-cacheable-response';
 import { tools } from '../tools/Tools';
 
 
@@ -154,12 +153,17 @@ export const AppContext = ({children}) =>{
         setSettings(setting);
         await updateSettings(setting, user?.storeId);
     }
-
+    
     const initialize = (uid) =>{
         initProducts(uid);
         initCustomers(uid);
         initSettings(uid);
     }
+
+    //listen for change in settings
+    useEffect(()=>{
+        setDiscounts(settings?.discounts || []);
+    },[settings]);
 
     //listen for change in user
     useEffect(()=>{

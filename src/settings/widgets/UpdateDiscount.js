@@ -6,9 +6,10 @@ import { Select } from '../../widgets/Select';
 import { discountTypes } from '../../content/lists';
 import { useStore } from '../../context/Store';
 import { tools } from '../../tools/Tools';
+import { NoRecords } from '../../reports/NoRecords';
 
 
-export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
+export const UpdateDiscount = ({onChangeMade, isChange}) =>{
     const { settings, discounts, setDiscounts } = useStore();
 
     const [onDiscountTypeChange, setOnDiscountTypeChange] = useState();
@@ -51,7 +52,7 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
                 }
             }
             setDiscounts([...discounts, addObj]);
-            onChangeDetect?.(true);
+            onChangeMade?.(true);
         }else{
             let index = 0;
             let newObject = JSON.parse(JSON.stringify(discounts));
@@ -65,14 +66,14 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
                         editObj?.runOnce === obj?.runOnce
                     ) return setError("No change detected");
 
-                    for (let isExist of newObject){
+                    for (let isExist of newObject || []){
                         if (isExist?.title === editObj?.title){
                             return setError("Title alrady exist");
                         }
                     }
 
                     newObject[index] = editObj;
-                    onChangeDetect?.(true);
+                    onChangeMade?.(true);
                 } index ++;
             }
             setDiscounts(newObject)
@@ -91,7 +92,7 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
     }
 
     const isIncluedInDb = (obj) =>{
-        for (let sObj of settings?.discounts){
+        for (let sObj of settings?.discounts || []){
             if (obj?.title === sObj?.title) return "";
         }
         return "1px solid dodgerblue";
@@ -128,10 +129,9 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
 
     useEffect(()=>{
         setOnDiscountTypeChange(discountTypRef.current.value);
-        setDiscounts(settings?.discounts || []);
     },[]);
     return(
-        <div className="pad-h-xl gray border radius">
+        <div className="pad-h-xl gray border radius margin-v-bottom">
             <div className="popup-header">
                 <span>
                     <label>Discounts</label>
@@ -145,7 +145,7 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
                 </div>
             </div>
             <div className="flex d-flex-on-mobile">
-                <div className="settings-discount-container gray2 scrollbar">
+                <div className="settings-discount-container gray2 scrollbar relative">
                     {
                         discounts?.length?
                         discounts?.map((disc, key)=>(
@@ -153,7 +153,7 @@ export const UpdateDiscount = ({onChangeDetect, isChange}) =>{
                                 <label>{disc?.title}</label>
                             </div>
                         )):
-                        <div>No discounts</div>
+                        <NoRecords/>
                     }
                 </div>
                 <div className="settings-discount-left-container relative">

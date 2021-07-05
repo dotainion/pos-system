@@ -18,8 +18,6 @@ export const EditCart = ({isOpen, onClose, record}) =>{
     const [discTypeSelected, setDiscTypeSelected] = useState("");
 
     const qtyRef = useRef();
-    const priceRef = useRef();
-    const productRef = useRef();
 
     const discountOpen = (type) =>{
         setDiscTypeSelected(type);
@@ -42,6 +40,10 @@ export const EditCart = ({isOpen, onClose, record}) =>{
 
     const onApply = () =>{
         onClose?.();
+    }
+
+    const onChangeQty = (e) =>{
+        calc.updateCartQty(record, e?.target?.value);
     }
 
     const onDiscSelected = (discount) =>{
@@ -78,14 +80,16 @@ export const EditCart = ({isOpen, onClose, record}) =>{
 
     useEffect(()=>{
         qtyRef.current.value = record?.qty || "";
-        priceRef.current.value = record?.info?.salePrice || "";
-        productRef.current.value = record?.info?.title || "";
         holdItemToREsetCart = JSON.parse(JSON.stringify(cart));
     },[record]);
     return(
         <>
-        <FlexContainer isOpen={isOpen} onClose={onClose}>
-            <div className="flex pad-xl relative radius" style={{border:"1px solid white"}}>
+        <FlexContainer isOpen={isOpen} onClose={onClose} alertType>
+            <div className="pad gray2 radius-top no-select">
+                <label>Edit item : </label>
+                <label style={{color:"dodgerblue"}}>{record?.info?.title}</label>
+            </div>
+            <div className="flex pad-xl relative radius no-select">
                 <div hidden={!record?.info?.discount} className="float-center max-size no-select" style={{zIndex:"1"}}>
                     <div className="float-center half-width pad-xl centered bg border radius">
                         <div>Will you like to delete this discount</div>
@@ -96,11 +100,10 @@ export const EditCart = ({isOpen, onClose, record}) =>{
                     </div>
                 </div>
                 <div>
-                    <Entry entryRef={productRef} inherit disabled placeholder="Product" />
-                    <Entry label="Quantity" entryRef={qtyRef} placeholder="Quantity" />
-                    <Entry entryRef={priceRef} inherit disabled placeholder="Price" dollarSign />
+                    <Entry label={record?.info?.qtyType} entryRef={qtyRef} onChange={onChangeQty} placeholder="Quantity" />
+                    <div className="float-bottom-left pad-xl">${record?.info?.salePrice}</div>
                 </div>
-                <div className="pad-xl">
+                <div>
                     <Button onClick={()=>discountOpen(discType.order)} topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="blue" text="Order Descount" cssClass="block max-width link-hover" />
                     <Button onClick={()=>discountOpen(discType.item)} topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="dodgerblue" text="Item Descount" cssClass="block max-width link-hover" />
                     <Button onClick={onApply} text="Apply" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="green" cssClass="block max-width link-hover" />
