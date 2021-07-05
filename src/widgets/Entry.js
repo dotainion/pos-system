@@ -30,7 +30,7 @@ export const Entry = ({placeholder, edit, disabled, inherit, entryRef, required,
                 <span style={{fontSize:"11px",color:"dodgerblue"}}>{optional && " Optional"}</span>
             </div>
             <span className={dollarSign && "dollar-sign" || percentSign && "percent-sign"} style={{position:"relative"}}>
-                <input disabled={disabled} ref={entryRef} onKeyPress={onKeyPress} onClick={onClick} {...inputPops} onChange={triggerChange} type={type} style={{border:error && "1px solid red" || !border && "none",height:type === "date"?"34px":null}} className={`input ${inputCss} ${inherit && "inherit"}`} placeholder={placeholder} />
+                <input disabled={disabled} ref={entryRef} onKeyPress={onKeyPress} onClick={onClick} {...inputPops} onChange={triggerChange} type={type} style={{border:error && "1px solid red" || !border && "none",height:type === "date"?"34px":null,marginTop:"3px"}} className={`input ${inputCss} ${inherit && "inherit"}`} placeholder={placeholder} />
                 <div className="float-bottom-overflow font-mini" style={{color:"red",bottom:"-110%"}}>{error}</div>
             </span>
             <div hidden={!edit} className="input" style={{border:"none",height:"35px"}}>{value}</div>

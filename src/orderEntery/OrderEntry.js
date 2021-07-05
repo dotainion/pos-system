@@ -349,7 +349,7 @@ const OrderEntry = () => {
                                             </div>
                                         </div>
                                         )):
-                                        <div className="pad-xxl">No records</div>
+                                        <NoRecords/>
                                     }
                                 </div> 
                                 <div className="float-recent-option">

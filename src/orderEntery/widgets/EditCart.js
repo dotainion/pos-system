@@ -89,7 +89,7 @@ export const EditCart = ({isOpen, onClose, record}) =>{
                 <label>Edit item : </label>
                 <label style={{color:"dodgerblue"}}>{record?.info?.title}</label>
             </div>
-            <div className="flex pad-xl relative radius no-select">
+            <div className="pad-xl relative radius no-select">
                 <div hidden={!record?.info?.discount} className="float-center max-size no-select" style={{zIndex:"1"}}>
                     <div className="float-center half-width pad-xl centered bg border radius">
                         <div>Will you like to delete this discount</div>
@@ -99,16 +99,21 @@ export const EditCart = ({isOpen, onClose, record}) =>{
                         </div>
                     </div>
                 </div>
-                <div>
-                    <Entry label={record?.info?.qtyType} entryRef={qtyRef} onChange={onChangeQty} placeholder="Quantity" />
-                    <div className="float-bottom-left pad-xl">${record?.info?.salePrice}</div>
+                <div className="flex">
+                    <Button onClick={()=>discountOpen(discType.order)} topSpacing color="blue" text="Order Descount" cssClass="max-width" left="2px" right="2px" />
+                    <Button onClick={()=>discountOpen(discType.item)} topSpacing color="dodgerblue" text="Item Descount" cssClass="max-width" left="2px" right="2px" />
+                    <Button onClick={onApply} text="Apply" topSpacing color="green" cssClass="block max-width" />
                 </div>
-                <div>
-                    <Button onClick={()=>discountOpen(discType.order)} topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="blue" text="Order Descount" cssClass="block max-width link-hover" />
-                    <Button onClick={()=>discountOpen(discType.item)} topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="dodgerblue" text="Item Descount" cssClass="block max-width link-hover" />
-                    <Button onClick={onApply} text="Apply" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="green" cssClass="block max-width link-hover" />
-                    <Button onClick={onCancel} text="Cancel" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="black" cssClass="block max-width link-hover" />
-                    <Button onClick={onDelete} text="Delete" topSpacing withBorder withBorderColor="gray" backgroundColor="white" color="red" cssClass="block max-width link-hover" />
+                <div className="flex">
+                    <Button onClick={onCancel} text="Cancel" topSpacing color="black" cssClass="max-width" left="2px" right="2px" />
+                    <Button onClick={onDelete} text="Delete" topSpacing color="red" cssClass="max-width" left="2px" right="2px" />
+                    <Button onClick={()=>{}} text="Other" topSpacing color="teal" cssClass="max-width" left="2px" right="2px" />
+                </div>
+                <div className="flex">
+                    <Entry label={record?.info?.qtyType} labelColor="dodgerblue" entryRef={qtyRef} onChange={onChangeQty} placeholder="Quantity" />
+                    <div className="relative half-width" style={{color:"dodgerblue"}}>
+                        <div className="float-center">${parseFloat?.(record?.info?.salePrice || 0)?.toFixed(2)}</div>
+                    </div>
                 </div>
             </div>
         </FlexContainer>

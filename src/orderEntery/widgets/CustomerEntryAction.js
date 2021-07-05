@@ -129,6 +129,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                         color={toggleDisplay.saveItem && "brown"}
                         cssClass="silver"
                         text="Stash for later"
+                        shadow="none"
                     >
                         &nbsp;<IonIcon icon={saveOutline}/>
                     </Button>
@@ -139,6 +140,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                         color={toggleDisplay.viewItem && "brown"}
                         cssClass="silver"
                         text="View stash lists"
+                        shadow="none"
                     >
                         &nbsp;<IonIcon icon={eyeOutline}/>
                     </Button>
@@ -149,6 +151,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
                         color={toggleDisplay.addCustomer && "brown"}
                         cssClass="silver"
                         text="Customers"
+                        shadow="none"
                     >
                         &nbsp;<IonIcon icon={eyeOutline}/>/<IonIcon icon={addOutline}/>
                     </Button>
@@ -156,7 +159,7 @@ export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searc
             </div>
             <div hidden={!toggleDisplay.saveItem} className="pad entry-action-sub">
                 <div className="half-width item-center flex">
-                    <Entry cssClass="bg2" entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
+                    <Entry entryRef={titleRef} style={{color:"rgb(3, 37, 68)"}} placeholder="Give a title to this order" label="Title" />
                     <div className="pad-xl" style={{position:"relative"}}>
                         <div className="float-left">
                             <Button 

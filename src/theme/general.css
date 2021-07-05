@@ -260,11 +260,11 @@
     padding: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    color: rgb(2, 26, 48);
+    color: var(--bg-text-color);
     border-radius: 5px;
     border: 1px solid lightgray;
-    box-shadow: 1px 1px 3px gray;
-    background: linear-gradient(to right, rgb(175, 174, 174) 0%, white 50%, rgb(175, 174, 174) 100%);
+    box-shadow: 1px 1px 3px rgb(5, 5, 5,0.5);
+    background: white;
 }
 .btn:hover{
     background-color: rgb(235, 233, 233);
@@ -742,7 +742,7 @@
 }
 .input{
     outline: none;
-    padding: 7px;
+    padding: 6px;
     width: 100%;
     border-radius: 50px;
     color: var(--bg-text-color);
