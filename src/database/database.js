@@ -1,4 +1,4 @@
-import { addData, getData, getDataByField, getDataById, getDataByDoubleField, updateData } from "./databaseRef";
+import { addData, getData, getDataByField, getDataById, getDataByDoubleField, updateData, deleteDataById } from "./databaseRef";
 
 const collection = {
     users: "users",
@@ -9,6 +9,7 @@ const collection = {
     settings: "settings",
     cashDrops: "cashdrops",
     payout: "payout",
+    employees: "employees"
 }
 
 export const addUser = async(data, uid=null) =>{
@@ -30,12 +31,32 @@ export const getUser = async(uid) =>{
     }
 }
 
+export const addEmployee = async(data) =>{
+    try{
+        await addData(collection.employees,data);
+        return true;
+    }catch(error){
+        console.log(error);
+        return false;
+    }
+}
+
 export const getEmployees = async(uid) =>{
     try{
-        return await getDataByField(collection.users,"storeId",uid);
+        return await getDataByField(collection.employees,"storeId",uid);
     }catch(error){
         console.log(error);
         return [];
+    }
+}
+
+export const deleteEmployeeById = async(id) =>{
+    try{
+        await deleteDataById(collection.employees,id);
+        return true;
+    }catch(error){
+        console.log(error);
+        return false;
     }
 }
 
@@ -74,6 +95,16 @@ export const getProductsById = async(id) =>{
     }catch(error){
         console.log(error);
         return {};
+    }
+}
+
+export const deleteProductsById = async(id) =>{
+    try{
+        await deleteDataById(collection.products,id);
+        return true;
+    }catch(error){
+        console.log(error);
+        return false;
     }
 }
 

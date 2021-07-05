@@ -12,11 +12,11 @@ export const Alert = ({isOpen, hideCancelButton, header, message, onConfirm, onC
     return(
         <FlexContainer isOpen={isOpen} onClose={onClose} alertType>
             <div className="radius-top">
-                <div className="gray2 radius-top pad" style={{color:headerColor}}><b>{header || "Confirm!"}</b></div>
-                <p className="pad-xl" style={{color:messageColor}}>{message}</p>
+                <div className="gray2 radius-top pad-mini border-bottom" style={{color:headerColor,borderColor:"gray"}}><b>{header || "Confirm!"}</b></div>
+                <p className="pad-h" style={{color:messageColor}}>{message}</p>
                 <p style={{paddingRight:"25px",textAlign:"right"}}>
-                    <Button style={{minWidth:"60px"}} onClick={onTriggerConfirm} text={okText || "Okay"} spacing />
-                    <Button style={{minWidth:"60px"}} hidden={hideCancelButton} onClick={onClose} text={cancelText || "Cancel"} />
+                    <Button onClick={onTriggerConfirm} text={okText || "Okay"} spacing />
+                    <Button hidden={hideCancelButton} onClick={onClose} text={cancelText || "Cancel"} />
                 </p>
             </div>
         </FlexContainer>

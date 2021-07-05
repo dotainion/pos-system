@@ -79,7 +79,7 @@ export const EndOfDay = ({isOpen, onRunEndOfDay, dateSelected}) =>{
         searchEndOfDay(dateformat);
     });
     return(
-        <div id="end-of-day" hidden={!isOpen}>
+        <div id="end-of-day relative" hidden={!isOpen}>
             <Loader isOpen={showLoader} />
             <div className="dark" style={{borderRadius:"25px"}}>
                 <Select options={["CURRENT DAY - POS STATIONS"]} style={{border:"none"}} />

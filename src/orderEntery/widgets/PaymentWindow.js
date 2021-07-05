@@ -1,11 +1,11 @@
 import { IonItemDivider } from '@ionic/react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../widgets/Entry';
-import { ModalContainer } from '../container/ModalContainer';
-import { useStore } from '../context/Store';
-import { ReceiptPreview } from '../document/Preview';
-import { printer } from '../document/Printer';
-import { Progressing } from '../widgets/Progressing';
+import { Entry } from '../../widgets/Entry';
+import { ModalContainer } from '../../container/ModalContainer';
+import { useStore } from '../../context/Store';
+import { ReceiptPreview } from '../../document/Preview';
+import { printer } from '../../document/Printer';
+import { Progressing } from '../../widgets/Progressing';
 
 
 

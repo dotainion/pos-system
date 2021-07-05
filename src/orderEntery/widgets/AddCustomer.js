@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Entry } from '../widgets/Entry';
-import { tools } from '../tools/Tools';
-import img from '../images/beach.jpg';
-import { ModalContainer } from '../container/ModalContainer';
-import { addCustomer } from '../database/database';
-import { useStore } from '../context/Store';
-import { Button } from '../widgets/Button';
+import { Entry } from '../../widgets/Entry';
+import { tools } from '../../tools/Tools';
+import img from '../../images/beach.jpg';
+import { ModalContainer } from '../../container/ModalContainer';
+import { addCustomer } from '../../database/database';
+import { useStore } from '../../context/Store';
+import { Button } from '../../widgets/Button';
 
 
 export const AddCustomer = ({isOpen, onClose}) =>{

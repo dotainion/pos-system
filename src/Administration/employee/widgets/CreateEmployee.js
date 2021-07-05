@@ -3,7 +3,7 @@ import { closeOutline, imagesOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { roles } from '../../../content/lists';
 import { useStore } from '../../../context/Store';
-import { addUser } from '../../../database/database';
+import { addEmployee, addUser } from '../../../database/database';
 import { Entry } from '../../../widgets/Entry';
 import { ModalContainer } from '../../../container/ModalContainer';
 import { Select } from '../../../widgets/Select';
@@ -51,7 +51,8 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
     const onAddEmployee = async() =>{
         setError("");
         setLoading(true);
-        if (Object.keys(user || {}).length <= 0) alert("no user");
+        if (!user?.storeId) return  alert("error with current user")
+        if (Object.keys(user || {}).length <= 0) return alert("no user");
         const employee = {
             name: nameRef.current.value || "",
             email: emailRef.current.value || "",
@@ -73,7 +74,7 @@ export const CreateEmployee = ({isOpen, record, onUpdateComplete, onClose}) =>{
             image: image || "",
             storeId: user?.storeId || "",
         }
-        await addUser(employee);
+        await addEmployee(employee);
         setLoading(false);
         onUpdateComplete?.();
     }

@@ -1,16 +1,16 @@
 import { IonIcon } from '@ionic/react';
 import { addOutline, chevronDownOutline, chevronUpOutline, closeOutline, eyeOutline, saveOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../widgets/Entry';
-import { ModalContainer } from '../container/ModalContainer';
-import { useStore } from '../context/Store';
-import { addCustomer } from '../database/database';
-import { SearchBar } from '../widgets/SearchBar';
-import img from '../images/beach.jpg';
-import { tools } from '../tools/Tools';
+import { Entry } from '../../widgets/Entry';
+import { ModalContainer } from '../../container/ModalContainer';
+import { useStore } from '../../context/Store';
+import { addCustomer } from '../../database/database';
+import { SearchBar } from '../../widgets/SearchBar';
+import img from '../../images/beach.jpg';
+import { tools } from '../../tools/Tools';
 import { AddCustomer } from './AddCustomer';
-import { Alert } from '../components/Alert';
-import { Button } from '../widgets/Button';
+import { Alert } from '../../components/Alert';
+import { Button } from '../../widgets/Button';
 
 
 export const CustomerEntryActions = ({isOpen, onClose, onCustomerSelected, searchValue}) =>{

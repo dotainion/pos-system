@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Entry } from '../widgets/Entry';
-import { FlexContainer } from '../container/FlexContainer';
-import { Button } from '../widgets/Button';
-import { Discounts } from '../app/Discounts';
-import { useStore } from '../context/Store';
-import { calc } from '../calc/Calculate';
+import { Entry } from '../../widgets/Entry';
+import { FlexContainer } from '../../container/FlexContainer';
+import { Button } from '../../widgets/Button';
+import { Discounts } from '../../app/Discounts';
+import { useStore } from '../../context/Store';
+import { calc } from '../../calc/Calculate';
 
 const discType = {
     order: "Order",
@@ -85,7 +85,7 @@ export const EditCart = ({isOpen, onClose, record}) =>{
     return(
         <>
         <FlexContainer isOpen={isOpen} onClose={onClose} alertType>
-            <div className="pad gray2 radius-top no-select">
+            <div className="pad-mini gray2 radius-top no-select">
                 <label>Edit item : </label>
                 <label style={{color:"dodgerblue"}}>{record?.info?.title}</label>
             </div>

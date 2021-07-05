@@ -6,8 +6,8 @@ import { getProducts, addSale, updateCustomerReward, getCustomerReward, updatePr
 import { ToolBar } from '../layout/ToolBar';
 import { Alert } from '../components/Alert';
 import { Loader } from '../components/Loader';
-import { CustomerEntryActions } from './CustomerEntryAction';
-import { PaymentWindow } from './PaymentWindow';
+import { CustomerEntryActions } from './widgets/CustomerEntryAction';
+import { PaymentWindow } from './widgets/PaymentWindow';
 import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
 import { routes } from '../global/Routes';
@@ -15,9 +15,9 @@ import { tools } from '../tools/Tools';
 import { MobileOrderEntryNav } from '../layout/MobileProductNav';
 import { CalculatorDragable } from '../app/Calculator';
 import { Discounts } from '../app/Discounts';
-import { EditCart } from './EditCart';
+import { EditCart } from './widgets/EditCart';
 import { calc } from '../calc/Calculate';
-import { NoRecords } from '../reports/NoRecords';
+import { NoRecords } from '../widgets/NoRecords';
 
 
 

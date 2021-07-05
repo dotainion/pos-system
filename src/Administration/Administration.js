@@ -1,5 +1,7 @@
 import { IonContent, IonList, IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import React, { useState } from 'react';
+import { Alert } from '../components/Alert';
+import { Loader } from '../components/Loader';
 import { MenuBar, MenuBarWrapper } from '../container/MenuBar';
 import { BlankPage } from '../widgets/BlankPage';
 import { Button } from '../widgets/Button';
@@ -9,6 +11,8 @@ import { Employees } from './employee/Employees';
 export const Administration = () =>{
     const [showEmployees, setShowEmployees] = useState(true);
     const [createEmployee, setCreateEmployee] = useState(false);
+    const [showLoader, setShowLoader] = useState(false);
+    const [showDeleteAlert, setShowDeleteAlert] = useState({state:false,confirm:false,data:null});
 
     const pageList = [
         {
@@ -32,20 +36,22 @@ export const Administration = () =>{
                             text={page.title}
                             cssClass="btn-dark-hoverride"
                             heilight={showEmployees}
-                            largeIcon
                             transparent
                             withBorder
+                            spacing
                         />
                     ))}
                 </div>
-            } onAdd={()=>setCreateEmployee(true)}>
-                <IonList class="item-container" style={{height:"80vh"}}>
+            } onAdd={()=>setCreateEmployee(true)} noScroll>
+                <div className="scroll scrollbar2" style={{height:"92vh"}}>
                     <Employees
                         isOpen={showEmployees}
                         onCreateOpen={createEmployee}
                         onCreateClose={()=>setCreateEmployee(false)}
+                        confirmDelete={showDeleteAlert}
+                        showconfirmDelete={setShowDeleteAlert}
                     />
-                </IonList>
+                </div>
             </MenuBarWrapper>
         </IonPage>
     )

@@ -6,7 +6,7 @@ import { Select } from '../../widgets/Select';
 import { discountTypes } from '../../content/lists';
 import { useStore } from '../../context/Store';
 import { tools } from '../../tools/Tools';
-import { NoRecords } from '../../reports/NoRecords';
+import { NoRecords } from '../../widgets/NoRecords';
 
 
 export const UpdateDiscount = ({onChangeMade, isChange}) =>{

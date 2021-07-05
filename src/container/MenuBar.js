@@ -40,7 +40,7 @@ const nav = [
     }
 ];
 
-export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options, optionsTitle, optionWillClick, barChild, barChildren, children}) =>{
+export const MenuBarWrapper = ({onAdd, onSearch, onSave, noScroll, saveBtnHilight, options, optionsTitle, optionWillClick, barChild, barChildren, children}) =>{
     const history = useHistory();
     const { logOffAdmin, user } = useStore();
     const [showSideMenu, setShowSideMenu] = useState("hide-menu");
@@ -133,7 +133,7 @@ export const MenuBarWrapper = ({onAdd, onSearch, onSave, saveBtnHilight, options
                         <SearchBar onSearch={onSearch} placeholder="Find employee"/>
                     </div>
                 </div>
-                <div className="max-screen-height-for-menu-wrapper scroll scrollbar2">
+                <div className={`max-screen-height-for-menu-wrapper ${!noScroll?"scroll":""} scrollbar2`}>
                     {children}
                     <IonIcon hidden={!onAdd} onClick={onAdd} class="add-btn-2 add-btn-on-mobile hide-on-desktop" icon={addOutline}/>
                 </div>

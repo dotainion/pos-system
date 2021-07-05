@@ -12,6 +12,7 @@ export const Button = ({text, color, disabled, type, heilight, backgroundColor, 
             style={{
                 ...style,
                 color: !color? heilight && "var(--border-heilight)":color,
+                minWidth:"50px",
                 marginTop: topSpacing && "5px",
                 marginLeft: spacing && "10px",
                 marginRight: spacing && "10px",
@@ -19,7 +20,7 @@ export const Button = ({text, color, disabled, type, heilight, backgroundColor, 
                 border:!heilight? transparent && withBorder? `1px solid ${withBorderColor}`: "none":"1px solid var(--border-heilight)",
                 boxShadow:transparent && "none",
             }}
-            className={`${cssClass} ${defaultColor && "btn-color-override"} pad btn`}
+            className={`${cssClass} ${defaultColor && "btn-color-override"} pad-mini no-wrap btn`}
         >{text}{children}
             {
                 type?.includes("add")
