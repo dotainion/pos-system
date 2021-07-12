@@ -6,7 +6,6 @@ import { getProducts, addSale, updateCustomerReward, getCustomerReward, updatePr
 import { ToolBar } from '../layout/ToolBar';
 import { Alert } from '../components/Alert';
 import { Loader } from '../components/Loader';
-import { CustomerEntryActions } from './widgets/CustomerEntryAction';
 import { PaymentWindow } from './widgets/PaymentWindow';
 import { SearchBar } from '../widgets/SearchBar';
 import { useHistory } from 'react-router';
@@ -18,6 +17,7 @@ import { Discounts } from '../app/Discounts';
 import { EditCart } from './widgets/EditCart';
 import { calc } from '../calc/Calculate';
 import { NoRecords } from '../widgets/NoRecords';
+import { OrderEntryAction } from './widgets/OrderEntryAction';
 
 
 
@@ -171,11 +171,11 @@ const OrderEntry = () => {
                 onOpenPayOut={()=>setShowPayOutAlert(true)}
                 onOpenDiscounts={()=>setShowDiscounts(true)}
             />
-            <CustomerEntryActions
+            <OrderEntryAction
                 isOpen={showCustomerAction}
                 onClose={()=>setShowCustomerAction(false)}
-                searchValue={customerSearchValue}
                 onCustomerSelected={setCustomer}
+                searchValue={customerSearchValue}
             />
             <PaymentWindow
                 isOpen={showPaymentWindow}

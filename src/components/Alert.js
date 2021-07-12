@@ -4,13 +4,13 @@ import { FlexContainer } from '../container/FlexContainer';
 import { Button } from '../widgets/Button';
 
 
-export const Alert = ({isOpen, hideCancelButton, header, message, onConfirm, onClose, okText, cancelText, headerColor, messageColor}) =>{
+export const Alert = ({isOpen, hideCancelButton, transparent, header, message, onConfirm, onClose, okText, cancelText, headerColor, messageColor}) =>{
     const onTriggerConfirm = () =>{
         onConfirm?.();
         onClose?.();
     }
     return(
-        <FlexContainer isOpen={isOpen} onClose={onClose} alertType>
+        <FlexContainer isOpen={isOpen} onClose={onClose} alertType transparent={transparent}>
             <div className="radius-top">
                 <div className="gray2 radius-top pad-mini border-bottom" style={{color:headerColor,borderColor:"gray"}}><b>{header || "Confirm!"}</b></div>
                 <p className="pad-h" style={{color:messageColor}}>{message}</p>

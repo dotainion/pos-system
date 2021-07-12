@@ -6,6 +6,7 @@ import { ModalContainer } from '../../container/ModalContainer';
 import { addCustomer } from '../../database/database';
 import { useStore } from '../../context/Store';
 import { Button } from '../../widgets/Button';
+import { Progressing } from '../../widgets/Progressing';
 
 
 export const AddCustomer = ({isOpen, onClose}) =>{
@@ -13,6 +14,7 @@ export const AddCustomer = ({isOpen, onClose}) =>{
 
     const [image, setImage] = useState("");
     const [error, setError] = useState("");
+    const [loader, setLoader] = useState(false);
 
     const imageRef = useRef();
     const customerNameRef = useRef();
@@ -30,6 +32,7 @@ export const AddCustomer = ({isOpen, onClose}) =>{
     const onSaveCustomer = async() =>{
         setError("");
         if (!customerNameRef.current.value) return setError("Name is required");
+        setLoader(true);
         await addCustomer({
             name: customerNameRef.current.value || "",
             email: customerEmailRef.current.value || "",
@@ -39,13 +42,15 @@ export const AddCustomer = ({isOpen, onClose}) =>{
         });
         onClearValues();
         initCustomers();
+        setLoader(false);
     }
     return(
-        <ModalContainer isOpen={isOpen} onClose={onClose}>
+        <ModalContainer isOpen={isOpen} onClose={onClose} bgTransparant floatMaxWidth>
             <p className="pad-xl font-xl" style={{position:"relative",textAlign:"center"}}>
                 Add valued customer<br/>
                 <label className="float-bottom-overflow max-width font" style={{color:"red",left:"0px",textAlign:"center"}}>{error}</label>
             </p>
+            <Progressing isOpen={loader} />
             <div className="flex pad-xxl">
                 <div className="half-width pad-xl" style={{position:"relative"}}>
                     <img onClick={()=>imageRef.current?.click()} src={image || img} className="float-center img-hover" style={{width:"80%",height:"150px",top:"40%"}} alt=""/>

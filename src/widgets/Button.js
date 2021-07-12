@@ -1,12 +1,31 @@
 import { IonIcon } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 
-export const Button = ({text, color, left, right, disabled, shadow, type, heilight, backgroundColor, defaultColor, withBorder, withBorderColor, transparent, cssClass, hidden, largeIcon, spacing, topSpacing, onClick, style, children}) =>{
+export const Button = ({text, infoMessage, color, left, right, disabled, shadow, type, heilight, backgroundColor, defaultColor, withBorder, withBorderColor, transparent, cssClass, hidden, largeIcon, spacing, topSpacing, onClick, style, children}) =>{
+    const [showInfo, setShowInfo] = useState(false);
+
+    const timeoutRef = useRef();
+
+    const triggerShowInfo = () =>{
+        if (infoMessage){
+            timeoutRef.current = setTimeout(() => {
+                setShowInfo(true);
+            }, 1000);
+        }
+    }
+
+    const triggerHideInfo = () =>{
+        clearTimeout(timeoutRef.current);
+        setShowInfo(false);
+    }
+
     return(
         <button
-            onClick={onClick}
+            onClick={()=>onClick?.({value: text})}
+            onMouseEnter={triggerShowInfo}
+            onMouseLeave={triggerHideInfo}
             disabled={disabled}
             hidden={hidden}
             style={{
@@ -20,7 +39,7 @@ export const Button = ({text, color, left, right, disabled, shadow, type, heilig
                 border:!heilight? transparent && withBorder? `1px solid ${withBorderColor}`: "none":"1px solid var(--border-heilight)",
                 boxShadow:transparent && "none" || shadow,
             }}
-            className={`${cssClass} ${defaultColor && "btn-color-override"} pad-mini no-wrap btn`}
+            className={`${cssClass} ${defaultColor && "btn-color-override"} pad-mini no-wrap btn relative`}
         >{text}{children}
             {
                 type?.includes("add")
@@ -31,6 +50,9 @@ export const Button = ({text, color, left, right, disabled, shadow, type, heilig
                     />
                 :   null
             }
+            <div hidden={!showInfo} className="float-bottom-overflow no-wrap border" style={{fontSize:"11px",backgroundColor:"white",padding:"2px"}}>
+                <span>{infoMessage}</span>
+            </div>
         </button>
     )
 }
